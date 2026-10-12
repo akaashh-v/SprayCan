@@ -1,0 +1,586 @@
+"""Unified Two-Stage Precision Aerosol Spray Can Detector Engine.
+
+Implements the conservative multi-evidence decision pipeline:
+1. Stage 1: Kinematic shaking burst candidate detection & digital clipping rejection.
+   - Rule 1: Volume/loudness used ONLY to identify digital clipping / unusable audio.
+   - Treats any positive finding strictly as an unconfirmed Candidate.
+   - Requires repeated back-and-forth physical bursts (cadence 2-13 Hz, span >= 0.40s, valley contrast >= 4.5 dB).
+2. Stage 2: Deep spectro-temporal CNN classifier (SprayCanShakingCNN, 5 classes).
+   - Full 2D Log-Mel spectrogram (64 mels x 44 frames).
+   - Rule 3: Multiple independent lines of evidence:
+     * P(spray_can_shaking) >= conservative_threshold (default 0.85).
+     * Competing classes (loud impact, environmental, hard negative rattle, speech) <= MAX_COMPETING_CONFIDENCE (0.20).
+     * Confidence margin P(spray) - max(P(competing)) >= MIN_CONFIDENCE_MARGIN (0.45).
+     * Shannon entropy < UNCERTAIN_ENTROPY_THRESHOLD (0.60).
+3. Multi-Window Temporal Persistence Gating:
+   - Must match across REQUIRED_CONSECUTIVE_WINDOWS (>= 3 consecutive windows, >= 1.0s).
+4. Cooldown Enforcement:
+   - 3.0s cooldown after confirmed alert.
+5. Rule 8: Structured debug logging without storing microphone audio unless explicitly configured.
+"""
+
+import json
+import logging
+import time
+from collections import deque
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple, Union
+
+import numpy as np
+import torch
+
+from audio_utils import (
+    compute_log_mel_spectrogram,
+    load_audio,
+    pad_or_trim,
+)
+from config import (
+    ALERT_COOLDOWN_SECONDS,
+    AUDIO_SAMPLES,
+    CALIBRATION_PATH,
+    CLASS_NAMES,
+    CLIPPING_PEAK_THRESHOLD,
+    CLIPPING_RATIO_THRESHOLD,
+    CONSERVATIVE_THRESHOLD,
+    DEVICE,
+    ENABLE_NOISE_CANCELLATION,
+    HOP_SAMPLES,
+    MAX_COMPETING_CONFIDENCE,
+    MAX_ENV_CONFIDENCE,
+    MIN_CONFIDENCE_MARGIN,
+    MODEL_SAVE_PATH,
+    NOISE_FLOOR_FACTOR,
+    NOISE_SUBTRACTION_FACTOR,
+    NUM_CLASSES,
+    REQUIRED_CONSECUTIVE_WINDOWS,
+    SAMPLE_RATE,
+    SAVE_MIC_AUDIO,
+    STAGE1_MIN_RMS,
+    UNCERTAIN_ENTROPY_THRESHOLD,
+    WINDOW_DURATION,
+)
+from noise_canceller import AdaptiveSpectralNoiseCanceller
+from stage1_shaking_detector import Stage1ShakingDetector
+from stage2_classifier import SprayCanShakingCNN, evaluate_candidate_prediction
+
+logger = logging.getLogger(__name__)
+
+
+class SprayCanDetectorEngine:
+    """Production-grade two-stage aerosol spray can shaking sound detector."""
+
+    def __init__(
+        self,
+        model_path: Optional[Path] = None,
+        calibration_path: Optional[Path] = None,
+        conservative_threshold: Optional[float] = None,
+        required_consecutive_windows: int = REQUIRED_CONSECUTIVE_WINDOWS,
+        cooldown_seconds: float = ALERT_COOLDOWN_SECONDS,
+        enable_noise_cancellation: bool = ENABLE_NOISE_CANCELLATION,
+        sr: int = SAMPLE_RATE,
+    ):
+        self.sr = sr
+        self.required_consecutive_windows = required_consecutive_windows
+        self.cooldown_seconds = cooldown_seconds
+        self.enable_noise_cancellation = enable_noise_cancellation
+
+        # 1. Initialize Stage 1 Kinematic Shaking Detector
+        self.stage1 = Stage1ShakingDetector(sr=self.sr)
+
+        # 2. Initialize Real-Time Adaptive Spectral Noise Canceller
+        self.noise_canceller = AdaptiveSpectralNoiseCanceller(
+            sr=self.sr,
+            alpha=NOISE_SUBTRACTION_FACTOR,
+            beta=NOISE_FLOOR_FACTOR,
+        )
+
+        # 3. Load Conservative Threshold from Calibration if available
+        self.calibration_path = Path(calibration_path or CALIBRATION_PATH)
+        if conservative_threshold is not None:
+            self.conservative_threshold = conservative_threshold
+        elif self.calibration_path.exists():
+            try:
+                with open(self.calibration_path, "r", encoding="utf-8") as f:
+                    calib_data = json.load(f)
+                    self.conservative_threshold = float(
+                        calib_data.get("selected_conservative_threshold", CONSERVATIVE_THRESHOLD)
+                    )
+            except Exception as e:
+                logger.warning("Could not read calibration file: %s. Using default: %.2f", e, CONSERVATIVE_THRESHOLD)
+                self.conservative_threshold = CONSERVATIVE_THRESHOLD
+        else:
+            self.conservative_threshold = CONSERVATIVE_THRESHOLD
+
+        # 4. Initialize Stage 2 Neural Network (5 Classes)
+        self.model_path = Path(model_path or MODEL_SAVE_PATH)
+        self.model = SprayCanShakingCNN(num_classes=NUM_CLASSES).to(DEVICE)
+        self.model_loaded = False
+        self._load_model_weights()
+
+        # 5. State tracking for real-time streaming
+        self.consecutive_positive_windows = 0
+        self.last_alert_time = -999.0
+        self.rolling_audio_buffer = np.zeros(AUDIO_SAMPLES, dtype=np.float32)
+        self.history = deque(maxlen=50)
+
+    def _load_model_weights(self) -> None:
+        """Load trained neural network checkpoint if available."""
+        if self.model_path.exists():
+            try:
+                checkpoint = torch.load(self.model_path, map_location=DEVICE, weights_only=False)
+                state_dict = checkpoint["model_state_dict"] if "model_state_dict" in checkpoint else checkpoint
+                self.model.load_state_dict(state_dict)
+                self.model.eval()
+                self.model_loaded = True
+                logger.info("Loaded Stage 2 neural network from %s", self.model_path)
+            except Exception as e:
+                logger.error("Failed to load model from %s: %s", self.model_path, e)
+                self.model_loaded = False
+        else:
+            logger.warning("Model checkpoint %s not found yet. Stage 2 will remain in standby.", self.model_path)
+            self.model_loaded = False
+
+    def reload_model_if_available(self) -> bool:
+        """Check and reload model if training recently completed."""
+        if not self.model_loaded and self.model_path.exists():
+            self._load_model_weights()
+            if self.calibration_path.exists():
+                try:
+                    with open(self.calibration_path, "r", encoding="utf-8") as f:
+                        calib_data = json.load(f)
+                        self.conservative_threshold = float(
+                            calib_data.get("selected_conservative_threshold", CONSERVATIVE_THRESHOLD)
+                        )
+                except Exception:
+                    pass
+        return self.model_loaded
+
+    def reset_state(self) -> None:
+        """Reset temporal state counters, rolling buffer, and noise filter."""
+        self.consecutive_positive_windows = 0
+        self.last_alert_time = -999.0
+        self.rolling_audio_buffer.fill(0.0)
+        self.history.clear()
+        self.noise_canceller.reset()
+
+    def evaluate_window(
+        self,
+        audio_window: np.ndarray,
+        current_time: Optional[float] = None,
+    ) -> Dict:
+        """Evaluate a single 1.0-second audio window through the conservative two-stage logic."""
+        if current_time is None:
+            current_time = time.time()
+
+        # Ensure correct window length
+        if len(audio_window) != AUDIO_SAMPLES:
+            audio_window = pad_or_trim(audio_window, AUDIO_SAMPLES)
+
+        # -------------------------------------------------------------
+        # Check Alert Cooldown
+        # -------------------------------------------------------------
+        time_since_alert = current_time - self.last_alert_time
+        in_cooldown = time_since_alert < self.cooldown_seconds
+        cooldown_remaining = max(0.0, self.cooldown_seconds - time_since_alert) if in_cooldown else 0.0
+
+        # -------------------------------------------------------------
+        # Rule 1: Loudness may be used ONLY to identify clipping or unusable audio
+        # Inspect raw sensor input before any linear/spectral DSP transforms
+        # -------------------------------------------------------------
+        raw_peak = float(np.max(np.abs(audio_window))) if len(audio_window) > 0 else 0.0
+        raw_clip_ratio = float(np.mean(np.abs(audio_window) >= CLIPPING_PEAK_THRESHOLD)) if len(audio_window) > 0 else 0.0
+        if raw_clip_ratio >= CLIPPING_RATIO_THRESHOLD or raw_peak >= 1.05:
+            s1 = self.stage1.analyze_window(audio_window)
+            self.consecutive_positive_windows = 0
+            result = {
+                "timestamp": round(current_time, 3),
+                "rms": s1["rms"],
+                "peak": s1["peak"],
+                "is_clipped": True,
+                "burst_count": 0,
+                "cadence_hz": 0.0,
+                "temporal_span_sec": 0.0,
+                "valley_contrast_db": 0.0,
+                "interval_cv": 0.0,
+                "canister_spectral_ratio": 0.0,
+                "noise_cancellation_active": self.enable_noise_cancellation,
+                "snr_db": 0.0,
+                "noise_reduction_db": 0.0,
+                "noise_floor_rms": 0.0,
+                "is_stage1_candidate": False,
+                "stage1_reason": s1["reason"],
+                "stage2_evaluated": False,
+                "p_spray_can": 0.0,
+                "p_loud_impact": 0.0,
+                "p_continuous_environmental": 0.0,
+                "p_hard_negative": 0.0,
+                "p_ambient": 0.0,
+                "max_competing_confidence": 0.0,
+                "max_competing_class": "none",
+                "confidence_margin": 0.0,
+                "entropy": 0.0,
+                "is_uncertain": False,
+                "predicted_class": "none",
+                "consecutive_windows": 0,
+                "required_windows": self.required_consecutive_windows,
+                "in_cooldown": in_cooldown,
+                "cooldown_remaining_sec": round(cooldown_remaining, 2),
+                "alert_fired": False,
+                "status": "UNUSABLE_AUDIO_CLIPPING",
+                "explanation": f"Unusable audio / digital clipping detected ({s1['reason']}). Alert prevented.",
+            }
+            self.history.append(result)
+            logger.debug("Engine: Unusable audio clipping: %s", s1['reason'])
+            return result
+
+        # -------------------------------------------------------------
+        # Adaptive Spectral Noise Cancellation (Background Room Noise, Fan Hum, Rain Bed)
+        # -------------------------------------------------------------
+        nc_metrics = {
+            "snr_db": 0.0,
+            "noise_reduction_db": 0.0,
+            "noise_floor_rms": 0.0,
+            "is_active": self.enable_noise_cancellation,
+        }
+        if self.enable_noise_cancellation:
+            processed_window, nc_metrics = self.noise_canceller.cancel_noise(audio_window)
+        else:
+            processed_window = audio_window
+
+        # -------------------------------------------------------------
+        # Stage 1: Kinematic Shaking Burst Candidate Pre-Filter & Clipping Check
+        # -------------------------------------------------------------
+        s1 = self.stage1.analyze_window(processed_window)
+
+        # Baseline result template
+        result = {
+            "timestamp": round(current_time, 3),
+            "rms": s1["rms"],
+            "peak": s1["peak"],
+            "is_clipped": s1["is_clipped"],
+            "burst_count": s1["burst_count"],
+            "cadence_hz": s1["cadence_hz"],
+            "temporal_span_sec": s1["temporal_span_sec"],
+            "valley_contrast_db": s1["valley_contrast_db"],
+            "interval_cv": s1.get("interval_cv", 0.0),
+            "canister_spectral_ratio": s1.get("canister_spectral_ratio", 0.0),
+            "noise_cancellation_active": self.enable_noise_cancellation,
+            "snr_db": nc_metrics["snr_db"],
+            "noise_reduction_db": nc_metrics["noise_reduction_db"],
+            "noise_floor_rms": nc_metrics["noise_floor_rms"],
+            "is_stage1_candidate": s1["is_candidate"],
+            "stage1_reason": s1["reason"],
+            "stage2_evaluated": False,
+            "p_spray_can": 0.0,
+            "p_loud_impact": 0.0,
+            "p_continuous_environmental": 0.0,
+            "p_hard_negative": 0.0,
+            "p_ambient": 0.0,
+            "max_competing_confidence": 0.0,
+            "max_competing_class": "none",
+            "confidence_margin": 0.0,
+            "entropy": 0.0,
+            "is_uncertain": False,
+            "predicted_class": "none",
+            "consecutive_windows": self.consecutive_positive_windows,
+            "required_windows": self.required_consecutive_windows,
+            "in_cooldown": in_cooldown,
+            "cooldown_remaining_sec": round(cooldown_remaining, 2),
+            "alert_fired": False,
+            "status": "STATUS: SILENT",
+            "explanation": "",
+        }
+
+        # Rule 1: Digital clipping rejection (loudness used ONLY to identify clipping/unusable audio)
+        if s1["is_clipped"]:
+            self.consecutive_positive_windows = 0
+            result["status"] = "UNUSABLE_AUDIO_CLIPPING"
+            result["explanation"] = f"Unusable audio / digital clipping detected ({s1['reason']}). Alert prevented."
+            self.history.append(result)
+            logger.debug("Engine: Unusable audio clipping: %s", s1['reason'])
+            return result
+
+        # If in cooldown, suppress any alert
+        if in_cooldown:
+            self.consecutive_positive_windows = 0
+            result["status"] = "IN_COOLDOWN"
+            result["explanation"] = f"Alert suppressed by cooldown ({cooldown_remaining:.1f}s remaining)."
+            self.history.append(result)
+            return result
+
+        # Silent or energy floor rejection
+        if s1["rms"] < STAGE1_MIN_RMS:
+            self.consecutive_positive_windows = 0
+            result["status"] = "STATUS: SILENT"
+            result["explanation"] = f"Ambient silence or low energy (RMS {s1['rms']:.4f} < {STAGE1_MIN_RMS})."
+            self.history.append(result)
+            return result
+
+        # -------------------------------------------------------------
+        # STAGE 1 GATE ENFORCEMENT:
+        # Rule 3: Sound's time sequence MUST match repeated back-and-forth shaking,
+        # NOT a single impact or an unrelated continuous sound.
+        # If not a candidate, treat strictly as non-candidate. CANNOT ALERT.
+        # -------------------------------------------------------------
+        if not s1["is_candidate"]:
+            self.consecutive_positive_windows = max(0, self.consecutive_positive_windows - 1)
+            result["alert_fired"] = False
+            result["is_stage1_candidate"] = False
+            result["status"] = "NO_SHAKING_CADENCE"
+            result["explanation"] = f"Stage 1 rejected: {s1['reason']}"
+            self.history.append(result)
+            return result
+
+        # -------------------------------------------------------------
+        # STAGE 2 CONFIRMATION:
+        # Audio is a confirmed Stage 1 candidate (repeated bursts + span + contrast).
+        # Now verify if the full spectro-temporal pattern matches spray can shaking.
+        # -------------------------------------------------------------
+        result["is_stage1_candidate"] = True
+
+        self.reload_model_if_available()
+        if not self.model_loaded:
+            self.consecutive_positive_windows = 0
+            result["status"] = "STAGE1_CANDIDATE (MODEL_NOT_READY)"
+            result["explanation"] = "Candidate detected by Stage 1, but Stage 2 neural network checkpoint is not loaded."
+            self.history.append(result)
+            return result
+
+        # Compute full 2D Log-Mel spectrogram on noise-cancelled audio (64 mels x 44 frames)
+        log_mel = compute_log_mel_spectrogram(processed_window, sr=self.sr)
+        tensor_in = torch.from_numpy(log_mel).unsqueeze(0).unsqueeze(0).to(DEVICE)
+
+        with torch.inference_mode():
+            probs = self.model.predict_proba(tensor_in).cpu().numpy()[0]
+        del tensor_in
+
+        s2_eval = evaluate_candidate_prediction(
+            probs,
+            conservative_threshold=self.conservative_threshold,
+            max_competing_confidence=MAX_COMPETING_CONFIDENCE,
+            max_env_confidence=MAX_ENV_CONFIDENCE,
+            min_confidence_margin=MIN_CONFIDENCE_MARGIN,
+            entropy_threshold=UNCERTAIN_ENTROPY_THRESHOLD,
+        )
+
+        result["stage2_evaluated"] = True
+        result["p_spray_can"] = s2_eval["p_spray_can"]
+        result["p_aerosol_spray_hiss"] = s2_eval.get("p_aerosol_spray_hiss", 0.0)
+        result["p_loud_impact"] = s2_eval["p_loud_impact"]
+        result["p_continuous_environmental"] = s2_eval["p_continuous_environmental"]
+        result["p_hard_negative"] = s2_eval["p_hard_negative"]
+        result["p_ambient"] = s2_eval["p_ambient"]
+        result["max_competing_confidence"] = s2_eval["max_competing_confidence"]
+        result["max_competing_class"] = s2_eval["max_competing_class"]
+        result["confidence_margin"] = s2_eval["confidence_margin"]
+        result["entropy"] = s2_eval["entropy"]
+        result["is_uncertain"] = s2_eval["is_uncertain"]
+        result["predicted_class"] = s2_eval["predicted_class"]
+
+        # Rule 8: Structured Debug Logging of decision and confidences (never storing audio)
+        logger.debug(
+            "Evaluation: p_spray=%.3f, p_hiss=%.3f, max_comp=%.3f (%s), margin=%.3f, entropy=%.2f, verdict=%s",
+            s2_eval["p_spray_can"],
+            s2_eval.get("p_aerosol_spray_hiss", 0.0),
+            s2_eval["max_competing_confidence"],
+            s2_eval["max_competing_class"],
+            s2_eval["confidence_margin"],
+            s2_eval["entropy"],
+            s2_eval["verdict"],
+        )
+
+        # Case A: Ambiguous / High entropy sound (Rule 4)
+        if s2_eval["is_uncertain"]:
+            self.consecutive_positive_windows = max(0, self.consecutive_positive_windows - 1)
+            result["status"] = "UNCERTAIN_AMBIGUOUS_SOUND"
+            result["explanation"] = f"Ambiguous acoustic distribution (Entropy {s2_eval['entropy']:.2f} >= {UNCERTAIN_ENTROPY_THRESHOLD}). No alert."
+            self.history.append(result)
+            return result
+
+        # Case B: Confirmed Spray Can Pattern (Rule 3)
+        if s2_eval["is_confirmed_spray"]:
+            self.consecutive_positive_windows += 1
+            result["consecutive_windows"] = self.consecutive_positive_windows
+
+            # Persistence Gating (Rule 3 & Rule 5): Must persist across consecutive windows
+            if self.consecutive_positive_windows >= self.required_consecutive_windows:
+                # ALERT TRIGGERED!
+                result["alert_fired"] = True
+                result["status"] = "ALERT: SPRAY CAN SOUND CONFIRMED"
+                result["explanation"] = (
+                    f"Aerosol spray can confirmed! P(spray)={s2_eval['p_spray_can']*100:.1f}% "
+                    f">= {self.conservative_threshold*100:.0f}%, competing max={s2_eval['max_competing_confidence']*100:.1f}%, "
+                    f"persisted {self.consecutive_positive_windows} consecutive windows."
+                )
+                self.last_alert_time = current_time
+                self.consecutive_positive_windows = 0  # reset persistence after firing
+                logger.info("ALERT TRIGGERED: Spray can confirmed at t=%.2f", current_time)
+            else:
+                result["status"] = f"STAGE1_CANDIDATE (Persistence: {self.consecutive_positive_windows}/{self.required_consecutive_windows})"
+                result["explanation"] = (
+                    f"Candidate matches spray can (P={s2_eval['p_spray_can']*100:.1f}%), "
+                    f"awaiting persistence ({self.consecutive_positive_windows}/{self.required_consecutive_windows} windows) to rule out transient rattles."
+                )
+            self.history.append(result)
+            return result
+
+        # Case C: Not a confirmed spray can (Hiss, Impact, Environmental, Rattle, Speech, Low margin)
+        if s2_eval["verdict"] in [
+            "AEROSOL_SPRAY_HISS_REJECTED",
+            "HARD_NEGATIVE_RATTLE_REJECTED",
+            "LOUD_IMPACT_REJECTED",
+            "CONTINUOUS_ENVIRONMENTAL_REJECTED",
+        ]:
+            self.consecutive_positive_windows = 0  # Strict immediate hard reset on verified confounder
+        else:
+            # Ambient speech syllable, background voice overlap, or brief uncertain fluctuation:
+            # Leaky decay instead of brutal instant zeroing
+            self.consecutive_positive_windows = max(0, self.consecutive_positive_windows - 1)
+
+        if s2_eval["verdict"] == "AEROSOL_SPRAY_HISS_REJECTED":
+            result["status"] = "AEROSOL_SPRAY_HISS_REJECTED"
+            result["explanation"] = f"Rejected as aerosol spray hiss / nozzle discharge (P(hiss)={s2_eval.get('p_aerosol_spray_hiss', 0.0)*100:.1f}%). Spraying is not shaking. No alert."
+        elif s2_eval["verdict"] == "LOUD_IMPACT_REJECTED":
+            result["status"] = "LOUD_IMPACT_REJECTED"
+            result["explanation"] = f"Rejected as sudden loud impact / shock (P(impact)={s2_eval['p_loud_impact']*100:.1f}%). No alert."
+        elif s2_eval["verdict"] == "CONTINUOUS_ENVIRONMENTAL_REJECTED":
+            result["status"] = "CONTINUOUS_ENVIRONMENTAL_REJECTED"
+            result["explanation"] = f"Rejected as continuous environmental sound (P(env)={s2_eval['p_continuous_environmental']*100:.1f}%). No alert."
+        elif s2_eval["verdict"] == "HARD_NEGATIVE_RATTLE_REJECTED":
+            result["status"] = "HARD_NEGATIVE_RATTLE_REJECTED"
+            result["explanation"] = f"Rejected as hard negative rattle (P(rattle)={s2_eval['p_hard_negative']*100:.1f}%). No alert."
+        elif s2_eval["verdict"] == "AMBIENT_AND_SPEECH":
+            result["status"] = "AMBIENT_AND_SPEECH"
+            result["explanation"] = f"Rejected as speech / ambient vocalization (P(ambient)={s2_eval['p_ambient']*100:.1f}%). No alert."
+        else:
+            result["status"] = "UNCERTAIN_NO_ALERT"
+            result["explanation"] = (
+                f"Model cannot distinguish sound confidently (P(spray)={s2_eval['p_spray_can']*100:.1f}%, "
+                f"margin={s2_eval['confidence_margin']*100:.1f}% < {MIN_CONFIDENCE_MARGIN*100:.0f}%). Returning uncertain/no alert."
+            )
+
+        self.history.append(result)
+        return result
+
+    def process_stream_chunk(self, chunk: np.ndarray, current_time: Optional[float] = None) -> Dict:
+        """Feed a live streaming audio chunk into rolling buffer and evaluate."""
+        if len(chunk) == 0:
+            return self.evaluate_window(np.zeros(AUDIO_SAMPLES, dtype=np.float32), current_time)
+
+        # Push chunk into rolling window
+        chunk_len = len(chunk)
+        if chunk_len >= AUDIO_SAMPLES:
+            self.rolling_audio_buffer = chunk[-AUDIO_SAMPLES:].astype(np.float32)
+        else:
+            self.rolling_audio_buffer = np.roll(self.rolling_audio_buffer, -chunk_len)
+            self.rolling_audio_buffer[-chunk_len:] = chunk.astype(np.float32)
+
+        return self.evaluate_window(self.rolling_audio_buffer, current_time=current_time)
+
+    def process_audio_file(
+        self,
+        source: Union[str, Path, bytes, np.ndarray],
+        hop_sec: float = 0.25,
+    ) -> Dict:
+        """Process an entire audio file in sliding windows and generate comprehensive diagnostics."""
+        audio = load_audio(source, sr=self.sr)
+        self.reset_state()
+        total_len = len(audio)
+
+        # For short clips (<= 2.0s), use smaller hop (0.15s) so multiple overlapping windows are tested
+        actual_hop_sec = 0.15 if total_len <= int(self.sr * 2.0) else hop_sec
+        hop_len = int(self.sr * actual_hop_sec)
+        win_len = AUDIO_SAMPLES
+
+        if total_len < win_len:
+            audio = pad_or_trim(audio, win_len)
+            total_len = len(audio)
+
+        evaluations: List[Dict] = []
+        alerts: List[Dict] = []
+        time_offset = 0.0
+
+        for start_idx in range(0, total_len - win_len + 1, hop_len):
+            window = audio[start_idx : start_idx + win_len]
+            t_win = start_idx / self.sr
+            eval_res = self.evaluate_window(window, current_time=t_win)
+            evaluations.append(eval_res)
+            if eval_res["alert_fired"]:
+                alerts.append(eval_res)
+
+        # Overall summary diagnostics
+        candidate_count = sum(1 for e in evaluations if e["is_stage1_candidate"])
+        stage2_confirmed_count = sum(1 for e in evaluations if e.get("p_spray_can", 0) >= self.conservative_threshold)
+        max_spray_p = max((e.get("p_spray_can", 0.0) for e in evaluations), default=0.0)
+        max_hiss_p = max((e.get("p_aerosol_spray_hiss", 0.0) for e in evaluations), default=0.0)
+        max_impact_p = max((e.get("p_loud_impact", 0.0) for e in evaluations), default=0.0)
+        max_env_p = max((e.get("p_continuous_environmental", 0.0) for e in evaluations), default=0.0)
+        max_rattle_p = max((e.get("p_hard_negative", 0.0) for e in evaluations), default=0.0)
+        has_clipping = any(e.get("is_clipped", False) for e in evaluations)
+
+        duration_sec = total_len / self.sr
+        alert_triggered = len(alerts) > 0
+
+        if alert_triggered:
+            primary_verdict = "CONFIRMED_SPRAY_CAN_ALERT"
+            summary_desc = (
+                f"Alert confirmed! Detected {len(alerts)} sustained spray can event(s). "
+                f"Max P(spray)={max_spray_p*100:.1f}%."
+            )
+        elif has_clipping:
+            primary_verdict = "REJECTED_DIGITAL_CLIPPING"
+            summary_desc = "Audio contains saturated digital clipping / unusable signal. Alert suppressed."
+        elif max_hiss_p >= 0.30:
+            primary_verdict = "REJECTED_AEROSOL_SPRAY_HISS"
+            summary_desc = f"Classified as aerosol spray hiss / nozzle discharge (Max P(hiss)={max_hiss_p*100:.1f}%). Spraying is not shaking. Alert suppressed."
+        elif max_impact_p >= 0.35:
+            primary_verdict = "REJECTED_LOUD_IMPACT"
+            summary_desc = f"Classified as loud impact / shock (Max P(impact)={max_impact_p*100:.1f}%). Alert suppressed."
+        elif max_env_p >= 0.35:
+            primary_verdict = "REJECTED_CONTINUOUS_ENVIRONMENTAL"
+            summary_desc = f"Classified as continuous environmental sound (Max P(env)={max_env_p*100:.1f}%). Alert suppressed."
+        elif max_rattle_p >= 0.35:
+            primary_verdict = "REJECTED_HARD_NEGATIVE_RATTLE"
+            summary_desc = f"Classified as hard negative rattle (coins/keys/pill bottle, Max P(rattle)={max_rattle_p*100:.1f}%). Alert suppressed."
+        elif candidate_count == 0:
+            primary_verdict = "REJECTED_NO_SHAKING_CADENCE"
+            summary_desc = "No repeated back-and-forth shaking cadence detected by Stage 1."
+        elif max_spray_p < self.conservative_threshold:
+            primary_verdict = "UNCERTAIN_NO_ALERT"
+            summary_desc = (
+                f"Candidate shaking detected but Stage 2 confidence P(spray)={max_spray_p*100:.1f}% "
+                f"did not meet conservative threshold ({self.conservative_threshold*100:.0f}%). Returning uncertain/no alert."
+            )
+        else:
+            primary_verdict = "REJECTED_INSUFFICIENT_PERSISTENCE"
+            summary_desc = (
+                f"Spray-like bursts observed, but did not persist across "
+                f"{self.required_consecutive_windows} consecutive windows. Ruled out as transient rattle."
+            )
+
+        return {
+            "duration_sec": round(duration_sec, 2),
+            "total_duration_sec": round(duration_sec, 2),
+            "total_windows_evaluated": len(evaluations),
+            "candidate_windows_count": candidate_count,
+            "stage1_candidates_count": candidate_count,
+            "stage2_confirmed_windows": stage2_confirmed_count,
+            "alerts_fired_count": len(alerts),
+            "confirmed_alerts_count": len(alerts),
+            "alert_triggered": alert_triggered,
+            "primary_verdict": primary_verdict,
+            "final_verdict": primary_verdict,
+            "summary_description": summary_desc,
+            "max_spray_confidence": round(max_spray_p, 4),
+            "max_hard_neg_confidence": round(max(max_rattle_p, max_hiss_p, max_impact_p, max_env_p), 4),
+            "max_confidence": {
+                "spray_can_shaking": round(max_spray_p, 4),
+                "aerosol_spray_hiss": round(max_hiss_p, 4),
+                "loud_impact": round(max_impact_p, 4),
+                "continuous_environmental": round(max_env_p, 4),
+                "hard_negative_rattle": round(max_rattle_p, 4),
+            },
+            "evaluations": evaluations,
+            "timeline": evaluations,
+            "alerts": alerts,
+        }

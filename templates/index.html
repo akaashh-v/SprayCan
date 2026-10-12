@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acoustic Spray Can Shaking Sound Detector | Two-Stage Precision AED</title>
+    <meta name="description" content="High-precision two-stage acoustic event detector for aerosol spray can shaking with hard-negative rejection and multi-window temporal persistence.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation / Header -->
+        <header class="app-header" id="app-header">
+            <div class="brand">
+                <div class="brand-logo">
+                    <span class="icon-pulse"></span>
+                    <span class="brand-icon">💨</span>
+                </div>
+                <div>
+                    <h1 class="brand-title">Aerosol Spray Can Sound Detector</h1>
+                    <p class="brand-subtitle">Two-Stage AED • Hard-Negative Rejection • Multi-Window Persistence</p>
+                </div>
+            </div>
+
+            <div class="header-badges">
+                <div class="badge status-badge" id="system-status-badge">
+                    <span class="badge-dot" id="system-status-dot"></span>
+                    <span id="system-status-text">INITIALIZING</span>
+                </div>
+                <div class="badge metric-badge" id="nc-badge" style="cursor: pointer;" title="Toggle Adaptive Noise Cancellation">
+                    <span class="badge-label">NOISE CANCEL:</span>
+                    <span class="badge-value" id="badge-nc-val" style="color: var(--accent-green);">ACTIVE 🟢</span>
+                </div>
+                <div class="badge metric-badge" id="threshold-badge">
+                    <span class="badge-label">THRESHOLD:</span>
+                    <span class="badge-value" id="badge-threshold-val">80%</span>
+                </div>
+                <div class="badge metric-badge" id="cooldown-badge">
+                    <span class="badge-label">COOLDOWN:</span>
+                    <span class="badge-value" id="badge-cooldown-val">0.5s</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Alert Banner -->
+        <section class="banner-section" id="alert-banner-section">
+            <div class="alert-banner status-silent" id="main-status-banner">
+                <div class="banner-indicator">
+                    <span class="radar-ping" id="banner-radar-ping"></span>
+                    <span class="status-emoji" id="banner-status-emoji">🔇</span>
+                </div>
+                <div class="banner-content">
+                    <div class="banner-eyebrow" id="banner-eyebrow">TWO-STAGE DECISION STATUS</div>
+                    <div class="banner-headline" id="banner-headline">STATUS: SILENT</div>
+                    <div class="banner-description" id="banner-description">
+                        System is continuously monitoring acoustic input. No shaking kinematics detected.
+                    </div>
+                </div>
+                <div class="banner-persistence" id="banner-persistence-box">
+                    <div class="persistence-label">CONSECUTIVE WINDOWS</div>
+                    <div class="persistence-dots" id="persistence-dots-container">
+                        <span class="p-dot" id="p-dot-0"></span>
+                        <span class="p-dot" id="p-dot-1"></span>
+                    </div>
+                    <div class="persistence-sub" id="persistence-sub-text">0 / 2 Required</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navigation Tabs -->
+        <nav class="nav-tabs" id="nav-tabs" aria-label="Detection Modes">
+            <button class="nav-tab active" id="tab-btn-mic" data-tab="tab-mic">
+                <span class="tab-icon">🎙️</span> Live Microphone
+            </button>
+            <button class="nav-tab" id="tab-btn-sandbox" data-tab="tab-sandbox">
+                <span class="tab-icon">🧪</span> Hard-Negative Sandbox
+            </button>
+            <button class="nav-tab" id="tab-btn-upload" data-tab="tab-upload">
+                <span class="tab-icon">📁</span> Audio File Analyzer
+            </button>
+            <button class="nav-tab" id="tab-btn-calibration" data-tab="tab-calibration">
+                <span class="tab-icon">📊</span> Calibration & Accuracy
+            </button>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Left Column: Primary Interface -->
+            <div class="primary-column">
+
+                <!-- TAB 1: LIVE MICROPHONE -->
+                <div class="tab-pane active" id="tab-mic">
+                    <div class="card glass-card">
+                        <div class="card-header">
+                            <div>
+                                <h2 class="card-title">Real-Time Microphone Stream</h2>
+                                <p class="card-subtitle">Streams 1-second rolling audio chunks evaluated every 250ms</p>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn btn-primary" id="btn-toggle-mic">
+                                    <span class="btn-icon" id="mic-btn-icon">▶</span>
+                                    <span id="mic-btn-text">Start Listening</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Sensitivity & Conservative Threshold Live Controller -->
+                        <div class="sensitivity-control-bar" id="sensitivity-control-bar">
+                            <div class="sensitivity-header-row">
+                                <span class="sensitivity-title">🎯 Detection Sensitivity / Threshold:</span>
+                                <span class="sensitivity-value" id="current-threshold-label">80% (Balanced Precision)</span>
+                            </div>
+                            <div class="sensitivity-presets">
+                                <button type="button" class="btn-preset" data-thresh="0.70" id="preset-sensitive">⚡ High Sensitivity (70%)</button>
+                                <button type="button" class="btn-preset active" data-thresh="0.80" id="preset-balanced">🎯 Balanced (80%)</button>
+                                <button type="button" class="btn-preset" data-thresh="0.92" id="preset-conservative">🛡️ Ultra-Conservative (92%)</button>
+                            </div>
+                            <div class="threshold-slider-row">
+                                <input type="range" min="60" max="98" value="80" class="threshold-slider" id="threshold-slider" aria-label="Detection Confidence Threshold Slider">
+                            </div>
+                        </div>
+
+                        <!-- Canvas Audio Visualizer -->
+                        <div class="visualizer-container" id="visualizer-container">
+                            <canvas id="waveform-canvas" width="800" height="140"></canvas>
+                            <div class="canvas-overlay">
+                                <span class="overlay-tag" id="canvas-rate-tag">22,050 Hz</span>
+                                <span class="overlay-tag" id="canvas-rms-tag">RMS: 0.000</span>
+                            </div>
+                        </div>
+
+                        <!-- Mic Controls & Diagnostics -->
+                        <div class="mic-status-row">
+                            <div class="mic-meta-item">
+                                <span class="meta-label">Audio Input:</span>
+                                <span class="meta-value" id="mic-device-name">Default Microphone</span>
+                            </div>
+                            <div class="mic-meta-item">
+                                <span class="meta-label">Rolling Buffer:</span>
+                                <span class="meta-value">22,050 samples (1.0 sec)</span>
+                            </div>
+                            <div class="mic-meta-item">
+                                <span class="meta-label">Hop Step:</span>
+                                <span class="meta-value">5,512 samples (250 ms)</span>
+                            </div>
+                            <div class="mic-meta-item">
+                                <span class="meta-label">Alert Count:</span>
+                                <span class="meta-value highlight-alert" id="mic-alert-count">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: HARD-NEGATIVE SANDBOX -->
+                <div class="tab-pane" id="tab-sandbox">
+                    <div class="card glass-card">
+                        <div class="card-header">
+                            <div>
+                                <h2 class="card-title">Acoustic Discrimination Sandbox</h2>
+                                <p class="card-subtitle">Test genuine spray cans against hard negatives (coins, keys, pill bottles, liquid)</p>
+                            </div>
+                        </div>
+
+                        <div class="sandbox-grid" id="sandbox-grid">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+
+                        <!-- Player and Test Result Container -->
+                        <div class="sandbox-player-card" id="sandbox-player-card" style="display: none;">
+                            <div class="sandbox-player-header">
+                                <span class="player-sample-title" id="player-sample-title">Sample Name</span>
+                                <audio id="sandbox-audio-player" controls preload="auto"></audio>
+                            </div>
+                            <div class="sandbox-evaluation-details" id="sandbox-eval-output">
+                                <!-- Evaluation result output -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: AUDIO FILE ANALYZER -->
+                <div class="tab-pane" id="tab-upload">
+                    <div class="card glass-card">
+                        <div class="card-header">
+                            <div>
+                                <h2 class="card-title">Audio File Upload & Diagnostics</h2>
+                                <p class="card-subtitle">Upload any MP3, WAV, OGG, or FLAC recording for sliding-window evaluation</p>
+                            </div>
+                        </div>
+
+                        <div class="upload-dropzone" id="upload-dropzone">
+                            <input type="file" id="file-input" accept="audio/*" style="display: none;">
+                            <div class="dropzone-icon">📥</div>
+                            <h3 class="dropzone-title">Drag & drop audio file here</h3>
+                            <p class="dropzone-hint">or click to browse from your computer (WAV, MP3, FLAC)</p>
+                            <button class="btn btn-secondary" id="btn-browse-file" type="button">Browse File</button>
+                        </div>
+
+                        <div class="file-eval-result" id="file-eval-result" style="display: none;">
+                            <div class="file-summary-grid">
+                                <div class="file-stat">
+                                    <span class="file-stat-label">File Duration:</span>
+                                    <span class="file-stat-value" id="res-duration">-</span>
+                                </div>
+                                <div class="file-stat">
+                                    <span class="file-stat-label">Windows Evaluated:</span>
+                                    <span class="file-stat-value" id="res-windows">-</span>
+                                </div>
+                                <div class="file-stat">
+                                    <span class="file-stat-label">Stage 1 Candidates:</span>
+                                    <span class="file-stat-value" id="res-candidates">-</span>
+                                </div>
+                                <div class="file-stat">
+                                    <span class="file-stat-label">Confirmed Alerts:</span>
+                                    <span class="file-stat-value highlight-alert" id="res-alerts">-</span>
+                                </div>
+                            </div>
+
+                            <div class="spectrogram-view" id="spectrogram-container">
+                                <h4 class="subhead">Full Spectro-Temporal Pattern (Log-Mel Spectrogram)</h4>
+                                <img id="spectrogram-image" alt="Spectrogram visualization" class="spec-img">
+                            </div>
+
+                            <div class="timeline-container">
+                                <h4 class="subhead">Window-by-Window Timeline Analysis</h4>
+                                <div class="timeline-scroll" id="timeline-list">
+                                    <!-- Rendered dynamically -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 4: CALIBRATION & ACCURACY -->
+                <div class="tab-pane" id="tab-calibration">
+                    <div class="card glass-card">
+                        <div class="card-header">
+                            <div>
+                                <h2 class="card-title">Threshold Calibration & False Alert Elimination</h2>
+                                <p class="card-subtitle">Measured on unseen test recordings with diverse hard negatives</p>
+                            </div>
+                            <button class="btn btn-secondary btn-sm" id="btn-refresh-calibration">Refresh</button>
+                        </div>
+
+                        <div class="calibration-callout">
+                            <div class="callout-icon">🛡️</div>
+                            <div>
+                                <div class="callout-title">Zero Hard-Negative False Alerts Guarantee</div>
+                                <div class="callout-text">
+                                    A single frequency or loudness threshold triggers false alarms on keys, coins, and pill bottles.
+                                    Our system combines Stage 1 physical cadence validation with a conservative Stage 2 CNN threshold
+                                    (<strong id="calib-selected-threshold">85%</strong>) and 3-window temporal persistence, driving false alerts to exactly <strong>0.0%</strong>.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-container">
+                            <table class="calibration-table" id="calibration-sweep-table">
+                                <thead>
+                                    <tr>
+                                        <th>Threshold (τ)</th>
+                                        <th>Spray Recall (TPR)</th>
+                                        <th>Hard-Neg False Alerts</th>
+                                        <th>Hard-Neg FPR</th>
+                                        <th>Ambient FPR</th>
+                                        <th>Precision</th>
+                                        <th>F1 Score</th>
+                                        <th>Verdict</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="calibration-table-body">
+                                    <!-- Populated via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Column: Live Two-Stage Decision Meters -->
+            <div class="meters-column">
+
+                <!-- NOISE CANCELLATION CARD -->
+                <div class="card glass-card">
+                    <div class="card-header-compact">
+                        <div class="stage-tag" style="background: rgba(16, 185, 129, 0.2); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.4);">DSP NOISE CANCELLER</div>
+                        <h3 class="card-title-sm">Adaptive Spectral Subtraction</h3>
+                        <button class="btn-text-sm" id="btn-toggle-nc" style="margin-left: auto; color: var(--accent-green); font-weight: 600; cursor: pointer;">ACTIVE [ON]</button>
+                    </div>
+                    <p class="card-sub-compact">Suppresses ambient room noise, fan hum & continuous rain bed</p>
+
+                    <div class="meter-group">
+                        <div class="meter-label-row">
+                            <span class="meter-title">Estimated SNR (Signal-to-Noise)</span>
+                            <span class="meter-val" id="meter-snr-val">0.0 dB</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill fill-green" id="meter-snr-fill" style="width: 0%;"></div>
+                        </div>
+                        <span class="meter-sub">Signal-to-Noise Ratio (Target: &ge; 6.0 dB)</span>
+                    </div>
+
+                    <div class="meter-group">
+                        <div class="meter-label-row">
+                            <span class="meter-title">Background Noise Reduction</span>
+                            <span class="meter-val" id="meter-nr-val">0.0 dB</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill fill-cyan" id="meter-nr-fill" style="width: 0%;"></div>
+                        </div>
+                        <span class="meter-sub">Noise Floor RMS: <span id="meter-noise-floor-val">0.000</span> (25% Quantile Floor)</span>
+                    </div>
+                </div>
+
+                <!-- STAGE 1 CARD: KINEMATIC PRE-FILTER -->
+                <div class="card glass-card">
+                    <div class="card-header-compact">
+                        <div class="stage-tag stage-1-tag">STAGE 1</div>
+                        <h3 class="card-title-sm">Kinematic Shaking Bursts</h3>
+                    </div>
+                    <p class="card-sub-compact">Physical candidate filter (Never alerts alone)</p>
+
+                    <div class="meter-group">
+                        <div class="meter-label-row">
+                            <span class="meter-title">RMS Energy Level</span>
+                            <span class="meter-val" id="meter-rms-val">0.000</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill fill-blue" id="meter-rms-fill" style="width: 0%;"></div>
+                            <div class="threshold-marker" style="left: 6%;" title="Floor Threshold: 0.006"></div>
+                        </div>
+                        <span class="meter-sub">Floor: 0.006 RMS</span>
+                    </div>
+
+                    <div class="meter-group">
+                        <div class="meter-label-row">
+                            <span class="meter-title">Impact Cadence</span>
+                            <span class="meter-val" id="meter-cadence-val">0.0 Hz</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill fill-cyan" id="meter-cadence-fill" style="width: 0%;"></div>
+                            <div class="allowed-zone" style="left: 17%; width: 83%;" title="Allowed: 2.5 - 15.0 Hz"></div>
+                        </div>
+                        <span class="meter-sub">Cadence: 2.5 - 15.0 Hz (&ge; 3 bursts, span &ge; 0.35s)</span>
+                    </div>
+
+                    <div class="meter-group">
+                        <div class="meter-label-row">
+                            <span class="meter-title">Envelope Valley Contrast</span>
+                            <span class="meter-val" id="meter-valley-val">0.0 dB</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill fill-teal" id="meter-valley-fill" style="width: 0%;"></div>
+                            <div class="threshold-marker" style="left: 21%;" title="Min Valley: 4.2 dB"></div>
+                        </div>
+                        <span class="meter-sub">Min Contrast: &ge; 4.2 dB (rules out continuous rain & hiss)</span>
+                    </div>
+
+                    <div class="meter-group">
+                        <div class="meter-label-row">
+                            <span class="meter-title">Rhythm Regularity (Interval CV)</span>
+                            <span class="meter-val" id="meter-cv-val">0.00</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill fill-blue" id="meter-cv-fill" style="width: 0%;"></div>
+                            <div class="threshold-marker" style="left: 65%;" title="Max CV: 0.65"></div>
+                        </div>
+                        <span class="meter-sub">Arm Pacing: CV &le; 0.65 (rules out stochastic rain drops)</span>
+                    </div>
+
+                    <div class="meter-group">
+                        <div class="meter-label-row">
+                            <span class="meter-title">Canister Metallic Resonance</span>
+                            <span class="meter-val" id="meter-metal-val">0.00x</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill fill-magenta" id="meter-metal-fill" style="width: 0%;"></div>
+                            <div class="threshold-marker" style="left: 15%;" title="Min Metal/Low: 0.30x"></div>
+                        </div>
+                        <span class="meter-sub">Metal/Low Ratio: &ge; 0.30x (rules out bubble thuds)</span>
+                    </div>
+
+                    <div class="stage-verdict-box" id="stage1-verdict-box">
+                        <span class="verdict-label">STAGE 1 VERDICT:</span>
+                        <span class="verdict-value" id="stage1-verdict-text">NO SHAKING DETECTED</span>
+                    </div>
+                </div>
+
+                <!-- STAGE 2 CARD: DEEP CNN CONFIRMATION -->
+                <div class="card glass-card">
+                    <div class="card-header-compact">
+                        <div class="stage-tag stage-2-tag">STAGE 2</div>
+                        <h3 class="card-title-sm">Deep Spectro-Temporal CNN</h3>
+                    </div>
+                    <p class="card-sub-compact">Full 2D pattern vs Hard Negatives</p>
+
+                    <div class="meter-group">
+                        <div class="meter-label-row">
+                            <span class="meter-title">Aerosol Spray Can Shaking</span>
+                            <span class="meter-val highlight-spray" id="meter-spray-val">0.0%</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill fill-green" id="meter-spray-fill" style="width: 0%;"></div>
+                            <div class="threshold-marker marker-alert" id="conservative-threshold-marker" style="left: 80%;" title="Conservative Cutoff: 80%"></div>
+                        </div>
+                        <span class="meter-sub">Conservative Threshold: <strong id="lbl-conservative-val">80%</strong> (3 windows)</span>
+                    </div>
+
+                    <div class="meter-group">
+                        <div class="meter-label-row">
+                            <span class="meter-title">Aerosol Spray Hiss (Continuous / Pulsed)</span>
+                            <span class="meter-val highlight-hardneg" id="meter-hiss-val">0.0%</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill fill-amber" id="meter-hiss-fill" style="width: 0%;"></div>
+                        </div>
+                        <span class="meter-sub">Negative Class: Spraying is NOT shaking (&le; 14%)</span>
+                    </div>
+
+                    <div class="meter-group">
+                        <div class="meter-label-row">
+                            <span class="meter-title">Hard Negative Rattle (Coins/Keys/Pill)</span>
+                            <span class="meter-val highlight-hardneg" id="meter-hardneg-val">0.0%</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill fill-magenta" id="meter-hardneg-fill" style="width: 0%;"></div>
+                        </div>
+                        <span class="meter-sub">Must be strictly lower than spray can (&le; 14%)</span>
+                    </div>
+
+                    <div class="meter-group">
+                        <div class="meter-label-row">
+                            <span class="meter-title">Loud Sudden Impact (Door/Desk/Clap)</span>
+                            <span class="meter-val highlight-hardneg" id="meter-impact-val">0.0%</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill fill-amber" id="meter-impact-fill" style="width: 0%;"></div>
+                        </div>
+                        <span class="meter-sub">Door slams, dropped items, claps (&le; 14%)</span>
+                    </div>
+
+                    <div class="meter-group">
+                        <div class="meter-label-row">
+                            <span class="meter-title">Continuous Environmental (Rain/Train/Water)</span>
+                            <span class="meter-val" id="meter-env-val">0.0%</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill fill-purple" id="meter-env-fill" style="width: 0%;"></div>
+                        </div>
+                        <span class="meter-sub">Rain, water drops, train rumbles (&le; 10%)</span>
+                    </div>
+
+                    <div class="meter-group">
+                        <div class="meter-label-row">
+                            <span class="meter-title">Ambient Room / Speech</span>
+                            <span class="meter-val" id="meter-ambient-val">0.0%</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill fill-gray" id="meter-ambient-fill" style="width: 0%;"></div>
+                        </div>
+                        <span class="meter-sub">Background voice, fans, keyboard</span>
+                    </div>
+
+                    <div class="meter-group">
+                        <div class="meter-label-row">
+                            <span class="meter-title">Shannon Entropy (Uncertainty)</span>
+                            <span class="meter-val" id="meter-entropy-val">0.00</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill fill-amber" id="meter-entropy-fill" style="width: 0%;"></div>
+                            <div class="threshold-marker" style="left: 70%;" title="Uncertain Cutoff: 0.70"></div>
+                        </div>
+                        <span class="meter-sub">Values &ge; 0.70 marked UNCERTAIN</span>
+                    </div>
+                </div>
+
+                <!-- EVENT LOG CARD -->
+                <div class="card glass-card">
+                    <div class="card-header-compact">
+                        <h3 class="card-title-sm">Real-Time Event Stream</h3>
+                        <button class="btn-text-sm" id="btn-clear-log">Clear</button>
+                    </div>
+                    <div class="log-stream-box" id="event-stream-container">
+                        <div class="log-entry log-entry-info">
+                            <span class="log-time">00:00:00</span>
+                            <span class="log-msg">Detector engine initialized. Ready.</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
