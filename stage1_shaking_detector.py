@@ -106,8 +106,8 @@ class Stage1ShakingDetector:
 
         # 4. Adaptive Threshold for Transient Point-Impact Peaks
         noise_floor = np.median(envelope) + 1e-6
-        peak_threshold = max(0.0006, noise_floor * 1.35, impact_rms * 0.18)
-        prominence_thresh = max(0.0003, noise_floor * 1.10, impact_rms * 0.10)
+        peak_threshold = max(0.0004, noise_floor * 1.20, impact_rms * 0.15)
+        prominence_thresh = max(0.0002, noise_floor * 1.05, impact_rms * 0.08)
 
         # Min distance between peaks: 50 ms (handles impacts up to 20/sec; spray can cadence is 2.5-15 Hz)
         min_peak_distance = int(self.sr * 0.050)
@@ -161,14 +161,15 @@ class Stage1ShakingDetector:
         elif burst_count < STAGE1_MIN_BURSTS:
             has_regularity = False
 
-        # 8. Canister Metallic Spectral Ratio (High canister resonance 2.2-7.5 kHz vs liquid bubbles 200-1800 Hz)
+        # 8. Canister Metallic Spectral Ratio (High canister resonance 2.2-7.5 kHz vs mid-low band 600-1800 Hz)
+        # Excludes <600 Hz low rumble (train diesel, track rumble, air conditioner drone) from denominator
         canister_spectral_ratio = 0.0
         spec = np.abs(np.fft.rfft(audio))
         freqs = np.fft.rfftfreq(len(audio), 1.0 / self.sr)
-        e_low = np.sum(spec[(freqs >= 200) & (freqs < 1800)] ** 2) + 1e-8
+        e_mid = np.sum(spec[(freqs >= 600) & (freqs < 1800)] ** 2) + 1e-8
         e_metal = np.sum(spec[(freqs >= 2200) & (freqs < 7500)] ** 2) + 1e-8
-        canister_spectral_ratio = float(e_metal / e_low)
-        has_canister_resonance = (canister_spectral_ratio >= STAGE1_MIN_CANISTER_SPECTRAL_RATIO) or (impact_rms >= 0.002 and has_cadence)
+        canister_spectral_ratio = float(e_metal / e_mid)
+        has_canister_resonance = (canister_spectral_ratio >= STAGE1_MIN_CANISTER_SPECTRAL_RATIO) or (impact_rms >= 0.0015 and has_cadence)
 
         # 9. Crest Impulsiveness Verification (Metallic marble impacts vs turbulent aerodynamic hiss)
         has_impulsiveness = (crest_factor >= STAGE1_MIN_CREST_FACTOR) or (impact_crest >= STAGE1_MIN_CREST_FACTOR)

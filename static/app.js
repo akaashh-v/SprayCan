@@ -426,12 +426,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
             elements.mainStatusBanner.classList.add("status-alert");
             elements.bannerStatusEmoji.innerText = "🚨";
-            elements.bannerHeadline.innerText = "ALERT: SPRAY CAN SHAKING CONFIRMED";
-            elements.bannerDescription.innerText = explanation;
+            elements.bannerHeadline.innerText = "ALERT: POSSIBLE AEROSOL-CAN SHAKING DETECTED";
+            elements.bannerDescription.innerText = `${explanation}\nDirect trained human operator to review the event. A sound alert is not proof that a person is spraying graffiti; do not identify or track people from audio.`;
 
             // Trigger browser audible notification beep
             playAlertBeep();
-            addLogEntry(`🚨 CONFIRMED ALERT: Spray Can Shaking! Confidence=${(pSpray * 100).toFixed(1)}%`, "alert");
+            const tsIso = res.timestamp_iso || new Date().toISOString();
+            addLogEntry(`🚨 Alert: possible aerosol-can shaking detected (Confidence=${(pSpray * 100).toFixed(1)}%, Timestamp=${tsIso}). Trained operator review requested.`, "alert");
         } else if (res.in_cooldown) {
             elements.mainStatusBanner.classList.add("status-cooldown");
             elements.bannerStatusEmoji.innerText = "⏳";
@@ -647,8 +648,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const stream = await navigator.mediaDevices.getUserMedia({
                 audio: {
-                    echoCancellation: true,
-                    noiseSuppression: true,
+                    echoCancellation: false,
+                    noiseSuppression: false,
                     autoGainControl: false,
                 },
             });
@@ -698,9 +699,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     orderedWindow[i] = nativeBuffer[(nativeBufferWriteIdx + i) % nativeWindowSamples];
                 }
 
-                // Resample to exactly 22,050 Hz (WINDOW_SAMPLES)
-                const resampledWindow = resampleLinear(orderedWindow, nativeSampleRate, TARGET_SAMPLE_RATE, WINDOW_SAMPLES);
-                const base64Pcm = floatTo16BitPCMBase64(resampledWindow);
+                // Transmit native hardware rate window directly so server applies polyphase sinc anti-aliasing filter
+                const base64Pcm = floatTo16BitPCMBase64(orderedWindow);
 
                 isRequestInFlight = true;
                 try {
@@ -1040,6 +1040,252 @@ document.addEventListener("DOMContentLoaded", () => {
         elements.ncBadge.addEventListener("click", toggleNoiseCancellation);
     }
 
+    // -------------------------------------------------------------------------
+    // Operator Review Queue & Privacy Management
+    // -------------------------------------------------------------------------
+    async function loadReviewQueue() {
+        const tbody = document.getElementById("review-queue-table-body");
+        if (!tbody) return;
+        try {
+            const resp = await fetch("/api/review_queue");
+            if (!resp.ok) return;
+            const data = await resp.json();
+            const items = data.items || [];
+            if (items.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 20px;">No pending candidate events in the review queue.</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = "";
+            items.forEach((item) => {
+                const tr = document.createElement("tr");
+                const pSpray = ((item.p_spray_can || 0) * 100).toFixed(1);
+                const entropy = (item.entropy || 0).toFixed(2);
+                const isAlert = item.event_type === "confirmed_alert";
+                const typeBadge = isAlert
+                    ? `<span style="color: var(--accent-red); font-weight: bold;">🚨 Alert</span>`
+                    : `<span style="color: var(--accent-amber); font-weight: bold;">❓ Uncertain</span>`;
+                const isReviewed = item.human_reviewed;
+                const actionHtml = isReviewed
+                    ? `<span style="color: var(--accent-green);">Reviewed: ${item.human_verdict}</span>`
+                    : `<div style="display: flex; gap: 4px;">
+                        <button class="btn btn-sm btn-primary" onclick="window.resolveReviewItem('${item.event_id}', 'verified_spray')">✓ Confirm Spray</button>
+                        <button class="btn btn-sm btn-secondary" onclick="window.resolveReviewItem('${item.event_id}', 'false_alert')">✗ False Alert</button>
+                        <button class="btn btn-sm btn-text" onclick="window.resolveReviewItem('${item.event_id}', 'inconclusive')">Inconclusive</button>
+                       </div>`;
+
+                tr.innerHTML = `
+                    <td><code>${item.event_id}</code></td>
+                    <td>${item.timestamp_iso ? item.timestamp_iso.substring(11, 19) : "N/A"}</td>
+                    <td>${typeBadge}</td>
+                    <td>${pSpray}%</td>
+                    <td>${entropy}</td>
+                    <td>
+                        <audio controls style="height: 28px; width: 140px;">
+                            <source src="/api/review_queue/${item.event_id}/audio" type="audio/wav">
+                        </audio>
+                    </td>
+                    <td>${actionHtml}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        } catch (e) {
+            console.error("Failed to load review queue:", e);
+        }
+    }
+
+    window.resolveReviewItem = async function(eventId, verdict) {
+        try {
+            const resp = await fetch("/api/review_queue/resolve", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ event_id: eventId, human_verdict: verdict }),
+            });
+            if (resp.ok) {
+                loadReviewQueue();
+            }
+        } catch (e) {
+            console.error("Failed to resolve review item:", e);
+        }
+    };
+
+    const btnRefreshReview = document.getElementById("btn-refresh-review-queue");
+    if (btnRefreshReview) {
+        btnRefreshReview.addEventListener("click", loadReviewQueue);
+    }
+
+    // -------------------------------------------------------------------------
+    // Record Ground Truth Workflow
+    // -------------------------------------------------------------------------
+    let fieldMediaRecorder = null;
+    let fieldRecordedChunks = [];
+    let fieldRecordStartTime = 0;
+    let fieldRecordTimerInterval = null;
+    let fieldRecordedBlob = null;
+
+    const btnRecordToggle = document.getElementById("btn-record-toggle");
+    const recordBtnText = document.getElementById("record-btn-text");
+    const recordBtnIcon = document.getElementById("record-btn-icon");
+    const recordingTimer = document.getElementById("recording-timer");
+    const recordingStatusBadge = document.getElementById("recording-status-badge");
+    const recordPreviewContainer = document.getElementById("record-preview-container");
+    const recordAudioPlayer = document.getElementById("record-audio-player");
+    const btnRecordDiscard = document.getElementById("btn-record-discard");
+    const btnRecordSave = document.getElementById("btn-record-save");
+    const btnRefreshRecordings = document.getElementById("btn-refresh-recordings");
+    const fieldRecordingsTableBody = document.getElementById("field-recordings-table-body");
+
+    async function loadFieldRecordings() {
+        if (!fieldRecordingsTableBody) return;
+        try {
+            const resp = await fetch("/api/field_recordings");
+            const data = await resp.json();
+            const list = data.recordings || [];
+            if (list.length === 0) {
+                fieldRecordingsTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 20px;">
+                            No field recordings captured yet. Use the recorder above to capture real microphone samples.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            fieldRecordingsTableBody.innerHTML = "";
+            list.slice().reverse().forEach((item) => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td style="font-family: monospace; font-size: 0.85rem;">${item.filename}</td>
+                    <td><span class="badge" style="background: rgba(99, 102, 241, 0.2); color: #818CF8;">${item.class_name}</span></td>
+                    <td>${item.condition}</td>
+                    <td style="font-family: monospace;">${item.session_id}</td>
+                    <td>${item.distance_m}m</td>
+                    <td>${item.duration_sec}s</td>
+                `;
+                fieldRecordingsTableBody.appendChild(tr);
+            });
+        } catch (e) {
+            console.error("Failed to load field recordings:", e);
+        }
+    }
+
+    if (btnRefreshRecordings) {
+        btnRefreshRecordings.addEventListener("click", loadFieldRecordings);
+    }
+
+    if (btnRecordToggle) {
+        btnRecordToggle.addEventListener("click", async () => {
+            if (fieldMediaRecorder && fieldMediaRecorder.state === "recording") {
+                // Stop recording
+                fieldMediaRecorder.stop();
+                clearInterval(fieldRecordTimerInterval);
+                recordBtnText.innerText = "Start Recording";
+                recordBtnIcon.innerText = "⏺️";
+                recordingStatusBadge.innerText = "CAPTURED";
+                recordingStatusBadge.style.background = "rgba(16, 185, 129, 0.2)";
+                recordingStatusBadge.style.color = "#10B981";
+            } else {
+                // Start recording
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({
+                        audio: {
+                            echoCancellation: false,
+                            noiseSuppression: false,
+                            autoGainControl: false,
+                        },
+                    });
+                    fieldRecordedChunks = [];
+                    fieldMediaRecorder = new MediaRecorder(stream);
+                    fieldMediaRecorder.ondataavailable = (e) => {
+                        if (e.data && e.data.size > 0) {
+                            fieldRecordedChunks.push(e.data);
+                        }
+                    };
+                    fieldMediaRecorder.onstop = () => {
+                        stream.getTracks().forEach((track) => track.stop());
+                        fieldRecordedBlob = new Blob(fieldRecordedChunks, { type: "audio/wav" });
+                        recordAudioPlayer.src = URL.createObjectURL(fieldRecordedBlob);
+                        recordPreviewContainer.style.display = "block";
+                    };
+
+                    fieldMediaRecorder.start();
+                    fieldRecordStartTime = Date.now();
+                    recordingStatusBadge.innerText = "RECORDING 🔴";
+                    recordingStatusBadge.style.background = "rgba(239, 68, 68, 0.2)";
+                    recordingStatusBadge.style.color = "#EF4444";
+                    recordBtnText.innerText = "Stop Recording";
+                    recordBtnIcon.innerText = "⏹️";
+                    recordPreviewContainer.style.display = "none";
+
+                    fieldRecordTimerInterval = setInterval(() => {
+                        const elapsed = (Date.now() - fieldRecordStartTime) / 1000;
+                        const mins = Math.floor(elapsed / 60).toString().padStart(2, "0");
+                        const secs = (elapsed % 60).toFixed(1).padStart(4, "0");
+                        recordingTimer.innerText = `${mins}:${secs}`;
+                    }, 100);
+                } catch (err) {
+                    console.error("Microphone access failed for recorder:", err);
+                    alert("Could not access microphone: " + err.message);
+                }
+            }
+        });
+    }
+
+    if (btnRecordDiscard) {
+        btnRecordDiscard.addEventListener("click", () => {
+            recordPreviewContainer.style.display = "none";
+            recordAudioPlayer.pause();
+            recordAudioPlayer.src = "";
+            fieldRecordedBlob = null;
+            recordingStatusBadge.innerText = "STANDBY";
+            recordingStatusBadge.style.background = "rgba(107, 114, 128, 0.2)";
+            recordingStatusBadge.style.color = "#9CA3AF";
+            recordingTimer.innerText = "00:00.0";
+        });
+    }
+
+    if (btnRecordSave) {
+        btnRecordSave.addEventListener("click", async () => {
+            if (!fieldRecordedBlob) return;
+            btnRecordSave.disabled = true;
+            btnRecordSave.innerText = "Saving...";
+
+            const classSelect = document.getElementById("record-class-select");
+            const conditionSelect = document.getElementById("record-condition-select");
+            const sessionInput = document.getElementById("record-session-id");
+            const distanceSelect = document.getElementById("record-distance-select");
+
+            const formData = new FormData();
+            formData.append("audio", fieldRecordedBlob, "recorded_sample.wav");
+            formData.append("class_name", classSelect ? classSelect.value : "spray_can_shaking");
+            formData.append("condition", conditionSelect ? conditionSelect.value : "clean");
+            formData.append("session_id", sessionInput ? sessionInput.value : "session_live");
+            formData.append("distance_m", distanceSelect ? distanceSelect.value : "3.0");
+
+            try {
+                const resp = await fetch("/api/record_sample", {
+                    method: "POST",
+                    body: formData,
+                });
+                const resData = await resp.json();
+                if (resp.ok) {
+                    alert(`Sample saved successfully to ${resData.entry.class_name}!`);
+                    btnRecordDiscard.click();
+                    loadFieldRecordings();
+                } else {
+                    alert(`Error saving sample: ${resData.error || "Unknown error"}`);
+                }
+            } catch (err) {
+                console.error("Failed to save recorded sample:", err);
+                alert("Failed to save recorded sample: " + err.message);
+            } finally {
+                btnRecordSave.disabled = false;
+                btnRecordSave.innerText = "💾 Save to Field Dataset";
+            }
+        });
+    }
+
     // Initialize system state
     initSystemStatus();
+    loadReviewQueue();
+    loadFieldRecordings();
 });

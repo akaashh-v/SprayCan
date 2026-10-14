@@ -19,6 +19,7 @@ Implements the conservative multi-evidence decision pipeline:
 5. Rule 8: Structured debug logging without storing microphone audio unless explicitly configured.
 """
 
+import datetime
 import json
 import logging
 import time
@@ -27,6 +28,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Union
 
 import numpy as np
+import soundfile as sf
 import torch
 
 from audio_utils import (
@@ -36,6 +38,8 @@ from audio_utils import (
 )
 from config import (
     ALERT_COOLDOWN_SECONDS,
+    ALERT_TITLE,
+    AUDIO_RETENTION_HOURS,
     AUDIO_SAMPLES,
     CALIBRATION_PATH,
     CLASS_NAMES,
@@ -43,16 +47,20 @@ from config import (
     CLIPPING_RATIO_THRESHOLD,
     CONSERVATIVE_THRESHOLD,
     DEVICE,
+    ENABLE_EPHEMERAL_REVIEW,
     ENABLE_NOISE_CANCELLATION,
     HOP_SAMPLES,
     MAX_COMPETING_CONFIDENCE,
     MAX_ENV_CONFIDENCE,
+    MAX_REVIEW_QUEUE_ITEMS,
     MIN_CONFIDENCE_MARGIN,
     MODEL_SAVE_PATH,
     NOISE_FLOOR_FACTOR,
     NOISE_SUBTRACTION_FACTOR,
     NUM_CLASSES,
+    OPERATOR_REVIEW_NOTICE,
     REQUIRED_CONSECUTIVE_WINDOWS,
+    REVIEW_QUEUE_DIR,
     SAMPLE_RATE,
     SAVE_MIC_AUDIO,
     STAGE1_MIN_RMS,
@@ -122,6 +130,9 @@ class SprayCanDetectorEngine:
         self.last_alert_time = -999.0
         self.rolling_audio_buffer = np.zeros(AUDIO_SAMPLES, dtype=np.float32)
         self.history = deque(maxlen=50)
+        self._was_recent_candidate = False
+        self.review_queue = deque(maxlen=MAX_REVIEW_QUEUE_ITEMS)
+        self._purge_expired_review_items()
 
     def _load_model_weights(self) -> None:
         """Load trained neural network checkpoint if available."""
@@ -235,15 +246,24 @@ class SprayCanDetectorEngine:
 
         # -------------------------------------------------------------
         # Adaptive Spectral Noise Cancellation (Background Room Noise, Fan Hum, Rain Bed)
+        # Background adaptation freezes during candidate persistence, active alerts, or cooldown
         # -------------------------------------------------------------
+        freeze_adaptation = bool(
+            in_cooldown or
+            (self.consecutive_positive_windows > 0) or
+            self._was_recent_candidate
+        )
         nc_metrics = {
             "snr_db": 0.0,
             "noise_reduction_db": 0.0,
             "noise_floor_rms": 0.0,
             "is_active": self.enable_noise_cancellation,
+            "adaptation_frozen": freeze_adaptation,
         }
         if self.enable_noise_cancellation:
-            processed_window, nc_metrics = self.noise_canceller.cancel_noise(audio_window)
+            processed_window, nc_metrics = self.noise_canceller.cancel_noise(
+                audio_window, freeze_adaptation=freeze_adaptation
+            )
         else:
             processed_window = audio_window
 
@@ -251,6 +271,7 @@ class SprayCanDetectorEngine:
         # Stage 1: Kinematic Shaking Burst Candidate Pre-Filter & Clipping Check
         # -------------------------------------------------------------
         s1 = self.stage1.analyze_window(processed_window)
+        self._was_recent_candidate = bool(s1.get("is_candidate", False))
 
         # Baseline result template
         result = {
@@ -265,6 +286,7 @@ class SprayCanDetectorEngine:
             "interval_cv": s1.get("interval_cv", 0.0),
             "canister_spectral_ratio": s1.get("canister_spectral_ratio", 0.0),
             "noise_cancellation_active": self.enable_noise_cancellation,
+            "adaptation_frozen": freeze_adaptation,
             "snr_db": nc_metrics["snr_db"],
             "noise_reduction_db": nc_metrics["noise_reduction_db"],
             "noise_floor_rms": nc_metrics["noise_floor_rms"],
@@ -389,37 +411,57 @@ class SprayCanDetectorEngine:
             s2_eval["verdict"],
         )
 
-        # Case A: Ambiguous / High entropy sound (Rule 4)
-        if s2_eval["is_uncertain"]:
+        # Case A: Ambiguous / High entropy sound or uncertain evidence
+        if s2_eval["is_uncertain"] or s2_eval["verdict"] == "UNCERTAIN_AMBIGUOUS_SOUND":
             self.consecutive_positive_windows = max(0, self.consecutive_positive_windows - 1)
             result["status"] = "UNCERTAIN_AMBIGUOUS_SOUND"
-            result["explanation"] = f"Ambiguous acoustic distribution (Entropy {s2_eval['entropy']:.2f} >= {UNCERTAIN_ENTROPY_THRESHOLD}). No alert."
+            result["is_uncertain"] = True
+            result["explanation"] = (
+                f"Ambiguous acoustic evidence (Entropy {s2_eval['entropy']:.2f}, Margin {s2_eval['confidence_margin']:.2f}). "
+                "No alert issued. Dispatched to operator review queue as uncertain candidate."
+            )
+            self._log_to_review_queue(
+                audio_window=audio_window,
+                evaluation=s2_eval,
+                current_time=current_time,
+                event_type="uncertain_candidate",
+            )
             self.history.append(result)
             return result
 
-        # Case B: Confirmed Spray Can Pattern (Rule 3)
+        # Case B: Confirmed Spray Can Pattern
         if s2_eval["is_confirmed_spray"]:
             self.consecutive_positive_windows += 1
             result["consecutive_windows"] = self.consecutive_positive_windows
 
-            # Persistence Gating (Rule 3 & Rule 5): Must persist across consecutive windows
+            # Persistence Gating: Must persist across consecutive windows
             if self.consecutive_positive_windows >= self.required_consecutive_windows:
                 # ALERT TRIGGERED!
+                now_iso = datetime.datetime.now(datetime.timezone.utc).isoformat()
                 result["alert_fired"] = True
-                result["status"] = "ALERT: SPRAY CAN SOUND CONFIRMED"
+                result["alert_title"] = ALERT_TITLE
+                result["status"] = f"ALERT: {ALERT_TITLE.upper()}"
+                result["timestamp_iso"] = now_iso
+                result["confidence"] = round(s2_eval["p_spray_can"], 4)
                 result["explanation"] = (
-                    f"Aerosol spray can confirmed! P(spray)={s2_eval['p_spray_can']*100:.1f}% "
-                    f">= {self.conservative_threshold*100:.0f}%, competing max={s2_eval['max_competing_confidence']*100:.1f}%, "
-                    f"persisted {self.consecutive_positive_windows} consecutive windows."
+                    f"possible aerosol-can shaking detected (Confidence: {s2_eval['p_spray_can']*100:.1f}%, "
+                    f"Timestamp: {now_iso}). {OPERATOR_REVIEW_NOTICE}"
+                )
+                result["operator_action_required"] = True
+                self._log_to_review_queue(
+                    audio_window=audio_window,
+                    evaluation=s2_eval,
+                    current_time=current_time,
+                    event_type="confirmed_alert",
                 )
                 self.last_alert_time = current_time
                 self.consecutive_positive_windows = 0  # reset persistence after firing
-                logger.info("ALERT TRIGGERED: Spray can confirmed at t=%.2f", current_time)
+                logger.info("ALERT TRIGGERED: %s at %s", ALERT_TITLE, now_iso)
             else:
                 result["status"] = f"STAGE1_CANDIDATE (Persistence: {self.consecutive_positive_windows}/{self.required_consecutive_windows})"
                 result["explanation"] = (
                     f"Candidate matches spray can (P={s2_eval['p_spray_can']*100:.1f}%), "
-                    f"awaiting persistence ({self.consecutive_positive_windows}/{self.required_consecutive_windows} windows) to rule out transient rattles."
+                    f"awaiting persistence ({self.consecutive_positive_windows}/{self.required_consecutive_windows} windows) to confirm shaking."
                 )
             self.history.append(result)
             return result
@@ -584,3 +626,119 @@ class SprayCanDetectorEngine:
             "timeline": evaluations,
             "alerts": alerts,
         }
+
+    def _log_to_review_queue(
+        self,
+        audio_window: np.ndarray,
+        evaluation: Dict,
+        current_time: float,
+        event_type: str,
+    ) -> None:
+        """Log ambiguous or alerted event to the ephemeral operator review queue.
+
+        Privacy rule:
+        - Stores only anonymous acoustic window for human validation.
+        - Automatically purged according to AUDIO_RETENTION_HOURS (24 hours).
+        """
+        if not ENABLE_EPHEMERAL_REVIEW:
+            return
+
+        self._purge_expired_review_items()
+
+        event_id = f"evt_{int(time.time() * 1000)}"
+        timestamp_iso = datetime.datetime.now(datetime.timezone.utc).isoformat()
+        wav_filename = f"{event_id}_{event_type}.wav"
+        wav_path = REVIEW_QUEUE_DIR / wav_filename
+
+        try:
+            # Ephemeral audio buffer: save 1.0s window for human verification
+            sf.write(str(wav_path), audio_window, self.sr, subtype="PCM_16")
+        except Exception as e:
+            logger.warning("Could not persist review audio snippet: %s", e)
+            wav_filename = None
+
+        record = {
+            "event_id": event_id,
+            "event_type": event_type,
+            "timestamp_iso": timestamp_iso,
+            "system_time": round(current_time, 3),
+            "p_spray_can": float(evaluation.get("p_spray_can", 0.0)),
+            "p_aerosol_spray_hiss": float(evaluation.get("p_aerosol_spray_hiss", 0.0)),
+            "p_hard_negative": float(evaluation.get("p_hard_negative", 0.0)),
+            "p_continuous_environmental": float(evaluation.get("p_continuous_environmental", 0.0)),
+            "p_ambient": float(evaluation.get("p_ambient", 0.0)),
+            "entropy": float(evaluation.get("entropy", 0.0)),
+            "margin": float(evaluation.get("confidence_margin", 0.0)),
+            "predicted_class": evaluation.get("predicted_class", "unknown"),
+            "verdict": evaluation.get("verdict", "unknown"),
+            "audio_file": wav_filename,
+            "human_reviewed": False,
+            "human_verdict": None,
+            "operator_notes": None,
+            "retention_policy": f"Ephemeral review buffer. Auto-purged after {AUDIO_RETENTION_HOURS}h.",
+        }
+
+        meta_path = REVIEW_QUEUE_DIR / f"{event_id}.json"
+        try:
+            with open(meta_path, "w", encoding="utf-8") as f:
+                json.dump(record, f, indent=2)
+        except Exception as e:
+            logger.warning("Could not write review metadata: %s", e)
+
+        self.review_queue.append(record)
+
+    def _purge_expired_review_items(self) -> None:
+        """Purge review records and audio files older than AUDIO_RETENTION_HOURS."""
+        if not REVIEW_QUEUE_DIR.exists():
+            return
+        cutoff_epoch = time.time() - (AUDIO_RETENTION_HOURS * 3600)
+        try:
+            for item in REVIEW_QUEUE_DIR.glob("*"):
+                if item.stat().st_mtime < cutoff_epoch:
+                    try:
+                        item.unlink()
+                    except Exception:
+                        pass
+        except Exception as e:
+            logger.warning("Error running privacy retention purge: %s", e)
+
+    def get_review_queue(self) -> List[Dict]:
+        """Fetch all events in the review queue ordered by newest first."""
+        self._purge_expired_review_items()
+        records = []
+        if REVIEW_QUEUE_DIR.exists():
+            for json_file in sorted(
+                REVIEW_QUEUE_DIR.glob("evt_*.json"),
+                key=lambda p: p.stat().st_mtime,
+                reverse=True,
+            ):
+                try:
+                    with open(json_file, "r", encoding="utf-8") as f:
+                        records.append(json.load(f))
+                except Exception:
+                    pass
+        return records[:MAX_REVIEW_QUEUE_ITEMS]
+
+    def resolve_review_event(
+        self,
+        event_id: str,
+        human_verdict: str,
+        operator_notes: str = "",
+    ) -> bool:
+        """Record a trained human operator's verdict on an uncertain or alerted event."""
+        json_path = REVIEW_QUEUE_DIR / f"{event_id}.json"
+        if not json_path.exists():
+            return False
+        try:
+            with open(json_path, "r", encoding="utf-8") as f:
+                record = json.load(f)
+            record["human_reviewed"] = True
+            record["human_verdict"] = human_verdict
+            record["operator_notes"] = operator_notes
+            record["reviewed_at"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
+            with open(json_path, "w", encoding="utf-8") as f:
+                json.dump(record, f, indent=2)
+            return True
+        except Exception as e:
+            logger.error("Failed to update review record: %s", e)
+            return False

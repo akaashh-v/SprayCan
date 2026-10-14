@@ -25,6 +25,7 @@ RAW_HARD_NEG_DIR = RAW_DIR / "hard_negatives"
 RAW_AMBIENT_DIR = RAW_DIR / "ambient_negatives"
 RAW_LOUD_IMPACT_DIR = RAW_DIR / "loud_impacts"
 RAW_ENV_DIR = RAW_DIR / "continuous_environmental"
+FIELD_RECORDINGS_DIR = RAW_DIR / "field_recordings"
 
 # Model Checkpoints & Evaluation artifacts
 MODEL_SAVE_PATH = MODELS_DIR / "best_detector.pth"
@@ -32,7 +33,7 @@ BASELINE_MODEL_SAVE_PATH = MODELS_DIR / "baseline_detector.pth"
 EVALUATION_REPORT_PATH = MODELS_DIR / "evaluation_report.json"
 CALIBRATION_PATH = MODELS_DIR / "threshold_calibration.json"
 
-for d in [RAW_SPRAY_DIR, RAW_SPRAY_HISS_DIR, RAW_HARD_NEG_DIR, RAW_AMBIENT_DIR, RAW_LOUD_IMPACT_DIR, RAW_ENV_DIR, PROCESSED_DIR, MODELS_DIR]:
+for d in [RAW_SPRAY_DIR, RAW_SPRAY_HISS_DIR, RAW_HARD_NEG_DIR, RAW_AMBIENT_DIR, RAW_LOUD_IMPACT_DIR, RAW_ENV_DIR, FIELD_RECORDINGS_DIR, PROCESSED_DIR, MODELS_DIR]:
     d.mkdir(parents=True, exist_ok=True)
 
 # Audio Parameters
@@ -55,11 +56,11 @@ STAGE1_MIN_RMS = 0.0004               # Sensitive energy floor for room/speaker 
 STAGE1_MIN_IMPACT_RATE = 2.5          # Minimum cadence for back-and-forth arm shaking (bursts/sec)
 STAGE1_MAX_IMPACT_RATE = 15.0         # Maximum cadence for physical spray can shaking
 STAGE1_MIN_BURSTS = 3                 # Must observe at least 3 distinct impact bursts in 1.0s window
-STAGE1_MIN_SPAN_SECONDS = 0.35        # First to last burst must span at least 0.35s (rules out isolated single/double drops)
-STAGE1_MIN_VALLEY_CONTRAST_DB = 4.2   # Deep valleys between strokes (rules out continuous rain, train, steady hissing)
-STAGE1_MIN_CREST_FACTOR = 4.8         # Peak-to-RMS ratio: metallic impact bursts vs flat turbulent friction hiss (< 4.5)
-STAGE1_MAX_INTERVAL_CV = 0.65         # Kinematic arm shaking regularity: CV of peak intervals <= 0.65 (rules out stochastic rain)
-STAGE1_MIN_CANISTER_SPECTRAL_RATIO = 0.30  # High-to-low ratio: metal canister modal ringing (2.2-7.5 kHz) vs bubbles (200-1800 Hz)
+STAGE1_MIN_SPAN_SECONDS = 0.30        # First to last burst must span at least 0.30s (rules out isolated single/double drops)
+STAGE1_MIN_VALLEY_CONTRAST_DB = 2.0   # Envelope valley contrast (rules out continuous hiss/rain while permitting station background)
+STAGE1_MIN_CREST_FACTOR = 4.2         # Peak-to-RMS ratio: metallic impact bursts vs flat turbulent friction hiss
+STAGE1_MAX_INTERVAL_CV = 0.70         # Kinematic arm shaking regularity: CV of peak intervals <= 0.70 (rules out stochastic rain)
+STAGE1_MIN_CANISTER_SPECTRAL_RATIO = 0.20  # High-to-low ratio: metal canister modal ringing (2.2-7.5 kHz) vs low noise
 CLIPPING_PEAK_THRESHOLD = 0.99        # Peak amplitude to identify digital clipping
 CLIPPING_RATIO_THRESHOLD = 0.002      # Fraction of clipped samples identifying unusable audio
 
@@ -83,24 +84,37 @@ IDX_TO_CLASS = {i: name for i, name in enumerate(CLASS_NAMES)}
 NUM_CLASSES = len(CLASS_NAMES)
 
 # Conservative Decision & Gating Thresholds
-CONSERVATIVE_THRESHOLD = 0.80         # Conservative confidence required for spray can class (>= 80%)
-MAX_COMPETING_CONFIDENCE = 0.14       # Competing classes (spray hiss, rattles, impacts) must have low confidence (<= 14%)
-MAX_ENV_CONFIDENCE = 0.10             # Environmental confounders (rain, water drops, train) must be strictly <= 10%
-MIN_CONFIDENCE_MARGIN = 0.45          # Margin: P(spray) - max(P(competing)) >= 0.45
-UNCERTAIN_ENTROPY_THRESHOLD = 0.65    # Normalized Shannon entropy threshold for ambiguous sounds
+CONSERVATIVE_THRESHOLD = 0.70         # Baseline confidence required for spray can class (tuned on validation set)
+MAX_COMPETING_CONFIDENCE = 0.20       # Physical mimics (spray hiss, hard rattle, impact) must remain low
+MAX_ENV_CONFIDENCE = 0.25             # Environmental background tolerance (rain, train rumble)
+MIN_CONFIDENCE_MARGIN = 0.35          # Margin: P(spray) - max(P(physical mimics)) >= 0.35
+UNCERTAIN_ENTROPY_THRESHOLD = 0.70    # Normalized Shannon entropy threshold for ambiguous sounds
 
 # Multi-Window Temporal Persistence & Cooldown Gating
-REQUIRED_CONSECUTIVE_WINDOWS = 3      # Must match across >= 3 consecutive windows (>= 1.5s sustained shaking)
-MIN_EVENT_DURATION_SECONDS = 1.0      # Minimum duration to confirm sustained shaking
-ALERT_COOLDOWN_SECONDS = 0.5          # Cooldown to prevent repeating alerts for one episode (0.5s)
+REQUIRED_CONSECUTIVE_WINDOWS = 2      # Alert promptness: requires 2 consecutive windows (prompt confirmation, no long delay)
+MIN_EVENT_DURATION_SECONDS = 0.75     # Minimum duration to confirm sustained shaking
+ALERT_COOLDOWN_SECONDS = 3.0          # Cooldown to prevent repeating alerts for one episode (3.0s)
+
+# Alert & Operator Instructions
+ALERT_TITLE = "possible aerosol-can shaking detected"
+OPERATOR_REVIEW_NOTICE = (
+    "Direct trained human operator to review the event. "
+    "A sound alert is not proof that a person is spraying graffiti; "
+    "do not identify or track people from audio."
+)
 
 # Noise Cancellation Settings
 ENABLE_NOISE_CANCELLATION = True      # Real-time adaptive spectral noise cancellation filter
-NOISE_SUBTRACTION_FACTOR = 1.7        # Over-subtraction factor alpha for stationary noise
-NOISE_FLOOR_FACTOR = 0.06             # Spectral floor factor beta (preserves acoustic transients, avoids musical noise)
+NOISE_SUBTRACTION_FACTOR = 1.6        # Over-subtraction factor alpha for stationary noise
+NOISE_FLOOR_FACTOR = 0.08             # Spectral floor factor beta (preserves acoustic transients, avoids musical noise)
 
-# Privacy & Logging Settings
-SAVE_MIC_AUDIO = False                # Do NOT store microphone audio unless explicitly configured
+# Privacy & Monitoring Settings (Railway Operator Data Governance)
+SAVE_MIC_AUDIO = False                # Do NOT store raw continuous microphone audio
+ENABLE_EPHEMERAL_REVIEW = True        # Store only ambiguous/candidate clips for human operator review
+AUDIO_RETENTION_HOURS = 24            # Automatically purge review clips older than 24 hours
+MAX_REVIEW_QUEUE_ITEMS = 100          # Bounded FIFO buffer for uncertain event review
+REVIEW_QUEUE_DIR = DATA_DIR / "review_queue"
+REVIEW_QUEUE_DIR.mkdir(parents=True, exist_ok=True)
 
 # Training Hyperparameters
 BATCH_SIZE = 32

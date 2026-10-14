@@ -1,0 +1,7016 @@
+[
+  {
+    "index": 0,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 1,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 2,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 3,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 4,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 5,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 6,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 7,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 8,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 9,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 10,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 11,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 12,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 13,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 14,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 15,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 16,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 17,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 18,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 19,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 20,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 21,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 22,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 23,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 24,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 25,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 26,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 27,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 28,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 29,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 30,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 31,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 32,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 33,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 34,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 35,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 36,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 37,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 38,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 39,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 40,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 41,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 42,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 43,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 44,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 45,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 46,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 47,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 48,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 49,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 50,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 51,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 52,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 53,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 54,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 55,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 56,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 57,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 58,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 59,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 60,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 61,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 62,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 63,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 64,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 65,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 66,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 67,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 68,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 69,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 70,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 71,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 72,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 73,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 74,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 75,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 76,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 77,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 78,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 79,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 80,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 81,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 82,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 83,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 84,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 85,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 86,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 87,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 88,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 89,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 90,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 91,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 92,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 93,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 94,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 95,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 96,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 97,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 98,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 99,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 100,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 101,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 102,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 103,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 104,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 105,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 106,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 107,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 108,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 109,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 110,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 111,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 112,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 113,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 114,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 115,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 116,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 117,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 118,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 119,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 120,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 121,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 122,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 123,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 124,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 125,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 126,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 127,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 128,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 129,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 130,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 131,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 132,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 133,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 134,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 136,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 137,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 138,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 139,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 140,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 141,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 142,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 143,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 144,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 145,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 147,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 148,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 149,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 150,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 151,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 152,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 153,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 154,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 155,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 156,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 157,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 158,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 159,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 160,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 161,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 162,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 163,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 164,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 165,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 166,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 167,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 168,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 169,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 170,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 171,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 172,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 173,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 174,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 175,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 176,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 177,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 178,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 179,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 180,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 181,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 182,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 183,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 184,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 185,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 186,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 187,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 188,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 189,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 190,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 191,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 192,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 193,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 194,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 195,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 196,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 197,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 198,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 199,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 200,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 201,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 202,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 203,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 204,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 205,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 206,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 207,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 208,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 209,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 210,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 211,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 212,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 213,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 214,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 215,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 216,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 217,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 218,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 219,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 220,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 221,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 222,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 223,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 224,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 225,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 226,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 228,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 229,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 230,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 231,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 232,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 233,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 234,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 235,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 236,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 237,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 238,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 239,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 240,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 241,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 242,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 243,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 244,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 245,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 246,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 247,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 248,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 249,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 250,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 251,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 252,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 253,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 254,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 255,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 256,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 257,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 258,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 259,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 260,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 261,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 262,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 263,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 264,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 265,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 266,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 267,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 268,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 269,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 270,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 271,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 272,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 273,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 274,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 275,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 276,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 277,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 278,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 279,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 280,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 281,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 282,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 283,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 284,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 285,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 286,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 287,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 288,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 289,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 290,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 291,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 292,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 293,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 294,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 295,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 296,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 297,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 298,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 299,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 300,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 301,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 302,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 303,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 304,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 305,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 306,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 307,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 308,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 309,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 310,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 311,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 312,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 313,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 314,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 315,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 316,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 317,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 318,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 319,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 320,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 321,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 322,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 323,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 324,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 325,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 326,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 327,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 328,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 329,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 330,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 331,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 332,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 333,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 334,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 335,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 336,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 337,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 338,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 339,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 340,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 341,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 342,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 343,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 344,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 345,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 346,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 347,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 348,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 349,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 350,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 351,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 352,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 353,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 354,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 355,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 356,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 357,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 358,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 359,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 360,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 361,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 362,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 363,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 364,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 365,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 366,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 367,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 368,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 369,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 370,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 371,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 372,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 373,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 374,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 375,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 376,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 377,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 378,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 379,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 380,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 381,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 382,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 383,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 384,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 385,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 386,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 387,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 388,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 389,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 390,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 391,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 392,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 393,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 394,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 395,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 396,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 397,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 398,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 399,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 400,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 401,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 402,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 403,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 404,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 405,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 406,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 407,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 408,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 409,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 410,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 411,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 412,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 413,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 414,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 415,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 416,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 417,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 418,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 419,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 420,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 421,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 422,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 423,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 424,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 425,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 426,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 427,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 428,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 429,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 430,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 431,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 432,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 433,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 434,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 435,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 436,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 437,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 438,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 439,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 440,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 441,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 442,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 443,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 444,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 445,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 446,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 447,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "3.mp3"
+  },
+  {
+    "index": 448,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "clip_23_1 (3).wav"
+  },
+  {
+    "index": 449,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "clip_23_1 (3).wav"
+  },
+  {
+    "index": 450,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "clip_23_1 (3).wav"
+  },
+  {
+    "index": 451,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "clip_23_1 (3).wav"
+  },
+  {
+    "index": 452,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "clip_23_1 (3).wav"
+  },
+  {
+    "index": 453,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "clip_30_1 (36).wav"
+  },
+  {
+    "index": 454,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "clip_30_1 (36).wav"
+  },
+  {
+    "index": 455,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "clip_30_1 (36).wav"
+  },
+  {
+    "index": 456,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "clip_30_1 (36).wav"
+  },
+  {
+    "index": 457,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "clip_30_1 (36).wav"
+  },
+  {
+    "index": 458,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "clip_34_1 (4).wav"
+  },
+  {
+    "index": 459,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "clip_34_1 (4).wav"
+  },
+  {
+    "index": 460,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "clip_34_1 (4).wav"
+  },
+  {
+    "index": 461,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "clip_34_1 (4).wav"
+  },
+  {
+    "index": 462,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "clip_34_1 (4).wav"
+  },
+  {
+    "index": 463,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "clip_36_1 (41).wav"
+  },
+  {
+    "index": 464,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "clip_36_1 (41).wav"
+  },
+  {
+    "index": 465,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "clip_36_1 (41).wav"
+  },
+  {
+    "index": 466,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "clip_36_1 (41).wav"
+  },
+  {
+    "index": 467,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "clip_36_1 (41).wav"
+  },
+  {
+    "index": 468,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "clip_40_1 (45).wav"
+  },
+  {
+    "index": 469,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "clip_40_1 (45).wav"
+  },
+  {
+    "index": 470,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "clip_40_1 (45).wav"
+  },
+  {
+    "index": 471,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "clip_40_1 (45).wav"
+  },
+  {
+    "index": 472,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "clip_40_1 (45).wav"
+  },
+  {
+    "index": 473,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "clip_41_1 (46).wav"
+  },
+  {
+    "index": 474,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "clip_41_1 (46).wav"
+  },
+  {
+    "index": 475,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "clip_41_1 (46).wav"
+  },
+  {
+    "index": 476,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "clip_41_1 (46).wav"
+  },
+  {
+    "index": 477,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "clip_41_1 (46).wav"
+  },
+  {
+    "index": 478,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "clip_46_1 (50).wav"
+  },
+  {
+    "index": 479,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "clip_46_1 (50).wav"
+  },
+  {
+    "index": 480,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "clip_46_1 (50).wav"
+  },
+  {
+    "index": 481,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "clip_46_1 (50).wav"
+  },
+  {
+    "index": 482,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "clip_46_1 (50).wav"
+  },
+  {
+    "index": 483,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "clip_49_1 (8).wav"
+  },
+  {
+    "index": 484,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "clip_49_1 (8).wav"
+  },
+  {
+    "index": 485,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "clip_49_1 (8).wav"
+  },
+  {
+    "index": 486,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "clip_49_1 (8).wav"
+  },
+  {
+    "index": 487,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "clip_49_1 (8).wav"
+  },
+  {
+    "index": 488,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 489,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 490,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 491,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 492,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 493,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 494,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 495,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 496,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 497,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 498,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 499,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 500,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 501,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 502,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 503,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 504,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 505,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 506,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 507,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 508,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 509,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 510,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 511,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 512,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 513,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 514,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 515,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 516,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 517,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 518,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 519,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 520,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 521,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 522,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 523,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 524,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 525,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 526,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 527,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 528,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 529,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 530,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 531,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 532,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 533,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 534,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 535,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 536,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 537,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 538,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 539,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 540,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 541,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 542,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 543,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 544,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 545,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 546,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 547,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 548,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 549,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 550,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 551,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 552,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 553,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 554,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 555,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 556,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 557,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 558,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 559,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 560,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 561,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 562,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 563,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 564,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 565,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 566,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 567,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 568,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 569,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 570,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 571,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 572,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 573,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 574,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 575,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 576,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 577,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 578,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 579,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 580,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 581,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 582,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 583,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 584,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 585,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 586,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 587,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 588,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 589,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 590,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 591,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 592,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 593,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 594,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 595,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 596,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 597,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 598,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 599,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 600,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 601,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 602,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 603,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 604,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 605,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 606,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 607,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 608,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 609,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 610,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 611,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 612,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 613,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 614,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 615,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 616,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 617,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 618,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 619,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 620,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 621,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 622,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 623,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 624,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 625,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 626,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 627,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 628,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 629,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 630,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 631,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 632,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 633,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 634,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 635,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 636,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 637,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 639,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 640,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 641,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 642,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 643,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 644,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 645,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 646,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 647,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 648,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 649,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 650,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 651,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 652,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 653,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 654,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 655,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 656,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 657,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 658,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 659,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 660,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 661,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 662,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 663,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 664,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 665,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 666,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 667,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 668,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 669,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 670,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 671,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 672,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 673,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 674,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 675,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 676,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 677,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 678,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 679,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 680,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 681,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 682,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 683,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 684,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 685,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 686,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 687,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 688,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 689,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 690,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 691,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 692,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 693,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 694,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 695,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 696,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 697,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 698,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 699,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 700,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 701,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 702,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 703,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 704,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 705,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 706,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 707,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 708,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 709,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 710,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 711,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 712,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 713,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 714,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 715,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 716,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 717,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 718,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 719,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 720,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 721,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 722,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 723,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 724,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 725,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 726,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 727,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 728,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 729,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 730,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 731,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 732,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 733,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 734,
+    "class_name": "spray_can_shaking",
+    "condition": "quiet_clean",
+    "snr_db": null,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 735,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 12.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 736,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 6.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 737,
+    "class_name": "spray_can_shaking",
+    "condition": "overlapping_train_announcement",
+    "snr_db": 0.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 738,
+    "class_name": "spray_can_shaking",
+    "condition": "masked_extreme",
+    "snr_db": -4.0,
+    "source_file": "preview_tillion_multiple_spray_can_shakes.mp3"
+  },
+  {
+    "index": 739,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "continuous_spray_008.wav"
+  },
+  {
+    "index": 740,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "continuous_spray_008.wav"
+  },
+  {
+    "index": 741,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "continuous_spray_008.wav"
+  },
+  {
+    "index": 742,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "continuous_spray_009.wav"
+  },
+  {
+    "index": 743,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "continuous_spray_009.wav"
+  },
+  {
+    "index": 744,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "continuous_spray_009.wav"
+  },
+  {
+    "index": 745,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "continuous_spray_011.wav"
+  },
+  {
+    "index": 746,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "continuous_spray_011.wav"
+  },
+  {
+    "index": 747,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "continuous_spray_011.wav"
+  },
+  {
+    "index": 748,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "continuous_spray_014.wav"
+  },
+  {
+    "index": 749,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "continuous_spray_014.wav"
+  },
+  {
+    "index": 750,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "continuous_spray_018.wav"
+  },
+  {
+    "index": 751,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "continuous_spray_020.wav"
+  },
+  {
+    "index": 752,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "continuous_spray_020.wav"
+  },
+  {
+    "index": 753,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "continuous_spray_020.wav"
+  },
+  {
+    "index": 754,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "continuous_spray_035.wav"
+  },
+  {
+    "index": 755,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "continuous_spray_035.wav"
+  },
+  {
+    "index": 756,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "continuous_spray_035.wav"
+  },
+  {
+    "index": 757,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "handling_and_cap_003.wav"
+  },
+  {
+    "index": 758,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "handling_and_cap_004.wav"
+  },
+  {
+    "index": 759,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "handling_and_cap_008.wav"
+  },
+  {
+    "index": 760,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "handling_and_cap_024.wav"
+  },
+  {
+    "index": 761,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "handling_and_cap_033.wav"
+  },
+  {
+    "index": 762,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "nozzle_sputter_001.wav"
+  },
+  {
+    "index": 763,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "nozzle_sputter_001.wav"
+  },
+  {
+    "index": 764,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "nozzle_sputter_012.wav"
+  },
+  {
+    "index": 765,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "nozzle_sputter_022.wav"
+  },
+  {
+    "index": 766,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "nozzle_sputter_022.wav"
+  },
+  {
+    "index": 767,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "nozzle_sputter_022.wav"
+  },
+  {
+    "index": 768,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "nozzle_sputter_028.wav"
+  },
+  {
+    "index": 769,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "nozzle_sputter_028.wav"
+  },
+  {
+    "index": 770,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "nozzle_sputter_028.wav"
+  },
+  {
+    "index": 771,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "nozzle_sputter_033.wav"
+  },
+  {
+    "index": 772,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "nozzle_sputter_033.wav"
+  },
+  {
+    "index": 773,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "pulsed_spray_bursts_013.wav"
+  },
+  {
+    "index": 774,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "pulsed_spray_bursts_013.wav"
+  },
+  {
+    "index": 775,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "pulsed_spray_bursts_013.wav"
+  },
+  {
+    "index": 776,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "pulsed_spray_bursts_015.wav"
+  },
+  {
+    "index": 777,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "pulsed_spray_bursts_015.wav"
+  },
+  {
+    "index": 778,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "pulsed_spray_bursts_015.wav"
+  },
+  {
+    "index": 779,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "pulsed_spray_bursts_028.wav"
+  },
+  {
+    "index": 780,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "pulsed_spray_bursts_028.wav"
+  },
+  {
+    "index": 781,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "pulsed_spray_bursts_028.wav"
+  },
+  {
+    "index": 782,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "pulsed_spray_bursts_031.wav"
+  },
+  {
+    "index": 783,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "pulsed_spray_bursts_031.wav"
+  },
+  {
+    "index": 784,
+    "class_name": "aerosol_spray_hiss",
+    "condition": "spray_hiss",
+    "snr_db": null,
+    "source_file": "pulsed_spray_bursts_031.wav"
+  },
+  {
+    "index": 785,
+    "class_name": "loud_impact",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "clap_005.wav"
+  },
+  {
+    "index": 786,
+    "class_name": "loud_impact",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "clap_005.wav"
+  },
+  {
+    "index": 787,
+    "class_name": "loud_impact",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "clap_008.wav"
+  },
+  {
+    "index": 788,
+    "class_name": "loud_impact",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "clap_008.wav"
+  },
+  {
+    "index": 789,
+    "class_name": "loud_impact",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "clap_010.wav"
+  },
+  {
+    "index": 790,
+    "class_name": "loud_impact",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "clap_010.wav"
+  },
+  {
+    "index": 791,
+    "class_name": "loud_impact",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "clap_014.wav"
+  },
+  {
+    "index": 792,
+    "class_name": "loud_impact",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "clap_016.wav"
+  },
+  {
+    "index": 793,
+    "class_name": "loud_impact",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "clap_020.wav"
+  },
+  {
+    "index": 794,
+    "class_name": "loud_impact",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "clap_020.wav"
+  },
+  {
+    "index": 795,
+    "class_name": "loud_impact",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "clap_023.wav"
+  },
+  {
+    "index": 796,
+    "class_name": "loud_impact",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "clap_023.wav"
+  },
+  {
+    "index": 797,
+    "class_name": "loud_impact",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "clap_025.wav"
+  },
+  {
+    "index": 798,
+    "class_name": "loud_impact",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "clap_025.wav"
+  },
+  {
+    "index": 799,
+    "class_name": "loud_impact",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "desk_bang_002.wav"
+  },
+  {
+    "index": 800,
+    "class_name": "loud_impact",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "desk_bang_014.wav"
+  },
+  {
+    "index": 801,
+    "class_name": "loud_impact",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "door_slam_004.wav"
+  },
+  {
+    "index": 802,
+    "class_name": "loud_impact",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "door_slam_025.wav"
+  },
+  {
+    "index": 803,
+    "class_name": "loud_impact",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "door_slam_026.wav"
+  },
+  {
+    "index": 804,
+    "class_name": "loud_impact",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "door_slam_031.wav"
+  },
+  {
+    "index": 805,
+    "class_name": "loud_impact",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "door_slam_035.wav"
+  },
+  {
+    "index": 806,
+    "class_name": "loud_impact",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "dropped_object_004.wav"
+  },
+  {
+    "index": 807,
+    "class_name": "loud_impact",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "dropped_object_006.wav"
+  },
+  {
+    "index": 808,
+    "class_name": "loud_impact",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "dropped_object_007.wav"
+  },
+  {
+    "index": 809,
+    "class_name": "loud_impact",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "dropped_object_012.wav"
+  },
+  {
+    "index": 810,
+    "class_name": "loud_impact",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "dropped_object_014.wav"
+  },
+  {
+    "index": 811,
+    "class_name": "loud_impact",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "dropped_object_023.wav"
+  },
+  {
+    "index": 812,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "percussive_music_003.wav"
+  },
+  {
+    "index": 813,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "percussive_music_003.wav"
+  },
+  {
+    "index": 814,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "percussive_music_003.wav"
+  },
+  {
+    "index": 815,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "percussive_music_008.wav"
+  },
+  {
+    "index": 816,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "percussive_music_008.wav"
+  },
+  {
+    "index": 817,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "percussive_music_019.wav"
+  },
+  {
+    "index": 818,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "percussive_music_019.wav"
+  },
+  {
+    "index": 819,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "percussive_music_019.wav"
+  },
+  {
+    "index": 820,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "percussive_music_026.wav"
+  },
+  {
+    "index": 821,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "percussive_music_026.wav"
+  },
+  {
+    "index": 822,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "percussive_music_026.wav"
+  },
+  {
+    "index": 823,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "percussive_music_030.wav"
+  },
+  {
+    "index": 824,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "percussive_music_030.wav"
+  },
+  {
+    "index": 825,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "rain_006.wav"
+  },
+  {
+    "index": 826,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "rain_006.wav"
+  },
+  {
+    "index": 827,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "rain_011.wav"
+  },
+  {
+    "index": 828,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "rain_011.wav"
+  },
+  {
+    "index": 829,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "rain_011.wav"
+  },
+  {
+    "index": 830,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "rain_023.wav"
+  },
+  {
+    "index": 831,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "rain_023.wav"
+  },
+  {
+    "index": 832,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "rain_023.wav"
+  },
+  {
+    "index": 833,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "spray_hiss_003.wav"
+  },
+  {
+    "index": 834,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "spray_hiss_003.wav"
+  },
+  {
+    "index": 835,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "spray_hiss_005.wav"
+  },
+  {
+    "index": 836,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "spray_hiss_005.wav"
+  },
+  {
+    "index": 837,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "spray_hiss_008.wav"
+  },
+  {
+    "index": 838,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "spray_hiss_008.wav"
+  },
+  {
+    "index": 839,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "spray_hiss_014.wav"
+  },
+  {
+    "index": 840,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "spray_hiss_014.wav"
+  },
+  {
+    "index": 841,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "spray_hiss_017.wav"
+  },
+  {
+    "index": 842,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "spray_hiss_017.wav"
+  },
+  {
+    "index": 843,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "spray_hiss_022.wav"
+  },
+  {
+    "index": 844,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "spray_hiss_022.wav"
+  },
+  {
+    "index": 845,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "spray_hiss_022.wav"
+  },
+  {
+    "index": 846,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "spray_hiss_027.wav"
+  },
+  {
+    "index": 847,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "spray_hiss_027.wav"
+  },
+  {
+    "index": 848,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "spray_hiss_028.wav"
+  },
+  {
+    "index": 849,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "spray_hiss_028.wav"
+  },
+  {
+    "index": 850,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "spray_hiss_028.wav"
+  },
+  {
+    "index": 851,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "spray_hiss_034.wav"
+  },
+  {
+    "index": 852,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "spray_hiss_034.wav"
+  },
+  {
+    "index": 853,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "spray_hiss_034.wav"
+  },
+  {
+    "index": 854,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "spray_hiss_035.wav"
+  },
+  {
+    "index": 855,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "spray_hiss_035.wav"
+  },
+  {
+    "index": 856,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "spray_hiss_035.wav"
+  },
+  {
+    "index": 857,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "train_rumble_027.wav"
+  },
+  {
+    "index": 858,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "train_rumble_027.wav"
+  },
+  {
+    "index": 859,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "train_rumble_027.wav"
+  },
+  {
+    "index": 860,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "train_rumble_029.wav"
+  },
+  {
+    "index": 861,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "train_rumble_029.wav"
+  },
+  {
+    "index": 862,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "train_rumble_029.wav"
+  },
+  {
+    "index": 863,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "train_rumble_034.wav"
+  },
+  {
+    "index": 864,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "train_rumble_034.wav"
+  },
+  {
+    "index": 865,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "water_drops_006.wav"
+  },
+  {
+    "index": 866,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "water_drops_006.wav"
+  },
+  {
+    "index": 867,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "water_drops_012.wav"
+  },
+  {
+    "index": 868,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "water_drops_012.wav"
+  },
+  {
+    "index": 869,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "water_drops_021.wav"
+  },
+  {
+    "index": 870,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "water_drops_021.wav"
+  },
+  {
+    "index": 871,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "water_drops_029.wav"
+  },
+  {
+    "index": 872,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "water_drops_029.wav"
+  },
+  {
+    "index": 873,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "water_drops_032.wav"
+  },
+  {
+    "index": 874,
+    "class_name": "continuous_environmental",
+    "condition": "overlapping_train_announcement",
+    "snr_db": null,
+    "source_file": "water_drops_032.wav"
+  },
+  {
+    "index": 875,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "bottle_caps_006.wav"
+  },
+  {
+    "index": 876,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "bottle_caps_006.wav"
+  },
+  {
+    "index": 877,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "bottle_caps_009.wav"
+  },
+  {
+    "index": 878,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "bottle_caps_009.wav"
+  },
+  {
+    "index": 879,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "bottle_caps_009.wav"
+  },
+  {
+    "index": 880,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "bottle_caps_012.wav"
+  },
+  {
+    "index": 881,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "bottle_caps_015.wav"
+  },
+  {
+    "index": 882,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "bottle_caps_019.wav"
+  },
+  {
+    "index": 883,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "bottle_caps_019.wav"
+  },
+  {
+    "index": 884,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "bottle_caps_019.wav"
+  },
+  {
+    "index": 885,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "bottle_caps_023.wav"
+  },
+  {
+    "index": 886,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "bottle_caps_025.wav"
+  },
+  {
+    "index": 887,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "bottle_caps_025.wav"
+  },
+  {
+    "index": 888,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "bottle_caps_025.wav"
+  },
+  {
+    "index": 889,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "bottle_caps_035.wav"
+  },
+  {
+    "index": 890,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "bottle_caps_035.wav"
+  },
+  {
+    "index": 891,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "coins_jar_003.wav"
+  },
+  {
+    "index": 892,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "coins_jar_003.wav"
+  },
+  {
+    "index": 893,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "coins_jar_004.wav"
+  },
+  {
+    "index": 894,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "coins_jar_004.wav"
+  },
+  {
+    "index": 895,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "coins_jar_007.wav"
+  },
+  {
+    "index": 896,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "coins_jar_007.wav"
+  },
+  {
+    "index": 897,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "coins_jar_010.wav"
+  },
+  {
+    "index": 898,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "coins_jar_010.wav"
+  },
+  {
+    "index": 899,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "coins_jar_024.wav"
+  },
+  {
+    "index": 900,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "coins_jar_026.wav"
+  },
+  {
+    "index": 901,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "coins_jar_026.wav"
+  },
+  {
+    "index": 902,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "coins_jar_026.wav"
+  },
+  {
+    "index": 903,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "coins_jar_030.wav"
+  },
+  {
+    "index": 904,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "coins_jar_035.wav"
+  },
+  {
+    "index": 905,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "coins_jar_035.wav"
+  },
+  {
+    "index": 906,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "containers_004.wav"
+  },
+  {
+    "index": 907,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "containers_004.wav"
+  },
+  {
+    "index": 908,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "containers_009.wav"
+  },
+  {
+    "index": 909,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "containers_009.wav"
+  },
+  {
+    "index": 910,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "containers_009.wav"
+  },
+  {
+    "index": 911,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "containers_012.wav"
+  },
+  {
+    "index": 912,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "containers_012.wav"
+  },
+  {
+    "index": 913,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "containers_013.wav"
+  },
+  {
+    "index": 914,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "containers_013.wav"
+  },
+  {
+    "index": 915,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "containers_015.wav"
+  },
+  {
+    "index": 916,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "containers_015.wav"
+  },
+  {
+    "index": 917,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "containers_022.wav"
+  },
+  {
+    "index": 918,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "containers_022.wav"
+  },
+  {
+    "index": 919,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "glassware_001.wav"
+  },
+  {
+    "index": 920,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "glassware_001.wav"
+  },
+  {
+    "index": 921,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "glassware_004.wav"
+  },
+  {
+    "index": 922,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "glassware_004.wav"
+  },
+  {
+    "index": 923,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "glassware_004.wav"
+  },
+  {
+    "index": 924,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "glassware_027.wav"
+  },
+  {
+    "index": 925,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "glassware_035.wav"
+  },
+  {
+    "index": 926,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "glassware_035.wav"
+  },
+  {
+    "index": 927,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "glassware_035.wav"
+  },
+  {
+    "index": 928,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "keys_jangle_006.wav"
+  },
+  {
+    "index": 929,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "keys_jangle_006.wav"
+  },
+  {
+    "index": 930,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "keys_jangle_006.wav"
+  },
+  {
+    "index": 931,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "keys_jangle_016.wav"
+  },
+  {
+    "index": 932,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "keys_jangle_016.wav"
+  },
+  {
+    "index": 933,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "keys_jangle_016.wav"
+  },
+  {
+    "index": 934,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "keys_jangle_020.wav"
+  },
+  {
+    "index": 935,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "keys_jangle_020.wav"
+  },
+  {
+    "index": 936,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "keys_jangle_034.wav"
+  },
+  {
+    "index": 937,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "keys_jangle_034.wav"
+  },
+  {
+    "index": 938,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "liquid_bottle_005.wav"
+  },
+  {
+    "index": 939,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "liquid_bottle_011.wav"
+  },
+  {
+    "index": 940,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "liquid_bottle_011.wav"
+  },
+  {
+    "index": 941,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "liquid_bottle_011.wav"
+  },
+  {
+    "index": 942,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "liquid_bottle_018.wav"
+  },
+  {
+    "index": 943,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "liquid_bottle_018.wav"
+  },
+  {
+    "index": 944,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "liquid_bottle_024.wav"
+  },
+  {
+    "index": 945,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "liquid_bottle_024.wav"
+  },
+  {
+    "index": 946,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "liquid_bottle_034.wav"
+  },
+  {
+    "index": 947,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "liquid_bottle_034.wav"
+  },
+  {
+    "index": 948,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "pill_bottle_004.wav"
+  },
+  {
+    "index": 949,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "pill_bottle_010.wav"
+  },
+  {
+    "index": 950,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "pill_bottle_010.wav"
+  },
+  {
+    "index": 951,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "pill_bottle_027.wav"
+  },
+  {
+    "index": 952,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "pill_bottle_027.wav"
+  },
+  {
+    "index": 953,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "screws_tin_003.wav"
+  },
+  {
+    "index": 954,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "screws_tin_003.wav"
+  },
+  {
+    "index": 955,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "screws_tin_005.wav"
+  },
+  {
+    "index": 956,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "screws_tin_025.wav"
+  },
+  {
+    "index": 957,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "screws_tin_025.wav"
+  },
+  {
+    "index": 958,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "screws_tin_025.wav"
+  },
+  {
+    "index": 959,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "screws_tin_035.wav"
+  },
+  {
+    "index": 960,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "screws_tin_035.wav"
+  },
+  {
+    "index": 961,
+    "class_name": "hard_negative_rattle",
+    "condition": "similar_rattles",
+    "snr_db": null,
+    "source_file": "screws_tin_035.wav"
+  },
+  {
+    "index": 962,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "fan_hum_004.wav"
+  },
+  {
+    "index": 963,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "fan_hum_004.wav"
+  },
+  {
+    "index": 964,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "fan_hum_012.wav"
+  },
+  {
+    "index": 965,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "fan_hum_012.wav"
+  },
+  {
+    "index": 966,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "fan_hum_012.wav"
+  },
+  {
+    "index": 967,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "fan_hum_014.wav"
+  },
+  {
+    "index": 968,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "fan_hum_014.wav"
+  },
+  {
+    "index": 969,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "fan_hum_014.wav"
+  },
+  {
+    "index": 970,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "fan_hum_015.wav"
+  },
+  {
+    "index": 971,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "fan_hum_015.wav"
+  },
+  {
+    "index": 972,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "fan_hum_018.wav"
+  },
+  {
+    "index": 973,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "fan_hum_018.wav"
+  },
+  {
+    "index": 974,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "fan_hum_018.wav"
+  },
+  {
+    "index": 975,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "keyboard_004.wav"
+  },
+  {
+    "index": 976,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "keyboard_004.wav"
+  },
+  {
+    "index": 977,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "keyboard_004.wav"
+  },
+  {
+    "index": 978,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "keyboard_007.wav"
+  },
+  {
+    "index": 979,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "keyboard_007.wav"
+  },
+  {
+    "index": 980,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "keyboard_007.wav"
+  },
+  {
+    "index": 981,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "keyboard_011.wav"
+  },
+  {
+    "index": 982,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "keyboard_011.wav"
+  },
+  {
+    "index": 983,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "keyboard_011.wav"
+  },
+  {
+    "index": 984,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "room_noise_005.wav"
+  },
+  {
+    "index": 985,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "room_noise_005.wav"
+  },
+  {
+    "index": 986,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "room_noise_005.wav"
+  },
+  {
+    "index": 987,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "room_noise_020.wav"
+  },
+  {
+    "index": 988,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "room_noise_020.wav"
+  },
+  {
+    "index": 989,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "room_noise_020.wav"
+  },
+  {
+    "index": 990,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "room_noise_026.wav"
+  },
+  {
+    "index": 991,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "room_noise_026.wav"
+  },
+  {
+    "index": 992,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "speech_002.wav"
+  },
+  {
+    "index": 993,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "speech_002.wav"
+  },
+  {
+    "index": 994,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "speech_002.wav"
+  },
+  {
+    "index": 995,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "speech_007.wav"
+  },
+  {
+    "index": 996,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "speech_007.wav"
+  },
+  {
+    "index": 997,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "speech_007.wav"
+  },
+  {
+    "index": 998,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "speech_015.wav"
+  },
+  {
+    "index": 999,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "speech_015.wav"
+  },
+  {
+    "index": 1000,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "speech_015.wav"
+  },
+  {
+    "index": 1001,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "speech_022.wav"
+  },
+  {
+    "index": 1002,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "speech_022.wav"
+  },
+  {
+    "index": 1003,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "speech_022.wav"
+  },
+  {
+    "index": 1004,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "speech_027.wav"
+  },
+  {
+    "index": 1005,
+    "class_name": "ambient_and_speech",
+    "condition": "busy_station",
+    "snr_db": null,
+    "source_file": "speech_027.wav"
+  }
+]

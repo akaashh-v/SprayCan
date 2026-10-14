@@ -46,16 +46,22 @@ from audio_utils import (
     generate_spray_pulsed_bursts,
     load_audio,
     pad_or_trim,
+    resample_audio_poly,
 )
 from config import (
+    AUDIO_RETENTION_HOURS,
     AUDIO_SAMPLES,
     BASE_DIR,
     CALIBRATION_PATH,
     CLASS_NAMES,
     CONSERVATIVE_THRESHOLD,
     EVALUATION_REPORT_PATH,
+    FIELD_RECORDINGS_DIR,
+    MAX_REVIEW_QUEUE_ITEMS,
     RAW_SPRAY_DIR,
+    REVIEW_QUEUE_DIR,
     SAMPLE_RATE,
+    SAVE_MIC_AUDIO,
     STATIC_DIR,
     TEMPLATES_DIR,
 )
@@ -206,6 +212,10 @@ def predict_window():
                 audio_arr = np.frombuffer(raw_bytes, dtype=np.int16).astype(np.float32) / 32768.0
         else:
             return jsonify({"error": "No audio payload provided"}), 400
+
+        native_sr = int(data.get("native_sample_rate") or data.get("sample_rate") or SAMPLE_RATE)
+        if native_sr != SAMPLE_RATE and len(audio_arr) != AUDIO_SAMPLES:
+            audio_arr = resample_audio_poly(audio_arr, orig_sr=native_sr, target_sr=SAMPLE_RATE)
 
         # Ensure audio array matches exactly AUDIO_SAMPLES (22,050 samples)
         if len(audio_arr) != AUDIO_SAMPLES:
@@ -384,6 +394,169 @@ def get_calibration_report():
         with open(EVALUATION_REPORT_PATH, "r", encoding="utf-8") as f:
             return jsonify(json.load(f))
     return jsonify({"error": "Evaluation report not found"}), 404
+
+
+@app.route("/api/review_queue", methods=["GET"])
+def get_review_queue():
+    """Return items in the operator review queue (uncertain candidates and confirmed alerts)."""
+    items = engine.get_review_queue()
+    return jsonify({
+        "items": items,
+        "count": len(items),
+        "retention_hours": AUDIO_RETENTION_HOURS,
+        "privacy_notice": (
+            "Ephemeral review buffer. Audio clips are retained up to "
+            f"{AUDIO_RETENTION_HOURS} hours for human operator assessment, "
+            "then permanently purged. No biometric or personal identification is performed."
+        ),
+    })
+
+
+@app.route("/api/review_queue/<event_id>/audio", methods=["GET"])
+def get_review_audio(event_id: str):
+    """Serve ephemeral audio snippet for human operator review."""
+    for item in REVIEW_QUEUE_DIR.glob(f"{event_id}_*.wav"):
+        return send_file(item, mimetype="audio/wav")
+    return "Review audio not found or expired", 404
+
+
+@app.route("/api/review_queue/resolve", methods=["POST"])
+def resolve_review():
+    """Human operator records verdict on a review item."""
+    data = request.get_json(force=True)
+    event_id = data.get("event_id")
+    human_verdict = data.get("human_verdict")  # "verified_spray", "false_alert", "inconclusive"
+    notes = data.get("notes", "")
+    if not event_id or not human_verdict:
+        return jsonify({"error": "event_id and human_verdict required"}), 400
+
+    success = engine.resolve_review_event(event_id, human_verdict, notes)
+    if success:
+        return jsonify({"status": "resolved", "event_id": event_id, "human_verdict": human_verdict})
+    return jsonify({"error": "Failed to resolve event"}), 404
+
+
+@app.route("/api/privacy_policy", methods=["GET"])
+def get_privacy_policy():
+    """Expose current audio retention and data governance settings."""
+    return jsonify({
+        "continuous_audio_stored": SAVE_MIC_AUDIO,
+        "ephemeral_review_enabled": True,
+        "audio_retention_hours": AUDIO_RETENTION_HOURS,
+        "max_stored_clips": MAX_REVIEW_QUEUE_ITEMS,
+        "human_tracking_disabled": True,
+        "compliance": "Acoustic event detection only; no voice identification, biometrics, or tracking.",
+    })
+
+
+@app.route("/api/record_sample", methods=["POST"])
+def record_sample():
+    """Save an operator-recorded ground truth sample to field dataset with metadata."""
+    try:
+        class_name = request.form.get("class_name") or "spray_can_shaking"
+        condition = request.form.get("condition") or "clean"
+        session_id = request.form.get("session_id") or "session_live_mic"
+        distance_m = request.form.get("distance_m") or "3.0"
+        notes = request.form.get("notes") or ""
+
+        # Validate class
+        allowed_classes = list(CLASS_NAMES) + ["overlapping_train_announcement"]
+        if class_name not in allowed_classes:
+            return jsonify({"error": f"Invalid class name '{class_name}'. Must be one of {allowed_classes}"}), 400
+
+        audio_bytes = None
+        if "audio" in request.files:
+            audio_bytes = request.files["audio"].read()
+        elif request.is_json:
+            json_data = request.get_json(silent=True) or {}
+            if "audio_base64" in json_data:
+                audio_bytes = base64.b64decode(json_data["audio_base64"])
+                class_name = json_data.get("class_name", class_name)
+                condition = json_data.get("condition", condition)
+                session_id = json_data.get("session_id", session_id)
+                distance_m = json_data.get("distance_m", distance_m)
+                notes = json_data.get("notes", notes)
+
+        if not audio_bytes:
+            return jsonify({"error": "No audio payload provided"}), 400
+
+        if audio_bytes.startswith(b"RIFF"):
+            audio_arr = load_audio(audio_bytes, sr=SAMPLE_RATE)
+        else:
+            try:
+                audio_arr = load_audio(audio_bytes, sr=SAMPLE_RATE)
+            except Exception:
+                audio_arr = np.frombuffer(audio_bytes, dtype=np.int16).astype(np.float32) / 32768.0
+
+        duration_sec = round(len(audio_arr) / SAMPLE_RATE, 2)
+        if duration_sec < 0.5:
+            return jsonify({"error": f"Audio too short ({duration_sec}s < 0.5s)"}), 400
+
+        # Target directory: data/raw/field_recordings/<class_name>
+        target_dir = FIELD_RECORDINGS_DIR / class_name
+        target_dir.mkdir(parents=True, exist_ok=True)
+
+        import time, uuid
+        ts = int(time.time())
+        uid = str(uuid.uuid4())[:8]
+        clean_sess = "".join(c if c.isalnum() or c in "_-" else "_" for c in session_id)
+        filename = f"{clean_sess}_{condition}_{ts}_{uid}.wav"
+        save_path = target_dir / filename
+
+        sf.write(str(save_path), audio_arr, SAMPLE_RATE)
+
+        # Update manifest: data/raw/field_recordings/manifest.json
+        manifest_path = FIELD_RECORDINGS_DIR / "manifest.json"
+        manifest_entries = []
+        if manifest_path.exists():
+            try:
+                with open(manifest_path, "r", encoding="utf-8") as f:
+                    manifest_entries = json.load(f)
+            except Exception:
+                manifest_entries = []
+
+        entry = {
+            "id": uid,
+            "filename": filename,
+            "filepath": str(save_path.relative_to(BASE_DIR)),
+            "class_name": class_name,
+            "condition": condition,
+            "session_id": clean_sess,
+            "distance_m": distance_m,
+            "notes": notes,
+            "duration_sec": duration_sec,
+            "samples": len(audio_arr),
+            "sample_rate": SAMPLE_RATE,
+            "timestamp": ts,
+        }
+        manifest_entries.append(entry)
+
+        with open(manifest_path, "w", encoding="utf-8") as f:
+            json.dump(manifest_entries, f, indent=2)
+
+        return jsonify({
+            "status": "success",
+            "message": f"Saved {duration_sec}s sample to {class_name}",
+            "entry": entry,
+            "total_recordings": len(manifest_entries),
+        })
+    except Exception as e:
+        logger.error("Error recording sample: %s", e, exc_info=True)
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/field_recordings", methods=["GET"])
+def get_field_recordings():
+    """List all operator-recorded ground truth field recordings."""
+    manifest_path = FIELD_RECORDINGS_DIR / "manifest.json"
+    if manifest_path.exists():
+        try:
+            with open(manifest_path, "r", encoding="utf-8") as f:
+                entries = json.load(f)
+                return jsonify({"recordings": entries, "count": len(entries)})
+        except Exception:
+            pass
+    return jsonify({"recordings": [], "count": 0})
 
 
 if __name__ == "__main__":

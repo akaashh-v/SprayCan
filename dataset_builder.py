@@ -215,25 +215,69 @@ def slice_audio_file(audio: np.ndarray, hop_sec: float = 0.5) -> List[np.ndarray
     return slices
 
 
+def get_session_id(fpath: Path) -> str:
+    """Extract recording session / collection period identifier from file path.
+
+    Ensures that multiple clips sliced from the same recording session or device
+    stay strictly together in the same split (train, val, or test) to prevent data leakage.
+    """
+    stem = fpath.stem.lower()
+    if stem.startswith("session_"):
+        parts = stem.split("_")
+        if len(parts) >= 2:
+            return f"{parts[0]}_{parts[1]}"
+        return parts[0]
+    if stem.startswith("preview_"):
+        parts = stem.split("_")
+        if len(parts) >= 2:
+            return f"session_author_{parts[1]}"
+        return "session_preview_misc"
+    if stem.startswith("clip_"):
+        parts = stem.split("_")
+        if len(parts) >= 2:
+            return f"session_clip_{parts[1]}"
+        return "session_clip_misc"
+    return f"session_recording_{stem.split('.')[0]}"
+
+
 def audit_shaking_slice(window: np.ndarray) -> bool:
     """Audit slice extracted from positive spray folder.
 
     Rejects:
-    - Silence or low-energy handling lulls (RMS < 0.004)
+    - Silence or low-energy handling lulls (RMS < 0.002)
     - Clipped signals (Peak >= 1.05)
-    - Flat / non-impulsive friction hiss (Crest Factor < 6.0)
-    Only retains authentic mechanical ball rattle impacts!
+    - Flat / non-impulsive friction hiss (Crest Factor < 4.2)
+    Retains authentic mechanical ball rattle impacts!
     """
     peak = np.max(np.abs(window)) if len(window) > 0 else 0.0
     rms = np.sqrt(np.mean(window**2)) if len(window) > 0 else 0.0
-    if rms < 0.004 or peak >= 1.05:
+    if rms < 0.002 or peak >= 1.05:
         return False
     crest = peak / (rms + 1e-8)
-    return crest >= 6.0
+    return crest >= 4.2
+
+
+def mix_audio_at_snr(signal_audio: np.ndarray, noise_audio: np.ndarray, snr_db: float) -> np.ndarray:
+    """Mix signal and noise at specified Signal-to-Noise Ratio (dB)."""
+    target_len = AUDIO_SAMPLES
+    s = pad_or_trim(signal_audio, target_len)
+    n = pad_or_trim(noise_audio, target_len)
+
+    s_rms = np.sqrt(np.mean(s**2)) + 1e-8
+    n_rms = np.sqrt(np.mean(n**2)) + 1e-8
+
+    desired_n_rms = s_rms / (10.0 ** (snr_db / 20.0))
+    scale = desired_n_rms / n_rms
+    mixed = s + n * scale
+
+    max_val = np.max(np.abs(mixed))
+    if max_val > 0.95:
+        mixed = mixed * (0.95 / max_val)
+    return mixed.astype(np.float32)
 
 
 def build_full_dataset() -> None:
-    """Extract Log-Mel spectrograms with strict Group-Based Splitting & Label Auditing (Rule 6)."""
+    """Extract Log-Mel spectrograms with strict Session-Based Splitting & Overlapping Mixtures."""
     random.seed(RANDOM_SEED)
     np.random.seed(RANDOM_SEED)
     torch.manual_seed(RANDOM_SEED)
@@ -280,7 +324,7 @@ def build_full_dataset() -> None:
         "ambient_and_speech": sorted(ambient_files),
     }
 
-    # 2. Strict Group-Based Splitting by Source Recording File (Rule 6)
+    # 2. Strict Session / Time-Period Group-Based Splitting (Prevents Leakage)
     split_manifest: Dict[str, Dict[str, List[str]]] = {
         "train": {},
         "val": {},
@@ -288,32 +332,55 @@ def build_full_dataset() -> None:
     }
 
     for class_name, files in class_source_map.items():
+        session_to_files: Dict[str, List[Path]] = {}
+        for f in files:
+            sid = get_session_id(f)
+            session_to_files.setdefault(sid, []).append(f)
+
+        session_keys = sorted(list(session_to_files.keys()))
         rng = random.Random(RANDOM_SEED + CLASS_TO_IDX[class_name])
-        shuffled = list(files)
-        rng.shuffle(shuffled)
+        rng.shuffle(session_keys)
 
-        n_total = len(shuffled)
-        n_val = max(1, int(n_total * 0.15))
-        n_test = max(1, int(n_total * 0.15))
-        n_train = n_total - n_val - n_test
+        n_sessions = len(session_keys)
+        n_val_sess = max(1, int(n_sessions * 0.15))
+        n_test_sess = max(1, int(n_sessions * 0.15))
+        n_train_sess = max(1, n_sessions - n_val_sess - n_test_sess)
 
-        train_srcs = shuffled[:n_train]
-        val_srcs = shuffled[n_train : n_train + n_val]
-        test_srcs = shuffled[n_train + n_val :]
+        train_sessions = session_keys[:n_train_sess]
+        val_sessions = session_keys[n_train_sess : n_train_sess + n_val_sess]
+        test_sessions = session_keys[n_train_sess + n_val_sess :]
 
-        split_manifest["train"][class_name] = [f.name for f in train_srcs]
-        split_manifest["val"][class_name] = [f.name for f in val_srcs]
-        split_manifest["test"][class_name] = [f.name for f in test_srcs]
+        split_manifest["train"][class_name] = [
+            f.name for sid in train_sessions for f in session_to_files[sid]
+        ]
+        split_manifest["val"][class_name] = [
+            f.name for sid in val_sessions for f in session_to_files[sid]
+        ]
+        split_manifest["test"][class_name] = [
+            f.name for sid in test_sessions for f in session_to_files[sid]
+        ]
 
         logger.info(
-            "Class '%s' split: Train=%d sources, Val=%d sources, Test=%d sources",
-            class_name, len(train_srcs), len(val_srcs), len(test_srcs)
+            "Class '%s' split: Train=%d files (%d sessions), Val=%d files (%d sessions), Test=%d files (%d sessions)",
+            class_name,
+            len(split_manifest["train"][class_name]), len(train_sessions),
+            len(split_manifest["val"][class_name]), len(val_sessions),
+            len(split_manifest["test"][class_name]), len(test_sessions),
         )
 
-    # 3. Process Windows for Each Partition with Label Auditing
+    # Pre-generate library of station noises for realistic overlap mixing
+    station_noise_pool = [
+        generate_env_train(duration=2.0, sr=SAMPLE_RATE),
+        generate_env_rain(duration=2.0, sr=SAMPLE_RATE),
+        generate_ambient_speech(duration=2.0, sr=SAMPLE_RATE),
+        generate_ambient_fan_hum(duration=2.0, sr=SAMPLE_RATE),
+    ]
+
+    # 3. Process Windows for Each Partition
     train_data: List[Tuple[np.ndarray, int]] = []
     val_data: List[Tuple[np.ndarray, int]] = []
     test_data: List[Tuple[np.ndarray, int]] = []
+    test_conditions: List[Dict] = []
 
     for split_name, partition_target, is_train in [
         ("train", train_data, True),
@@ -333,35 +400,85 @@ def build_full_dataset() -> None:
                     audio = load_audio(fpath, sr=SAMPLE_RATE)
                     windows = slice_audio_file(audio, hop_sec=hop)
                     for win in windows:
-                        # Label Audit for Positive Spray Class:
                         if class_name == "spray_can_shaking":
                             if not audit_shaking_slice(win):
-                                # If slice is quiet room tone or non-shaking handling, route to ambient
                                 rms = np.sqrt(np.mean(win**2))
                                 if 0.001 < rms < 0.015:
                                     spec = compute_log_mel_spectrogram(win, sr=SAMPLE_RATE)
                                     partition_target.append((spec, CLASS_TO_IDX["ambient_and_speech"]))
                                 continue
 
-                        # Base log-mel spectrogram
                         spec = compute_log_mel_spectrogram(win, sr=SAMPLE_RATE)
                         partition_target.append((spec, class_idx))
 
-                        # Training augmentations
-                        if is_train:
-                            num_augs = 2 if class_name == "spray_can_shaking" else 1
-                            for _ in range(num_augs):
+                        if split_name == "test":
+                            if class_name == "spray_can_shaking":
+                                cond = "quiet_clean"
+                            elif class_name == "aerosol_spray_hiss":
+                                cond = "spray_hiss"
+                            elif class_name == "hard_negative_rattle":
+                                cond = "similar_rattles"
+                            elif class_name == "continuous_environmental":
+                                cond = "overlapping_train_announcement"
+                            else:
+                                cond = "busy_station"
+                            test_conditions.append({
+                                "index": len(test_data) - 1,
+                                "class_name": class_name,
+                                "condition": cond,
+                                "snr_db": None,
+                                "source_file": fpath.name,
+                            })
+
+                        # Positive Shaking Augmentations & Overlapping Mixtures:
+                        if class_name == "spray_can_shaking":
+                            if is_train:
+                                # Standard augmentations
                                 aug_win = augment_audio(win, sr=SAMPLE_RATE)
                                 aug_spec = compute_log_mel_spectrogram(aug_win, sr=SAMPLE_RATE)
                                 aug_spec = apply_spec_augment(aug_spec)
                                 partition_target.append((aug_spec, class_idx))
+
+                                # Overlapping station noise mixtures in training (+12 dB to +3 dB)
+                                bg = random.choice(station_noise_pool)
+                                snr = random.uniform(3.0, 14.0)
+                                mixed_win = mix_audio_at_snr(win, bg, snr)
+                                mixed_spec = compute_log_mel_spectrogram(mixed_win, sr=SAMPLE_RATE)
+                                partition_target.append((mixed_spec, class_idx))
+
+                            elif split_name == "test":
+                                # Controlled Overlapping Mixtures in Held-Out Test Set:
+                                # Evaluate performance across real SNR levels (+12 dB, +6 dB, 0 dB, -4 dB)
+                                for snr_val, cond_label in [
+                                    (12.0, "overlapping_train_announcement"),
+                                    (6.0, "overlapping_train_announcement"),
+                                    (0.0, "overlapping_train_announcement"),
+                                    (-4.0, "masked_extreme"),
+                                ]:
+                                    bg = random.choice(station_noise_pool)
+                                    mixed_win = mix_audio_at_snr(win, bg, snr_val)
+                                    mixed_spec = compute_log_mel_spectrogram(mixed_win, sr=SAMPLE_RATE)
+                                    test_data.append((mixed_spec, class_idx))
+                                    test_conditions.append({
+                                        "index": len(test_data) - 1,
+                                        "class_name": "spray_can_shaking",
+                                        "condition": cond_label,
+                                        "snr_db": snr_val,
+                                        "source_file": fpath.name,
+                                    })
+
+                        elif is_train:
+                            # Negative class augmentations
+                            aug_win = augment_audio(win, sr=SAMPLE_RATE)
+                            aug_spec = compute_log_mel_spectrogram(aug_win, sr=SAMPLE_RATE)
+                            partition_target.append((aug_spec, class_idx))
+
                 except Exception as e:
                     logger.warning("Error processing %s in %s: %s", fpath.name, split_name, e)
 
-    # Shuffle each partition internally
+    # Shuffle training and validation partitions internally
     random.Random(RANDOM_SEED).shuffle(train_data)
     random.Random(RANDOM_SEED + 1).shuffle(val_data)
-    random.Random(RANDOM_SEED + 2).shuffle(test_data)
 
     def to_tensors(partition_list):
         x = torch.from_numpy(np.array([item[0] for item in partition_list], dtype=np.float32)).unsqueeze(1)
@@ -381,6 +498,9 @@ def build_full_dataset() -> None:
     # Save manifest for data leakage verification
     with open(PROCESSED_DIR / "split_manifest.json", "w", encoding="utf-8") as f:
         json.dump(split_manifest, f, indent=2)
+
+    with open(PROCESSED_DIR / "test_conditions.json", "w", encoding="utf-8") as f:
+        json.dump(test_conditions, f, indent=2)
 
     def count_labels(pt):
         lbls = pt["labels"].tolist()

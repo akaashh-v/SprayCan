@@ -65,8 +65,15 @@ class AdaptiveSpectralNoiseCanceller:
         """Reset running noise floor estimate."""
         self.running_noise_spec = None
 
-    def cancel_noise(self, audio: np.ndarray) -> Tuple[np.ndarray, Dict]:
+    def cancel_noise(
+        self, audio: np.ndarray, freeze_adaptation: bool = False
+    ) -> Tuple[np.ndarray, Dict]:
         """Apply adaptive multi-band spectral subtraction and transient enhancement.
+
+        Args:
+            audio: 1D numpy array of audio samples.
+            freeze_adaptation: If True, do not update the baseline noise spectrum.
+                Used to prevent candidate shaking events or alerts from being absorbed into baseline.
 
         Returns:
             cleaned_audio: Noise-suppressed audio array of identical length.
@@ -79,6 +86,7 @@ class AdaptiveSpectralNoiseCanceller:
                 "noise_reduction_db": 0.0,
                 "noise_floor_rms": 0.0,
                 "is_active": False,
+                "adaptation_frozen": freeze_adaptation,
             }
 
         orig_rms = float(np.sqrt(np.mean(audio**2)))
@@ -88,6 +96,7 @@ class AdaptiveSpectralNoiseCanceller:
                 "noise_reduction_db": 0.0,
                 "noise_floor_rms": 0.0,
                 "is_active": True,
+                "adaptation_frozen": freeze_adaptation,
             }
 
         # 1. Short-Time Fourier Transform (STFT) via scipy.signal
@@ -110,12 +119,15 @@ class AdaptiveSpectralNoiseCanceller:
         if np.any(self.high_mask):
             noise_floor[self.high_mask] = np.percentile(mag[self.high_mask], self.noise_percentile_high, axis=1, keepdims=True)
 
-        if self.running_noise_spec is None or self.running_noise_spec.shape != noise_floor.shape:
+        if not freeze_adaptation:
+            if self.running_noise_spec is None or self.running_noise_spec.shape != noise_floor.shape:
+                self.running_noise_spec = noise_floor
+            else:
+                self.running_noise_spec = (
+                    self.history_alpha * self.running_noise_spec + (1.0 - self.history_alpha) * noise_floor
+                )
+        elif self.running_noise_spec is None or self.running_noise_spec.shape != noise_floor.shape:
             self.running_noise_spec = noise_floor
-        else:
-            self.running_noise_spec = (
-                self.history_alpha * self.running_noise_spec + (1.0 - self.history_alpha) * noise_floor
-            )
 
         smoothed_noise = self.running_noise_spec
 

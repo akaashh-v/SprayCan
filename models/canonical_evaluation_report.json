@@ -1,0 +1,1048 @@
+{
+  "provenance": {
+    "run_id": "CANONICAL_RUN_20261013_RECONCILED",
+    "model_checkpoint_path": "C:\\Users\\User\\Desktop\\CogniLearn\\Spray\\models\\best_detector.pth",
+    "model_sha256": "ecac9edfa5012e4770460ccc740d495256afe54c0893f7273f226ca59682bec5",
+    "val_partition_path": "C:\\Users\\User\\Desktop\\CogniLearn\\Spray\\data\\processed\\val.pt",
+    "val_sha256": "752ef6adedc31509927b4951ad3aa784edf45938fe15b682b58f225900140d48",
+    "test_partition_path": "C:\\Users\\User\\Desktop\\CogniLearn\\Spray\\data\\processed\\test.pt",
+    "test_sha256": "31d66f89312e7d2b59716f22860c6b69f9c49b1d605d39fb049e20e3290ebb86",
+    "split_manifest_path": "C:\\Users\\User\\Desktop\\CogniLearn\\Spray\\data\\processed\\split_manifest.json",
+    "split_manifest_sha256": "7ec6f9df275e40823d4ff2aa9ee7973ef32d7d881ab58326658f68794d87e1c2",
+    "test_conditions_path": "C:\\Users\\User\\Desktop\\CogniLearn\\Spray\\data\\processed\\test_conditions.json",
+    "test_conditions_sha256": "dfa56ddcb4c9b259dfb42db48be0a2d4dd0cc70c45755a4d1910cc3998a0084f"
+  },
+  "operating_configuration": {
+    "production_conservative_threshold": 0.8,
+    "max_competing_confidence": 0.2,
+    "max_env_confidence": 0.25,
+    "min_confidence_margin": 0.35,
+    "uncertain_entropy_threshold": 0.7,
+    "required_consecutive_windows": 2,
+    "cooldown_seconds": 3.0,
+    "detection_delay_seconds": 1.25
+  },
+  "validation_evaluation": {
+    "split_name": "validation",
+    "sample_counts": {
+      "total_samples": 506,
+      "target_samples": 238,
+      "negative_samples": 268,
+      "class_distribution": {
+        "ambient_and_speech": 47,
+        "loud_impact": 27,
+        "continuous_environmental": 66,
+        "hard_negative_rattle": 92,
+        "aerosol_spray_hiss": 36,
+        "spray_can_shaking": 238
+      },
+      "total_audio_duration_seconds": 506.0,
+      "negative_audio_duration_seconds": 268.0,
+      "negative_audio_duration_minutes": 4.47
+    },
+    "threshold_sweep": [
+      {
+        "threshold": 0.85,
+        "confusion_counts": {
+          "tp": 164,
+          "fp": 0,
+          "fn": 74,
+          "tn": 268
+        },
+        "metrics": {
+          "precision": 1.0,
+          "recall": 0.6891,
+          "missed_detection_rate": 0.3109,
+          "specificity": 1.0,
+          "f1_score": 0.8159
+        },
+        "false_positives_by_negative_class": {
+          "ambient_and_speech": 0,
+          "loud_impact": 0,
+          "continuous_environmental": 0,
+          "hard_negative_rattle": 0,
+          "aerosol_spray_hiss": 0
+        },
+        "uncertain_candidate_count": 38,
+        "raw_argmax_confusion_matrix": [
+          [
+            34,
+            1,
+            0,
+            6,
+            0,
+            6
+          ],
+          [
+            0,
+            27,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            5,
+            47,
+            0,
+            14,
+            0
+          ],
+          [
+            2,
+            6,
+            1,
+            83,
+            0,
+            0
+          ],
+          [
+            0,
+            11,
+            0,
+            0,
+            25,
+            0
+          ],
+          [
+            23,
+            0,
+            0,
+            0,
+            1,
+            214
+          ]
+        ]
+      },
+      {
+        "threshold": 0.8,
+        "confusion_counts": {
+          "tp": 173,
+          "fp": 0,
+          "fn": 65,
+          "tn": 268
+        },
+        "metrics": {
+          "precision": 1.0,
+          "recall": 0.7269,
+          "missed_detection_rate": 0.2731,
+          "specificity": 1.0,
+          "f1_score": 0.8418
+        },
+        "false_positives_by_negative_class": {
+          "ambient_and_speech": 0,
+          "loud_impact": 0,
+          "continuous_environmental": 0,
+          "hard_negative_rattle": 0,
+          "aerosol_spray_hiss": 0
+        },
+        "uncertain_candidate_count": 38,
+        "raw_argmax_confusion_matrix": [
+          [
+            34,
+            1,
+            0,
+            6,
+            0,
+            6
+          ],
+          [
+            0,
+            27,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            5,
+            47,
+            0,
+            14,
+            0
+          ],
+          [
+            2,
+            6,
+            1,
+            83,
+            0,
+            0
+          ],
+          [
+            0,
+            11,
+            0,
+            0,
+            25,
+            0
+          ],
+          [
+            23,
+            0,
+            0,
+            0,
+            1,
+            214
+          ]
+        ]
+      },
+      {
+        "threshold": 0.75,
+        "confusion_counts": {
+          "tp": 180,
+          "fp": 1,
+          "fn": 58,
+          "tn": 267
+        },
+        "metrics": {
+          "precision": 0.9945,
+          "recall": 0.7563,
+          "missed_detection_rate": 0.2437,
+          "specificity": 0.9963,
+          "f1_score": 0.8592
+        },
+        "false_positives_by_negative_class": {
+          "ambient_and_speech": 1,
+          "loud_impact": 0,
+          "continuous_environmental": 0,
+          "hard_negative_rattle": 0,
+          "aerosol_spray_hiss": 0
+        },
+        "uncertain_candidate_count": 38,
+        "raw_argmax_confusion_matrix": [
+          [
+            34,
+            1,
+            0,
+            6,
+            0,
+            6
+          ],
+          [
+            0,
+            27,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            5,
+            47,
+            0,
+            14,
+            0
+          ],
+          [
+            2,
+            6,
+            1,
+            83,
+            0,
+            0
+          ],
+          [
+            0,
+            11,
+            0,
+            0,
+            25,
+            0
+          ],
+          [
+            23,
+            0,
+            0,
+            0,
+            1,
+            214
+          ]
+        ]
+      },
+      {
+        "threshold": 0.7,
+        "confusion_counts": {
+          "tp": 190,
+          "fp": 3,
+          "fn": 48,
+          "tn": 265
+        },
+        "metrics": {
+          "precision": 0.9845,
+          "recall": 0.7983,
+          "missed_detection_rate": 0.2017,
+          "specificity": 0.9888,
+          "f1_score": 0.8817
+        },
+        "false_positives_by_negative_class": {
+          "ambient_and_speech": 3,
+          "loud_impact": 0,
+          "continuous_environmental": 0,
+          "hard_negative_rattle": 0,
+          "aerosol_spray_hiss": 0
+        },
+        "uncertain_candidate_count": 38,
+        "raw_argmax_confusion_matrix": [
+          [
+            34,
+            1,
+            0,
+            6,
+            0,
+            6
+          ],
+          [
+            0,
+            27,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            5,
+            47,
+            0,
+            14,
+            0
+          ],
+          [
+            2,
+            6,
+            1,
+            83,
+            0,
+            0
+          ],
+          [
+            0,
+            11,
+            0,
+            0,
+            25,
+            0
+          ],
+          [
+            23,
+            0,
+            0,
+            0,
+            1,
+            214
+          ]
+        ]
+      },
+      {
+        "threshold": 0.65,
+        "confusion_counts": {
+          "tp": 194,
+          "fp": 4,
+          "fn": 44,
+          "tn": 264
+        },
+        "metrics": {
+          "precision": 0.9798,
+          "recall": 0.8151,
+          "missed_detection_rate": 0.1849,
+          "specificity": 0.9851,
+          "f1_score": 0.8899
+        },
+        "false_positives_by_negative_class": {
+          "ambient_and_speech": 4,
+          "loud_impact": 0,
+          "continuous_environmental": 0,
+          "hard_negative_rattle": 0,
+          "aerosol_spray_hiss": 0
+        },
+        "uncertain_candidate_count": 38,
+        "raw_argmax_confusion_matrix": [
+          [
+            34,
+            1,
+            0,
+            6,
+            0,
+            6
+          ],
+          [
+            0,
+            27,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            5,
+            47,
+            0,
+            14,
+            0
+          ],
+          [
+            2,
+            6,
+            1,
+            83,
+            0,
+            0
+          ],
+          [
+            0,
+            11,
+            0,
+            0,
+            25,
+            0
+          ],
+          [
+            23,
+            0,
+            0,
+            0,
+            1,
+            214
+          ]
+        ]
+      },
+      {
+        "threshold": 0.6,
+        "confusion_counts": {
+          "tp": 197,
+          "fp": 4,
+          "fn": 41,
+          "tn": 264
+        },
+        "metrics": {
+          "precision": 0.9801,
+          "recall": 0.8277,
+          "missed_detection_rate": 0.1723,
+          "specificity": 0.9851,
+          "f1_score": 0.8975
+        },
+        "false_positives_by_negative_class": {
+          "ambient_and_speech": 4,
+          "loud_impact": 0,
+          "continuous_environmental": 0,
+          "hard_negative_rattle": 0,
+          "aerosol_spray_hiss": 0
+        },
+        "uncertain_candidate_count": 38,
+        "raw_argmax_confusion_matrix": [
+          [
+            34,
+            1,
+            0,
+            6,
+            0,
+            6
+          ],
+          [
+            0,
+            27,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            5,
+            47,
+            0,
+            14,
+            0
+          ],
+          [
+            2,
+            6,
+            1,
+            83,
+            0,
+            0
+          ],
+          [
+            0,
+            11,
+            0,
+            0,
+            25,
+            0
+          ],
+          [
+            23,
+            0,
+            0,
+            0,
+            1,
+            214
+          ]
+        ]
+      }
+    ]
+  },
+  "held_out_test_evaluation": {
+    "split_name": "held_out_test",
+    "sample_counts": {
+      "total_samples": 1006,
+      "target_samples": 735,
+      "negative_samples": 271,
+      "class_distribution": {
+        "ambient_and_speech": 48,
+        "loud_impact": 27,
+        "continuous_environmental": 63,
+        "hard_negative_rattle": 87,
+        "aerosol_spray_hiss": 46,
+        "spray_can_shaking": 735
+      },
+      "total_audio_duration_seconds": 1006.0,
+      "negative_audio_duration_seconds": 271.0,
+      "negative_audio_duration_minutes": 4.52
+    },
+    "threshold_sweep": [
+      {
+        "threshold": 0.85,
+        "confusion_counts": {
+          "tp": 181,
+          "fp": 0,
+          "fn": 554,
+          "tn": 271
+        },
+        "metrics": {
+          "precision": 1.0,
+          "recall": 0.2463,
+          "missed_detection_rate": 0.7537,
+          "specificity": 1.0,
+          "f1_score": 0.3952
+        },
+        "false_positives_by_negative_class": {
+          "ambient_and_speech": 0,
+          "loud_impact": 0,
+          "continuous_environmental": 0,
+          "hard_negative_rattle": 0,
+          "aerosol_spray_hiss": 0
+        },
+        "uncertain_candidate_count": 119,
+        "raw_argmax_confusion_matrix": [
+          [
+            38,
+            2,
+            0,
+            6,
+            0,
+            2
+          ],
+          [
+            0,
+            27,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            3,
+            36,
+            0,
+            24,
+            0
+          ],
+          [
+            1,
+            4,
+            2,
+            80,
+            0,
+            0
+          ],
+          [
+            0,
+            5,
+            0,
+            0,
+            41,
+            0
+          ],
+          [
+            114,
+            6,
+            103,
+            31,
+            4,
+            477
+          ]
+        ]
+      },
+      {
+        "threshold": 0.8,
+        "confusion_counts": {
+          "tp": 236,
+          "fp": 0,
+          "fn": 499,
+          "tn": 271
+        },
+        "metrics": {
+          "precision": 1.0,
+          "recall": 0.3211,
+          "missed_detection_rate": 0.6789,
+          "specificity": 1.0,
+          "f1_score": 0.4861
+        },
+        "false_positives_by_negative_class": {
+          "ambient_and_speech": 0,
+          "loud_impact": 0,
+          "continuous_environmental": 0,
+          "hard_negative_rattle": 0,
+          "aerosol_spray_hiss": 0
+        },
+        "uncertain_candidate_count": 119,
+        "raw_argmax_confusion_matrix": [
+          [
+            38,
+            2,
+            0,
+            6,
+            0,
+            2
+          ],
+          [
+            0,
+            27,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            3,
+            36,
+            0,
+            24,
+            0
+          ],
+          [
+            1,
+            4,
+            2,
+            80,
+            0,
+            0
+          ],
+          [
+            0,
+            5,
+            0,
+            0,
+            41,
+            0
+          ],
+          [
+            114,
+            6,
+            103,
+            31,
+            4,
+            477
+          ]
+        ]
+      },
+      {
+        "threshold": 0.75,
+        "confusion_counts": {
+          "tp": 278,
+          "fp": 0,
+          "fn": 457,
+          "tn": 271
+        },
+        "metrics": {
+          "precision": 1.0,
+          "recall": 0.3782,
+          "missed_detection_rate": 0.6218,
+          "specificity": 1.0,
+          "f1_score": 0.5489
+        },
+        "false_positives_by_negative_class": {
+          "ambient_and_speech": 0,
+          "loud_impact": 0,
+          "continuous_environmental": 0,
+          "hard_negative_rattle": 0,
+          "aerosol_spray_hiss": 0
+        },
+        "uncertain_candidate_count": 119,
+        "raw_argmax_confusion_matrix": [
+          [
+            38,
+            2,
+            0,
+            6,
+            0,
+            2
+          ],
+          [
+            0,
+            27,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            3,
+            36,
+            0,
+            24,
+            0
+          ],
+          [
+            1,
+            4,
+            2,
+            80,
+            0,
+            0
+          ],
+          [
+            0,
+            5,
+            0,
+            0,
+            41,
+            0
+          ],
+          [
+            114,
+            6,
+            103,
+            31,
+            4,
+            477
+          ]
+        ]
+      },
+      {
+        "threshold": 0.7,
+        "confusion_counts": {
+          "tp": 308,
+          "fp": 0,
+          "fn": 427,
+          "tn": 271
+        },
+        "metrics": {
+          "precision": 1.0,
+          "recall": 0.419,
+          "missed_detection_rate": 0.581,
+          "specificity": 1.0,
+          "f1_score": 0.5906
+        },
+        "false_positives_by_negative_class": {
+          "ambient_and_speech": 0,
+          "loud_impact": 0,
+          "continuous_environmental": 0,
+          "hard_negative_rattle": 0,
+          "aerosol_spray_hiss": 0
+        },
+        "uncertain_candidate_count": 119,
+        "raw_argmax_confusion_matrix": [
+          [
+            38,
+            2,
+            0,
+            6,
+            0,
+            2
+          ],
+          [
+            0,
+            27,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            3,
+            36,
+            0,
+            24,
+            0
+          ],
+          [
+            1,
+            4,
+            2,
+            80,
+            0,
+            0
+          ],
+          [
+            0,
+            5,
+            0,
+            0,
+            41,
+            0
+          ],
+          [
+            114,
+            6,
+            103,
+            31,
+            4,
+            477
+          ]
+        ]
+      },
+      {
+        "threshold": 0.65,
+        "confusion_counts": {
+          "tp": 335,
+          "fp": 0,
+          "fn": 400,
+          "tn": 271
+        },
+        "metrics": {
+          "precision": 1.0,
+          "recall": 0.4558,
+          "missed_detection_rate": 0.5442,
+          "specificity": 1.0,
+          "f1_score": 0.6262
+        },
+        "false_positives_by_negative_class": {
+          "ambient_and_speech": 0,
+          "loud_impact": 0,
+          "continuous_environmental": 0,
+          "hard_negative_rattle": 0,
+          "aerosol_spray_hiss": 0
+        },
+        "uncertain_candidate_count": 119,
+        "raw_argmax_confusion_matrix": [
+          [
+            38,
+            2,
+            0,
+            6,
+            0,
+            2
+          ],
+          [
+            0,
+            27,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            3,
+            36,
+            0,
+            24,
+            0
+          ],
+          [
+            1,
+            4,
+            2,
+            80,
+            0,
+            0
+          ],
+          [
+            0,
+            5,
+            0,
+            0,
+            41,
+            0
+          ],
+          [
+            114,
+            6,
+            103,
+            31,
+            4,
+            477
+          ]
+        ]
+      },
+      {
+        "threshold": 0.6,
+        "confusion_counts": {
+          "tp": 364,
+          "fp": 0,
+          "fn": 371,
+          "tn": 271
+        },
+        "metrics": {
+          "precision": 1.0,
+          "recall": 0.4952,
+          "missed_detection_rate": 0.5048,
+          "specificity": 1.0,
+          "f1_score": 0.6624
+        },
+        "false_positives_by_negative_class": {
+          "ambient_and_speech": 0,
+          "loud_impact": 0,
+          "continuous_environmental": 0,
+          "hard_negative_rattle": 0,
+          "aerosol_spray_hiss": 0
+        },
+        "uncertain_candidate_count": 119,
+        "raw_argmax_confusion_matrix": [
+          [
+            38,
+            2,
+            0,
+            6,
+            0,
+            2
+          ],
+          [
+            0,
+            27,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            3,
+            36,
+            0,
+            24,
+            0
+          ],
+          [
+            1,
+            4,
+            2,
+            80,
+            0,
+            0
+          ],
+          [
+            0,
+            5,
+            0,
+            0,
+            41,
+            0
+          ],
+          [
+            114,
+            6,
+            103,
+            31,
+            4,
+            477
+          ]
+        ]
+      }
+    ]
+  },
+  "test_conditions_breakdown_at_tau_0_80": {
+    "quiet_clean": {
+      "condition_description": "Solo spray can shaking in quiet room (no train noise)",
+      "dataset_nature": "laboratory_recording",
+      "total_samples": 147,
+      "target_samples": 146,
+      "negative_samples": 1,
+      "duration_seconds": 147.0,
+      "tp": 58,
+      "fp": 0,
+      "fn": 88,
+      "tn": 1,
+      "precision": 1.0,
+      "recall": 0.3973,
+      "rejection_rate": 1.0
+    },
+    "busy_station": {
+      "condition_description": "Continuous station background noise ONLY (NO positive shake audio present)",
+      "dataset_nature": "synthetic_mixture",
+      "total_samples": 71,
+      "target_samples": 0,
+      "negative_samples": 71,
+      "duration_seconds": 71.0,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "tn": 71,
+      "precision": 1.0,
+      "recall": "N/A (No target samples in test set)",
+      "rejection_rate": 1.0
+    },
+    "overlapping_train_announcement": {
+      "condition_description": "Spray can shaking mixed with train rumble & announcements (+12 to 0 dB SNR)",
+      "dataset_nature": "synthetic_mixture",
+      "total_samples": 504,
+      "target_samples": 438,
+      "negative_samples": 66,
+      "duration_seconds": 504.0,
+      "tp": 120,
+      "fp": 0,
+      "fn": 318,
+      "tn": 66,
+      "precision": 1.0,
+      "recall": 0.274,
+      "rejection_rate": 1.0
+    },
+    "spray_hiss": {
+      "condition_description": "Aerosol spray discharge hiss, sputter, and cap handling",
+      "dataset_nature": "synthetic_mixture",
+      "total_samples": 46,
+      "target_samples": 4,
+      "negative_samples": 42,
+      "duration_seconds": 46.0,
+      "tp": 0,
+      "fp": 0,
+      "fn": 4,
+      "tn": 42,
+      "precision": 1.0,
+      "recall": 0.0,
+      "rejection_rate": 1.0
+    },
+    "similar_rattles": {
+      "condition_description": "Hard negative rattles (keys, coins, pill bottles, glassware)",
+      "dataset_nature": "synthetic_mixture",
+      "total_samples": 87,
+      "target_samples": 0,
+      "negative_samples": 87,
+      "duration_seconds": 87.0,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "tn": 87,
+      "precision": 1.0,
+      "recall": "N/A (No target samples in test set)",
+      "rejection_rate": 1.0
+    },
+    "masked_extreme": {
+      "condition_description": "Heavy acoustic masking where train pass-by exceeds can SPL by 4 dB (-4 dB SNR)",
+      "dataset_nature": "synthetic_mixture",
+      "total_samples": 147,
+      "target_samples": 147,
+      "negative_samples": 0,
+      "duration_seconds": 147.0,
+      "tp": 58,
+      "fp": 0,
+      "fn": 89,
+      "tn": 0,
+      "precision": 1.0,
+      "recall": 0.3946,
+      "rejection_rate": "N/A"
+    }
+  },
+  "duration_and_reliability_statement": "The held-out test partition contains 271 one-second negative windows, totaling 271 seconds (4.52 minutes) of concatenated synthetic and laboratory negative audio. This negative duration is insufficient to establish a reliable false alert rate per hour for an operational railway environment. True continuous false alarm rates can only be measured by deploying continuous multi-hour acoustic recordings through the installed platform microphone."
+}

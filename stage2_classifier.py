@@ -156,29 +156,29 @@ def evaluate_candidate_prediction(
     p_rattle = float(competing_probs.get("hard_negative_rattle", 0.0))
     p_ambient = float(competing_probs.get("ambient_and_speech", 0.0))
 
-    # Dangerous acoustic confounders (spray hiss, hard rattles, impacts, environmental)
-    dangerous_confounders = {
+    # Separate physical mimics from additive environmental background:
+    # Physical mimics (spray hiss, hard rattles, impacts) must never trigger an alert.
+    physical_mimics = {
         "aerosol_spray_hiss": p_spray_hiss,
         "hard_negative_rattle": p_rattle,
         "loud_impact": p_impact,
-        "continuous_environmental": p_env,
     }
-    max_dangerous_name = max(dangerous_confounders, key=dangerous_confounders.get)
-    max_dangerous_val = float(dangerous_confounders[max_dangerous_name])
+    max_mimic_name = max(physical_mimics, key=physical_mimics.get)
+    max_mimic_val = float(physical_mimics[max_mimic_name])
+    mimic_margin = float(p_spray - max_mimic_val)
 
-    # Conservative Confirmation Rules:
-    # 1. Spray can probability must exceed conservative threshold (tau >= 0.80).
-    # 2. All competing confounders must have low confidence (<= max_competing_confidence, default 0.14).
-    # 3. Continuous environmental sounds (rain, water drops) must be strictly <= max_env_confidence (default 0.10).
-    # 4. Ambient room tone / background voice must not dominate (<= 0.20).
-    # 5. Confidence margin between spray and nearest competing class must be >= min_confidence_margin (0.45).
-    # 6. Shannon entropy must not indicate an ambiguous/uncertain signal (< entropy_threshold).
+    # Conservative Confirmation Rules for Railway Monitoring:
+    # 1. Spray can probability must meet conservative threshold (tau).
+    # 2. Confusable physical mimics (spray hiss, keys/coins, impact bangs) must remain strictly low (<= max_competing_confidence).
+    # 3. Target class must hold a solid margin over physical mimics (>= min_confidence_margin).
+    # 4. Target must dominate over station environmental noise (p_spray > p_env).
+    # 5. Shannon entropy must not indicate high acoustic ambiguity (< entropy_threshold).
     is_confirmed_spray = (
         (p_spray >= conservative_threshold) and
-        (max_dangerous_val <= max_competing_confidence) and
-        (p_env <= max_env_confidence) and
-        (p_ambient <= 0.35) and
-        (margin >= min_confidence_margin) and
+        (max_mimic_val <= max_competing_confidence) and
+        (mimic_margin >= min_confidence_margin) and
+        (p_spray > p_env) and
+        (p_spray > p_ambient) and
         not is_uncertain
     )
 
@@ -186,18 +186,19 @@ def evaluate_candidate_prediction(
         verdict = "CONFIRMED_SPRAY_CAN"
     elif is_uncertain:
         verdict = "UNCERTAIN_AMBIGUOUS_SOUND"
-    elif predicted_class == "continuous_environmental" or p_env >= 0.12:
-        verdict = "CONTINUOUS_ENVIRONMENTAL_REJECTED"
-    elif predicted_class == "aerosol_spray_hiss" or p_spray_hiss >= 0.14:
+    elif p_spray_hiss >= max(0.18, max_competing_confidence) or predicted_class == "aerosol_spray_hiss":
         verdict = "AEROSOL_SPRAY_HISS_REJECTED"
-    elif predicted_class == "loud_impact" or p_impact >= 0.15:
-        verdict = "LOUD_IMPACT_REJECTED"
-    elif predicted_class == "hard_negative_rattle" or p_rattle >= 0.15:
+    elif p_rattle >= max(0.18, max_competing_confidence) or predicted_class == "hard_negative_rattle":
         verdict = "HARD_NEGATIVE_RATTLE_REJECTED"
-    elif predicted_class == "ambient_and_speech" or p_ambient >= 0.25:
+    elif p_impact >= max(0.20, max_competing_confidence) or predicted_class == "loud_impact":
+        verdict = "LOUD_IMPACT_REJECTED"
+    elif predicted_class == "continuous_environmental" and p_spray < 0.40:
+        verdict = "CONTINUOUS_ENVIRONMENTAL_REJECTED"
+    elif predicted_class == "ambient_and_speech" and p_spray < 0.40:
         verdict = "AMBIENT_AND_SPEECH"
     else:
-        verdict = "UNCERTAIN_LOW_MARGIN"
+        # Ambiguous candidate: target presence is detectable but does not meet conservative margin
+        verdict = "UNCERTAIN_AMBIGUOUS_SOUND"
 
     return {
         "is_confirmed_spray": is_confirmed_spray,

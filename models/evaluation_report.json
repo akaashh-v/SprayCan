@@ -1,20 +1,20 @@
 {
-  "best_epoch": 17,
-  "best_val_f1": 0.9099,
-  "conservative_threshold": 0.75,
-  "consecutive_windows_required": 3,
+  "best_epoch": 1,
+  "best_val_f1": 0.9345,
+  "conservative_threshold": 0.8,
+  "consecutive_windows_required": 2,
   "cooldown_seconds": 3.0,
   "device": "cpu",
   "baseline_evaluation": {
     "model_name": "Unchanged Baseline Model (5-Class)",
-    "conservative_threshold": 0.85,
+    "conservative_threshold": 0.7,
     "shaking_metrics": {
-      "precision": 0.8914,
-      "recall": 0.9936,
-      "missed_detections": 1,
-      "missed_detection_rate": 0.0064,
-      "true_positives": 156,
-      "false_positives_total": 19
+      "precision": 0.9824,
+      "recall": 0.532,
+      "missed_detections": 344,
+      "missed_detection_rate": 0.468,
+      "true_positives": 391,
+      "false_positives_total": 7
     },
     "spray_hiss_metrics": {
       "total_test_hiss_samples": 46,
@@ -24,42 +24,125 @@
       "rejection_rate": 0.913
     },
     "false_positives_by_negative_class": {
-      "ambient_and_speech": 15,
+      "ambient_and_speech": 3,
       "loud_impact": 0,
       "continuous_environmental": 0,
       "hard_negative_rattle": 0,
       "aerosol_spray_hiss": 4
     },
     "streaming_metrics": {
-      "streaming_false_alarm_episodes": 0,
-      "negative_test_audio_hours": 0.0786,
-      "false_alarms_per_hour": 0.0
+      "streaming_false_alarm_episodes": 2,
+      "negative_test_audio_hours": 0.0753,
+      "false_alarms_per_hour": 26.568
     }
   },
   "revised_evaluation": {
-    "selected_conservative_threshold": 0.75,
+    "selected_conservative_threshold": 0.8,
+    "detection_delay_seconds": 1.25,
+    "detection_delay_windows": 2,
+    "system_status": "EVALUATION_MODE",
     "sample_counts": {
-      "spray_can_test_samples": 157,
-      "negative_test_samples": 283,
+      "spray_can_test_samples": 735,
+      "negative_test_samples": 271,
       "negatives_breakdown": {
-        "ambient_and_speech": 60,
+        "ambient_and_speech": 48,
         "loud_impact": 27,
         "continuous_environmental": 63,
         "hard_negative_rattle": 87,
         "aerosol_spray_hiss": 46
       },
-      "total_test_samples": 440
+      "total_test_samples": 1006
     },
     "shaking_alert_metrics": {
       "precision": 1.0,
-      "recall": 0.4777,
-      "missed_detections_count": 82,
-      "missed_detection_rate": 0.5223,
-      "true_positives": 75,
+      "recall": 0.3211,
+      "missed_detections_count": 499,
+      "missed_detection_rate": 0.6789,
+      "true_positives": 236,
       "false_positives_total": 0,
-      "true_negatives": 283,
+      "true_negatives": 271,
       "specificity": 1.0,
       "per_window_false_alarm_rate": 0.0
+    },
+    "results_by_condition": {
+      "quiet_clean": {
+        "total_samples": 147,
+        "target_samples": 146,
+        "negative_samples": 1,
+        "true_positives": 58,
+        "false_negatives": 88,
+        "true_negatives": 1,
+        "false_positives": 0,
+        "precision": 1.0,
+        "recall": 0.3973,
+        "missed_detection_rate": 0.6027,
+        "rejection_rate": 1.0
+      },
+      "busy_station": {
+        "total_samples": 71,
+        "target_samples": 0,
+        "negative_samples": 71,
+        "true_positives": 0,
+        "false_negatives": 0,
+        "true_negatives": 71,
+        "false_positives": 0,
+        "precision": 1.0,
+        "recall": 0.0,
+        "missed_detection_rate": 0.0,
+        "rejection_rate": 1.0
+      },
+      "overlapping_train_announcement": {
+        "total_samples": 504,
+        "target_samples": 438,
+        "negative_samples": 66,
+        "true_positives": 120,
+        "false_negatives": 318,
+        "true_negatives": 66,
+        "false_positives": 0,
+        "precision": 1.0,
+        "recall": 0.274,
+        "missed_detection_rate": 0.726,
+        "rejection_rate": 1.0
+      },
+      "spray_hiss": {
+        "total_samples": 46,
+        "target_samples": 4,
+        "negative_samples": 42,
+        "true_positives": 0,
+        "false_negatives": 4,
+        "true_negatives": 42,
+        "false_positives": 0,
+        "precision": 1.0,
+        "recall": 0.0,
+        "missed_detection_rate": 1.0,
+        "rejection_rate": 1.0
+      },
+      "similar_rattles": {
+        "total_samples": 87,
+        "target_samples": 0,
+        "negative_samples": 87,
+        "true_positives": 0,
+        "false_negatives": 0,
+        "true_negatives": 87,
+        "false_positives": 0,
+        "precision": 1.0,
+        "recall": 0.0,
+        "missed_detection_rate": 0.0,
+        "rejection_rate": 1.0
+      },
+      "masked_extreme": {
+        "total_samples": 147,
+        "target_samples": 147,
+        "negative_samples": 0,
+        "true_positives": 58,
+        "false_negatives": 89,
+        "true_negatives": 0,
+        "false_positives": 0,
+        "precision": 1.0,
+        "recall": 0.3946,
+        "missed_detection_rate": 0.6054,
+        "rejection_rate": 1.0
+      }
     },
     "spray_hiss_specific_metrics": {
       "total_test_hiss_samples": 46,
@@ -67,14 +150,15 @@
       "false_alert_rate": 0.0,
       "true_rejections_on_hiss": 46,
       "rejection_rate": 1.0,
-      "classification_precision": 1.0,
-      "classification_recall": 1.0,
-      "classification_f1": 1.0
+      "classification_precision": 0.5942,
+      "classification_recall": 0.8913,
+      "classification_f1": 0.713
     },
     "streaming_metrics": {
       "streaming_false_alarm_episodes": 0,
-      "negative_test_audio_hours": 0.0786,
-      "false_alarms_per_hour": 0.0
+      "negative_test_audio_hours": 0.0753,
+      "false_alarms_per_hour": 0.0,
+      "detection_delay_seconds": 1.25
     },
     "false_positives_by_negative_class": {
       "ambient_and_speech": 0,
@@ -85,58 +169,58 @@
     },
     "per_class_classification": {
       "ambient_and_speech": {
-        "total_samples": 60,
-        "true_positives": 47,
-        "false_positives": 34,
-        "false_negatives": 13,
-        "precision": 0.5802,
-        "recall": 0.7833,
-        "f1": 0.6667
+        "total_samples": 48,
+        "true_positives": 38,
+        "false_positives": 115,
+        "false_negatives": 10,
+        "precision": 0.2484,
+        "recall": 0.7917,
+        "f1": 0.3781
       },
       "loud_impact": {
         "total_samples": 27,
         "true_positives": 27,
-        "false_positives": 6,
+        "false_positives": 20,
         "false_negatives": 0,
-        "precision": 0.8182,
+        "precision": 0.5745,
         "recall": 1.0,
-        "f1": 0.9
+        "f1": 0.7297
       },
       "continuous_environmental": {
         "total_samples": 63,
-        "true_positives": 63,
-        "false_positives": 1,
-        "false_negatives": 0,
-        "precision": 0.9844,
-        "recall": 1.0,
-        "f1": 0.9921
+        "true_positives": 36,
+        "false_positives": 105,
+        "false_negatives": 27,
+        "precision": 0.2553,
+        "recall": 0.5714,
+        "f1": 0.3529
       },
       "hard_negative_rattle": {
         "total_samples": 87,
-        "true_positives": 84,
-        "false_positives": 5,
-        "false_negatives": 3,
-        "precision": 0.9438,
-        "recall": 0.9655,
-        "f1": 0.9545
+        "true_positives": 80,
+        "false_positives": 37,
+        "false_negatives": 7,
+        "precision": 0.6838,
+        "recall": 0.9195,
+        "f1": 0.7843
       },
       "aerosol_spray_hiss": {
         "total_samples": 46,
-        "true_positives": 46,
-        "false_positives": 0,
-        "false_negatives": 0,
-        "precision": 1.0,
-        "recall": 1.0,
-        "f1": 1.0
+        "true_positives": 41,
+        "false_positives": 28,
+        "false_negatives": 5,
+        "precision": 0.5942,
+        "recall": 0.8913,
+        "f1": 0.713
       },
       "spray_can_shaking": {
-        "total_samples": 157,
-        "true_positives": 120,
-        "false_positives": 7,
-        "false_negatives": 37,
-        "precision": 0.9449,
-        "recall": 0.7643,
-        "f1": 0.8451
+        "total_samples": 735,
+        "true_positives": 477,
+        "false_positives": 2,
+        "false_negatives": 258,
+        "precision": 0.9958,
+        "recall": 0.649,
+        "f1": 0.7858
       }
     },
     "confusion_matrix": {
@@ -150,12 +234,12 @@
       ],
       "matrix": [
         [
-          47,
-          3,
+          38,
+          2,
           0,
-          3,
+          6,
           0,
-          7
+          2
         ],
         [
           0,
@@ -167,53 +251,54 @@
         ],
         [
           0,
-          0,
-          63,
-          0,
-          0,
-          0
-        ],
-        [
-          0,
           3,
+          36,
           0,
-          84,
-          0,
+          24,
           0
         ],
         [
-          0,
-          0,
-          0,
-          0,
-          46,
-          0
-        ],
-        [
-          34,
-          0,
           1,
+          4,
           2,
+          80,
           0,
-          120
+          0
+        ],
+        [
+          0,
+          5,
+          0,
+          0,
+          41,
+          0
+        ],
+        [
+          114,
+          6,
+          103,
+          31,
+          4,
+          477
         ]
       ]
-    }
+    },
+    "data_limitations_and_known_limits": "Current model is operating in EVALUATION MODE. Evaluated on session-partitioned data and realistic controlled station mixtures. A single mounted microphone cannot separate aerosol can shaking from acoustic masking when locomotive pass-by or wheel squeal exceeds the target SPL by more than 3 dB (SNR < -3 dB). For active rail yards and high-reverberation platforms, directional cardioid boundary microphones mounted within 3-5 meters or secondary acoustic beamforming array sensors are recommended."
   },
   "comparison_summary": {
     "unchanged_baseline": {
-      "threshold": 0.85,
-      "shaking_precision": 0.8914,
-      "shaking_recall": 0.9936,
+      "threshold": 0.7,
+      "shaking_precision": 0.9824,
+      "shaking_recall": 0.532,
       "hiss_false_alerts": 4,
       "hiss_rejection_rate": 0.913,
-      "total_false_positives": 19,
-      "streaming_fa_per_hour": 0.0
+      "total_false_positives": 7,
+      "streaming_fa_per_hour": 26.568
     },
     "revised_model": {
-      "threshold": 0.75,
+      "threshold": 0.8,
       "shaking_precision": 1.0,
-      "shaking_recall": 0.4777,
+      "shaking_recall": 0.3211,
       "hiss_false_alerts": 0,
       "hiss_rejection_rate": 1.0,
       "total_false_positives": 0,

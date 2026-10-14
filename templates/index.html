@@ -84,6 +84,12 @@
             <button class="nav-tab" id="tab-btn-calibration" data-tab="tab-calibration">
                 <span class="tab-icon">📊</span> Calibration & Accuracy
             </button>
+            <button class="nav-tab" id="tab-btn-review" data-tab="tab-review">
+                <span class="tab-icon">🛡️</span> Operator Review & Privacy
+            </button>
+            <button class="nav-tab" id="tab-btn-record" data-tab="tab-record">
+                <span class="tab-icon">⏺️</span> Record Ground Truth
+            </button>
         </nav>
 
         <!-- Main Content Area -->
@@ -273,6 +279,183 @@
                                 </thead>
                                 <tbody id="calibration-table-body">
                                     <!-- Populated via JS -->
+                                </tbody>
+                            </table>
+                </div>
+                </div>
+
+                <!-- TAB 5: OPERATOR REVIEW & PRIVACY -->
+                <div class="tab-pane" id="tab-review">
+                    <div class="card glass-card">
+                        <div class="card-header">
+                            <div>
+                                <h2 class="card-title">Operator Review Queue & Privacy Controls</h2>
+                                <p class="card-subtitle">Ephemeral verification buffer for ambiguous candidates and confirmed alerts</p>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn btn-secondary" id="btn-refresh-review-queue">
+                                    <span>🔄</span> Refresh Queue
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Privacy & Retention Notice -->
+                        <div class="callout callout-info" style="margin-bottom: 20px;">
+                            <span class="callout-icon">🔒</span>
+                            <div>
+                                <div class="callout-title">Railway Data Privacy & Retention Policy</div>
+                                <div class="callout-text">
+                                    • Continuous microphone audio is <strong>never stored</strong>.<br>
+                                    • Only short 1.0-second candidate audio snippets requiring operator assessment are buffered.<br>
+                                    • Ephemeral retention limit: <strong>24 hours</strong>. Expired files are permanently purged automatically.<br>
+                                    • <strong>Privacy Protection:</strong> Sound detection only. No voice biometric identification, tracking, or facial correlation.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Microphone Placement & Sensor Engineering Recommendation -->
+                        <div class="callout callout-warning" style="margin-bottom: 24px;">
+                            <span class="callout-icon">📡</span>
+                            <div>
+                                <div class="callout-title">Acoustic Engineering: Single Mounted Microphone Limitations</div>
+                                <div class="callout-text">
+                                    In noisy railway platforms, diesel locomotives and train passes exceed 85–95 dBA, which can mask the 55–65 dBA rattle of an aerosol can at distances &gt; 5 meters.
+                                    <br><strong>Recommendations:</strong>
+                                    Mount directional cardioid boundary microphones downward toward target surfaces (shelters, walls, blind spots) within <strong>3–5 meters</strong>.
+                                    For high-traffic platforms, use a dual-microphone cross-correlation array to reject diffuse track rumble.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Review Queue Table -->
+                        <h3 class="card-title-sm" style="margin-bottom: 12px;">Candidate Events Awaiting Operator Assessment</h3>
+                        <div class="table-container">
+                            <table class="calibration-table" id="review-queue-table">
+                                <thead>
+                                    <tr>
+                                        <th>Event ID</th>
+                                        <th>Timestamp</th>
+                                        <th>Type</th>
+                                        <th>P(Spray)</th>
+                                        <th>Entropy</th>
+                                        <th>Audio Snippet</th>
+                                        <th>Human Review Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="review-queue-table-body">
+                                    <tr>
+                                        <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 20px;">
+                                            No pending candidate events in the review queue.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 6: RECORD GROUND TRUTH -->
+                <div class="tab-pane" id="tab-record">
+                    <div class="card glass-card">
+                        <div class="card-header">
+                            <div>
+                                <h2 class="card-title">Record Labeled Field Examples</h2>
+                                <p class="card-subtitle">Capture real microphone recordings with pre-save playback, metadata tagging, and strict session isolation</p>
+                            </div>
+                        </div>
+
+                        <!-- Instructions & Best Practices -->
+                        <div class="callout callout-info" style="margin-bottom: 20px;">
+                            <span class="callout-icon">🎙️</span>
+                            <div>
+                                <div class="callout-title">Field Recording Protocol for Railway Monitoring</div>
+                                <div class="callout-text">
+                                    • <strong>Session Isolation:</strong> All clips recorded in the same session or with the same setup are grouped by Session ID to guarantee zero data leakage across train/val/test splits.<br>
+                                    • <strong>Conditions to Capture:</strong> Authentic aerosol-can shakes (clean, busy station, and overlapping train passes/announcements), spray-hiss-only negatives, keys/coins rattles, and ordinary station noise.<br>
+                                    • <strong>Pre-Save Verification:</strong> Always play back and inspect audio quality before committing to the dataset.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recorder Controls Card -->
+                        <div class="card glass-card" style="margin-bottom: 20px; border-color: rgba(99, 102, 241, 0.3);">
+                            <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 16px; flex-wrap: wrap;">
+                                <button class="btn btn-primary" id="btn-record-toggle" type="button">
+                                    <span id="record-btn-icon">⏺️</span> <span id="record-btn-text">Start Recording</span>
+                                </button>
+                                <div id="recording-timer" style="font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; color: var(--accent-cyan); font-weight: bold;">00:00.0</div>
+                                <span class="badge" id="recording-status-badge" style="background: rgba(107, 114, 128, 0.2); color: #9CA3AF;">STANDBY</span>
+                            </div>
+
+                            <!-- Audio Preview Container -->
+                            <div id="record-preview-container" style="display: none; margin-top: 16px; padding: 14px; background: rgba(17, 24, 39, 0.6); border-radius: 8px; border: 1px solid var(--border-color);">
+                                <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;">PRE-SAVE PLAYBACK & VERIFICATION:</div>
+                                <audio id="record-audio-player" controls style="width: 100%; margin-bottom: 14px;"></audio>
+                                
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 14px;">
+                                    <div>
+                                        <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Target Class Label</label>
+                                        <select id="record-class-select" class="form-select" style="width: 100%; background: #1F2937; color: #FFF; border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 10px;">
+                                            <option value="spray_can_shaking">spray_can_shaking (Target: Can Shaking)</option>
+                                            <option value="aerosol_spray_hiss">aerosol_spray_hiss (Negative: Spray Hiss Only)</option>
+                                            <option value="hard_negative_rattle">hard_negative_rattle (Negative: Keys/Coins/Pill)</option>
+                                            <option value="continuous_environmental">continuous_environmental (Negative: Train/Station Noise)</option>
+                                            <option value="ambient_and_speech">ambient_and_speech (Negative: Room/Speech)</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Acoustic Condition</label>
+                                        <select id="record-condition-select" class="form-select" style="width: 100%; background: #1F2937; color: #FFF; border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 10px;">
+                                            <option value="quiet_clean">Quiet / Clean Indoor / Solo</option>
+                                            <option value="busy_station">Busy Station / Platform Ambient</option>
+                                            <option value="overlapping_train_announcement">Overlapping Train Pass / Announcement</option>
+                                            <option value="similar_rattles">Similar Rattles (Keys, Coins, Hardware)</option>
+                                            <option value="spray_hiss">Spray Hiss / Nozzle Discharge</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Session Identifier</label>
+                                        <input type="text" id="record-session-id" value="session_field_test_1" style="width: 100%; background: #1F2937; color: #FFF; border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 10px;" placeholder="e.g. session_platform1_micA">
+                                    </div>
+                                    <div>
+                                        <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Distance from Mic</label>
+                                        <select id="record-distance-select" class="form-select" style="width: 100%; background: #1F2937; color: #FFF; border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 10px;">
+                                            <option value="1.0">1.0 meter (Near-field)</option>
+                                            <option value="3.0" selected>3.0 meters (Recommended mounting)</option>
+                                            <option value="5.0">5.0 meters (Far-field)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                                    <button class="btn btn-secondary" id="btn-record-discard" type="button">Discard</button>
+                                    <button class="btn btn-primary" id="btn-record-save" type="button">💾 Save to Field Dataset</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Already Recorded Samples Table -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <h3 class="card-title-sm">Collected Field Recordings</h3>
+                            <button class="btn btn-secondary btn-sm" id="btn-refresh-recordings">🔄 Refresh List</button>
+                        </div>
+                        <div class="table-container">
+                            <table class="calibration-table" id="field-recordings-table">
+                                <thead>
+                                    <tr>
+                                        <th>File Name</th>
+                                        <th>Class Label</th>
+                                        <th>Condition</th>
+                                        <th>Session ID</th>
+                                        <th>Distance</th>
+                                        <th>Duration</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="field-recordings-table-body">
+                                    <tr>
+                                        <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 20px;">
+                                            No field recordings captured yet. Use the recorder above to capture real microphone samples.
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>

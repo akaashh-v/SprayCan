@@ -155,11 +155,11 @@ class TestSprayCanDetectorBehavior(unittest.TestCase):
         self.assertLessEqual(self.engine.consecutive_positive_windows, 1)
 
     def test_cooldown_enforcement(self):
-        """After a confirmed event fires, subsequent windows within 0.5s cooldown are suppressed."""
+        """After a confirmed event fires, subsequent windows within cooldown are suppressed."""
         # Simulate firing an alert
         self.engine.last_alert_time = 10.0
 
-        # Evaluate at t = 10.25s (0.25s into 0.5s cooldown)
+        # Evaluate at t = 10.25s (0.25s into cooldown)
         shake_file = RAW_SPRAY_DIR / "1.mp3"
         raw_shake = load_audio(shake_file, sr=self.sr)
         shake_win = raw_shake[:AUDIO_SAMPLES]
@@ -168,10 +168,12 @@ class TestSprayCanDetectorBehavior(unittest.TestCase):
         self.assertFalse(res["alert_fired"])
         self.assertTrue(res["in_cooldown"])
         self.assertEqual(res["status"], "IN_COOLDOWN")
-        self.assertAlmostEqual(res["cooldown_remaining_sec"], 0.25, places=2)
+        expected_remaining = round(self.engine.cooldown_seconds - 0.25, 2)
+        self.assertAlmostEqual(res["cooldown_remaining_sec"], expected_remaining, places=2)
 
-        # After cooldown passes (t = 10.6s)
-        res_post = self.engine.evaluate_window(shake_win, current_time=10.6)
+        # After cooldown passes (t = 10.0 + cooldown + 0.1s)
+        t_after = 10.0 + self.engine.cooldown_seconds + 0.1
+        res_post = self.engine.evaluate_window(shake_win, current_time=t_after)
         self.assertFalse(res_post["in_cooldown"])
 
     def test_light_rain_never_alerts(self):

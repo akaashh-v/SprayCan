@@ -1,0 +1,20 @@
+{
+  "event_id": "evt_1791885111169",
+  "event_type": "uncertain_candidate",
+  "timestamp_iso": "2026-10-13T09:51:51.169175+00:00",
+  "system_time": 1791885111.104,
+  "p_spray_can": 0.1786,
+  "p_aerosol_spray_hiss": 0.5282,
+  "p_hard_negative": 0.0254,
+  "p_continuous_environmental": 0.2004,
+  "p_ambient": 0.0329,
+  "entropy": 0.719,
+  "margin": -0.3497,
+  "predicted_class": "aerosol_spray_hiss",
+  "verdict": "UNCERTAIN_AMBIGUOUS_SOUND",
+  "audio_file": "evt_1791885111169_uncertain_candidate.wav",
+  "human_reviewed": false,
+  "human_verdict": null,
+  "operator_notes": null,
+  "retention_policy": "Ephemeral review buffer. Auto-purged after 24h."
+}
