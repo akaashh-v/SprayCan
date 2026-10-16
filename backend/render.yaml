@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: spray-can-detector-api
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: "pip install --upgrade pip && pip install -r requirements.txt"
+    startCommand: "gunicorn --bind 0.0.0.0:$PORT --workers 1 --threads 4 --timeout 120 app:app"
+    envVars:
+      - key: FLASK_SECRET_KEY
+        generateValue: true
+      - key: CROSS_ORIGIN_COOKIES
+        value: "true"

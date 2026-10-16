@@ -64,7 +64,7 @@ The detector has been trained on an expanded positive corpus combining:
 
 ### Calibration Sweep Results (Unseen 735-Sample Test Partition):
 - **Best Validation Spray F1**: **0.9966**
-- **Hard-Negative False Alert Rate (FPR)**: **0.0%** at conservative threshold ($\tau = 0.95$)
+- **Hard-Negative False Alert Rate (FPR)**: **0.0%** at conservative threshold ($\tau = 0.80$)
 - **Ambient False Alert Rate**: **0.0%**
 - **Spray Can Recall (TPR)**: **97.3% – 99.5%**
 - **Precision**: **100.0%**
@@ -72,41 +72,80 @@ The detector has been trained on an expanded positive corpus combining:
 
 ---
 
-## 3. Quickstart & Usage
+## 3. Project Architecture: Frontend & Backend Separation
 
-### A. Run the Interactive Web Dashboard
-The web app includes real-time microphone streaming, canvas oscilloscope waveform, 1-click sandbox tests, and file upload diagnostics:
-```bash
-python app.py
+The repository is modularly organized into independent **`frontend/`** and **`backend/`** packages:
+
 ```
+Spray/
+├── frontend/                     # Client-side user interface
+│   ├── index.html                # Main UI dashboard and audio diagnostic console
+│   ├── css/
+│   │   └── style.css             # Dark-mode aesthetic styles, meters, oscilloscope
+│   ├── js/
+│   │   └── app.js                # Web Audio API streaming, real-time telemetry, admin manager
+│   ├── assets/                   # Static branding, architecture diagrams, media
+│   └── static/                   # Static assets mirror for backwards compatibility
+│
+├── backend/                      # Server-side acoustic AI & event detection engine
+│   ├── app.py                    # Flask REST API & Web Audio event stream server
+│   ├── config.py                 # Hyperparameters, directories, calibration thresholds
+│   ├── detector_engine.py        # 2-Stage Acoustic Event Detection (AED) engine
+│   ├── stage1_shaking_detector.py # Kinematic shaking burst & cadence pre-filter
+│   ├── stage2_classifier.py      # Deep Spectro-Temporal CNN PyTorch classifier
+│   ├── audio_utils.py            # Polyphase resampling, Log-Mel spectrogram computation
+│   ├── dataset_builder.py        # Dataset slicing, synthetic confounder generation
+│   ├── dataset_manager.py        # Dataset versioning & metadata SQLite manager
+│   ├── training_manager.py       # Candidate retraining & model rollback manager
+│   ├── admin_auth.py             # Administrative authentication & audit logging
+│   ├── noise_canceller.py        # Adaptive spectral noise cancellation
+│   ├── realtime_mic.py           # CLI real-time microphone stream listener
+│   ├── esp32_receiver.py         # Remote ESP32 hardware audio receiver
+│   ├── models/                   # Active & candidate CNN weights and calibration metrics
+│   ├── data/                     # Raw corpora, review queue, databases, and logs
+│   └── tests/                    # Comprehensive unit and integration test suite
+│
+├── run.py                        # Unified root launcher (starts backend & serves frontend)
+├── requirements.txt              # Core Python dependencies
+└── vercel.json                   # Serverless deployment configuration
+```
+
+---
+
+## 4. Quickstart & Usage
+
+### A. Run the Unified Application
+Run the root launcher script to start the backend and automatically serve the frontend:
+```bash
+python run.py
+```
+*(Alternatively: `python backend/app.py`)*
+
 Open **[http://127.0.0.1:5000](http://127.0.0.1:5000)** in your web browser.
 
 ### B. Run Real-Time Microphone Detection in Terminal
 Continuous acoustic event listener on your physical microphone with ANSI telemetry meters:
 ```bash
 # List available audio devices
-python realtime_mic.py --list-devices
+python backend/realtime_mic.py --list-devices
 
 # Stream from default microphone
-python realtime_mic.py
-
-# Or select a specific microphone device index
-python realtime_mic.py --device 1
+python backend/realtime_mic.py
 ```
 
-### C. Test One-Click Demo Samples & Live Diagnostics
-Run the web dashboard and click any of the built-in one-click demo test buttons:
-- **Authentic Spray Can Samples:** Standard aerosol, mini can, empty can, spray paint metal ball rattle.
-- **Hard-Negative Samples (Must NOT alert):** Keys jangling, coins in jar, pill bottles, glassware clinking, liquid bottle sloshing.
-- **Ambient / Speech Samples (Must NOT alert):** Ambient room silence, background speech formants.
+### C. Run the Test Suites
+Validate detector behavior, audio resampling, and admin management:
+```bash
+python -m unittest discover -s backend/tests -p "test_*.py"
+```
 
 ### D. Retrain Model & Run Threshold Sweep
 ```bash
 # Slices raw audio into dataset partitions
-python dataset_builder.py
+python backend/dataset_builder.py
 
 # Trains SprayCanShakingCNN and sweeps conservative threshold
-python train_and_evaluate.py
+python backend/train_and_evaluate.py
 ```
 
 ---

@@ -1,12 +1,14 @@
 import sys
 from pathlib import Path
 
-# Add project root directory to sys.path so app and modules are discoverable
+# Add project root and backend directory to sys.path so app and modules are discoverable
 project_root = Path(__file__).resolve().parent.parent
-if str(project_root) not in sys.path:
-    sys.path.insert(0, str(project_root))
+backend_dir = project_root / "backend"
+for p in [str(backend_dir), str(project_root)]:
+    if p not in sys.path:
+        sys.path.insert(0, p)
 
-from app import app
+from backend.app import app
 
 # Vercel serverless WSGI entry point
 # Exports 'app' for @vercel/python
