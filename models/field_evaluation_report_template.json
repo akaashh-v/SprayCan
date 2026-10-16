@@ -1,0 +1,130 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Railway Platform Acoustic Spray Can Detector - Field Evaluation Report Template",
+  "template_version": "1.0.0",
+  "provenance": {
+    "run_id": "FIELD_EVAL_YYYYMMDD_HHMMSS",
+    "evaluation_timestamp_iso": "YYYY-MM-DDTHH:MM:SSZ",
+    "model_checkpoint_path": "models/best_detector.pth",
+    "model_sha256": "ecac9edfa5012e4770460ccc740d495256afe54c0893f7273f226ca59682bec5",
+    "split_manifest_path": "data/processed/field_split_manifest.json",
+    "split_manifest_sha256": "SHA256_HASH_OF_SPLIT_MANIFEST",
+    "operating_configuration": {
+      "production_conservative_threshold": 0.80,
+      "max_competing_confidence": 0.20,
+      "max_env_confidence": 0.25,
+      "min_confidence_margin": 0.35,
+      "uncertain_entropy_threshold": 0.70,
+      "required_consecutive_windows": 2,
+      "cooldown_seconds": 3.0,
+      "stream_hop_duration_seconds": 0.25,
+      "window_duration_seconds": 1.0,
+      "shadow_mode_enabled": true,
+      "automatic_enforcement_allowed": false
+    }
+  },
+  "field_performance_verification_status": {
+    "status": "UNVERIFIED",
+    "installed_microphone_continuous_data_available": false,
+    "disclaimer": "Detector behavior has NOT yet been tested on real continuous recordings from installed platform microphones. Any operational field performance metric remains strictly UNVERIFIED until continuous recordings from the installed microphone are ingested and evaluated."
+  },
+  "governance_and_privacy": {
+    "shadow_mode_policy": "All acoustic alerts are strictly advisory. No automatic security dispatch, siren activation, or personnel mobilization is permitted without human visual verification.",
+    "audio_retention_policy_hours": 24,
+    "automatic_purge_verified": true,
+    "non_inference_policy": "Acoustic detection measures physical sound events only. Operators must not infer graffiti activity, criminal intent, or individual identity from audio recordings."
+  },
+  "aggregate_field_metrics": {
+    "total_sessions_evaluated": 0,
+    "total_audio_duration_hours": 0.0,
+    "total_negative_audio_hours": 0.0,
+    "total_target_events": 0,
+    "detected_target_events": 0,
+    "missed_target_events": 0,
+    "event_detection_rate": "N/A (No target events collected yet)",
+    "event_detection_rate_95ci": null,
+    "detection_delays_seconds": {
+      "mean": null,
+      "median": null,
+      "min": null,
+      "max": null
+    },
+    "total_alert_episodes_fired": 0,
+    "true_alert_episodes": 0,
+    "false_alert_episodes": 0,
+    "false_alert_episodes_per_hour": null,
+    "false_alert_rate_95ci_per_hour": null,
+    "exposure_metric_rules": {
+      "zero_hours_rule": "If total_negative_audio_hours is 0, false_alert_episodes_per_hour and false_alert_rate_95ci_per_hour are strictly null (undefined).",
+      "zero_alerts_positive_exposure_rule": "If exposure hours T > 0 and 0 false alerts observed, rate is 0.0 with Poisson exact 95% upper bound ≈ -ln(0.05)/T ≈ 3.0 / T FA/hr.",
+      "positive_alerts_rule": "If exposure hours T > 0 and k >= 1 false alerts observed, rate is k / T with exact Chi-square quantiles 95% CI."
+    }
+  },
+  "condition_breakdown": {
+    "quiet_platform": {
+      "condition_description": "Off-peak quiet station platform ambient audio",
+      "negative_duration_hours": 0.0,
+      "target_events": 0,
+      "detected_events": 0,
+      "missed_events": 0,
+      "detection_rate": "N/A",
+      "false_alert_episodes": 0,
+      "false_alert_rate_per_hour": null
+    },
+    "train_passby_and_braking": {
+      "condition_description": "Freight or commuter train arrival, departure, track rumble, and wheel squeal (80-95 dBA)",
+      "negative_duration_hours": 0.0,
+      "target_events": 0,
+      "detected_events": 0,
+      "missed_events": 0,
+      "detection_rate": "N/A",
+      "false_alert_episodes": 0,
+      "false_alert_rate_per_hour": null
+    },
+    "station_announcements": {
+      "condition_description": "Public address loudspeaker announcements and chime transients",
+      "negative_duration_hours": 0.0,
+      "target_events": 0,
+      "detected_events": 0,
+      "missed_events": 0,
+      "detection_rate": "N/A",
+      "false_alert_episodes": 0,
+      "false_alert_rate_per_hour": null
+    },
+    "rain_and_environmental": {
+      "condition_description": "Heavy rainfall on shelter canopy, roof dripping, wind gust turbulence",
+      "negative_duration_hours": 0.0,
+      "target_events": 0,
+      "detected_events": 0,
+      "missed_events": 0,
+      "detection_rate": "N/A",
+      "false_alert_episodes": 0,
+      "false_alert_rate_per_hour": null
+    },
+    "passenger_crowd": {
+      "condition_description": "Footfall impact acoustics, luggage wheel rumble, platform vocal chatter",
+      "negative_duration_hours": 0.0,
+      "target_events": 0,
+      "detected_events": 0,
+      "missed_events": 0,
+      "detection_rate": "N/A",
+      "false_alert_episodes": 0,
+      "false_alert_rate_per_hour": null
+    },
+    "continuous_negative_baseline": {
+      "condition_description": "Unattended long-duration continuous platform monitoring (zero target events present)",
+      "negative_duration_hours": 0.0,
+      "target_events": 0,
+      "detected_events": 0,
+      "missed_events": 0,
+      "detection_rate": "N/A (No target events present in baseline)",
+      "false_alert_episodes": 0,
+      "false_alert_rate_per_hour": null
+    }
+  },
+  "readiness_criteria_and_limitations": {
+    "is_field_ready": false,
+    "readiness_statement": "The detector CANNOT be declared field-ready for autonomous operation until multi-week continuous platform recording benchmarks (>100 hours of continuous negative railway audio across varied weather and schedule conditions) establish an operationally viable false-alert rate and human visual verification protocols are certified.",
+    "statistical_uncertainty_clause": "Zero false positives or zero false alerts in short-duration testing (<50 hours) do NOT establish a reliable zero-risk guarantee. Poisson upper confidence bounds must always be reported."
+  }
+}

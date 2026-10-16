@@ -56,12 +56,16 @@ from config import (
     CLASS_NAMES,
     CONSERVATIVE_THRESHOLD,
     EVALUATION_REPORT_PATH,
+    FIELD_ANNOTATIONS_DIR,
     FIELD_RECORDINGS_DIR,
+    FIELD_SESSIONS_DIR,
     MAX_REVIEW_QUEUE_ITEMS,
     RAW_SPRAY_DIR,
     REVIEW_QUEUE_DIR,
     SAMPLE_RATE,
     SAVE_MIC_AUDIO,
+    SHADOW_ALERTS_LOG,
+    SHADOW_MODE_ENABLED,
     STATIC_DIR,
     TEMPLATES_DIR,
 )
@@ -165,6 +169,9 @@ def get_status():
         "sample_rate": SAMPLE_RATE,
         "classes": CLASS_NAMES,
         "calibration": calib,
+        "shadow_mode": getattr(engine, "shadow_mode", True),
+        "audio_retention_hours": AUDIO_RETENTION_HOURS,
+        "automatic_enforcement_allowed": False,
     })
 
 
@@ -184,7 +191,7 @@ def update_config():
         engine.required_consecutive_windows = new_p
     if "cooldown_seconds" in data:
         new_cd = float(data["cooldown_seconds"])
-        new_cd = max(0.1, min(10.0, new_cd))
+        new_cd = max(0.0, min(10.0, new_cd))
         engine.cooldown_seconds = new_cd
     return jsonify({
         "status": "success",
@@ -454,9 +461,14 @@ def record_sample():
     """Save an operator-recorded ground truth sample to field dataset with metadata."""
     try:
         class_name = request.form.get("class_name") or "spray_can_shaking"
-        condition = request.form.get("condition") or "clean"
-        session_id = request.form.get("session_id") or "session_live_mic"
-        distance_m = request.form.get("distance_m") or "3.0"
+        condition = request.form.get("condition") or "clean_indoor"
+        session_id = request.form.get("session_id") or "session_local_can_01"
+        distance_m = request.form.get("distance_m") or "1.0"
+        microphone_name = request.form.get("microphone_name") or "Target Microphone"
+        can_type = request.form.get("can_type") or "n_a_negative"
+        can_fill_level = request.form.get("can_fill_level") or "n_a_negative"
+        shaking_style = request.form.get("shaking_style") or "n_a_negative"
+        label_confidence = request.form.get("label_confidence") or "confirmed_high"
         notes = request.form.get("notes") or ""
 
         # Validate class
@@ -475,6 +487,11 @@ def record_sample():
                 condition = json_data.get("condition", condition)
                 session_id = json_data.get("session_id", session_id)
                 distance_m = json_data.get("distance_m", distance_m)
+                microphone_name = json_data.get("microphone_name", microphone_name)
+                can_type = json_data.get("can_type", can_type)
+                can_fill_level = json_data.get("can_fill_level", can_fill_level)
+                shaking_style = json_data.get("shaking_style", shaking_style)
+                label_confidence = json_data.get("label_confidence", label_confidence)
                 notes = json_data.get("notes", notes)
 
         if not audio_bytes:
@@ -518,10 +535,15 @@ def record_sample():
         entry = {
             "id": uid,
             "filename": filename,
-            "filepath": str(save_path.relative_to(BASE_DIR)),
+            "filepath": str(save_path.relative_to(BASE_DIR)).replace("\\", "/"),
             "class_name": class_name,
             "condition": condition,
             "session_id": clean_sess,
+            "microphone_name": microphone_name,
+            "can_type": can_type,
+            "can_fill_level": can_fill_level,
+            "shaking_style": shaking_style,
+            "label_confidence": label_confidence,
             "distance_m": distance_m,
             "notes": notes,
             "duration_sec": duration_sec,
@@ -545,6 +567,25 @@ def record_sample():
         return jsonify({"error": str(e)}), 500
 
 
+@app.route("/api/audio_file", methods=["GET"])
+def get_audio_file():
+    """Safely stream a recorded audio file for playback or inspection."""
+    req_path = request.args.get("path", "")
+    if not req_path:
+        return jsonify({"error": "No file path specified"}), 400
+    file_path = (BASE_DIR / req_path).resolve()
+    base_resolved = BASE_DIR.resolve()
+    try:
+        if not str(file_path).startswith(str(base_resolved)):
+            return jsonify({"error": "Access denied"}), 403
+    except Exception:
+        return jsonify({"error": "Invalid path"}), 400
+
+    if not file_path.exists() or not file_path.is_file():
+        return jsonify({"error": "File not found"}), 404
+    return send_file(str(file_path), mimetype="audio/wav")
+
+
 @app.route("/api/field_recordings", methods=["GET"])
 def get_field_recordings():
     """List all operator-recorded ground truth field recordings."""
@@ -553,10 +594,231 @@ def get_field_recordings():
         try:
             with open(manifest_path, "r", encoding="utf-8") as f:
                 entries = json.load(f)
-                return jsonify({"recordings": entries, "count": len(entries)})
+                return jsonify({"status": "success", "recordings": entries, "count": len(entries)})
         except Exception:
             pass
-    return jsonify({"recordings": [], "count": 0})
+    return jsonify({"status": "success", "recordings": [], "count": 0})
+
+
+@app.route("/api/field_session/save_continuous", methods=["POST"])
+def save_continuous_field_session():
+    """Save a continuous real-site audio session from installed microphone with metadata."""
+    try:
+        session_id = request.form.get("session_id") or f"session_{int(time.time())}"
+        site_id = request.form.get("site_id") or "railway_station_platform"
+        microphone_id = request.form.get("microphone_id") or "installed_cardioid_01"
+        operator_id = request.form.get("operator_id") or "operator_field_tech"
+        condition = request.form.get("condition") or "station_ambient"
+        distance_m = request.form.get("distance_m") or "3.0"
+        notes = request.form.get("notes") or ""
+
+        audio_bytes = None
+        if "audio" in request.files:
+            audio_bytes = request.files["audio"].read()
+        elif request.is_json:
+            json_data = request.get_json(silent=True) or {}
+            audio_b64 = json_data.get("audio_base64")
+            if audio_b64:
+                audio_bytes = base64.b64decode(audio_b64)
+            session_id = json_data.get("session_id", session_id)
+            site_id = json_data.get("site_id", site_id)
+            microphone_id = json_data.get("microphone_id", microphone_id)
+            operator_id = json_data.get("operator_id", operator_id)
+            condition = json_data.get("condition", condition)
+            distance_m = json_data.get("distance_m", distance_m)
+            notes = json_data.get("notes", notes)
+
+        if not audio_bytes:
+            return jsonify({"error": "No audio payload provided"}), 400
+
+        audio_arr = load_audio(audio_bytes, sr=SAMPLE_RATE)
+        duration_sec = round(len(audio_arr) / SAMPLE_RATE, 2)
+
+        # Sanitize session_id
+        clean_sess = "".join(c if c.isalnum() or c in "_-" else "_" for c in session_id)
+        sess_dir = FIELD_SESSIONS_DIR / clean_sess
+        sess_dir.mkdir(parents=True, exist_ok=True)
+
+        audio_path = sess_dir / "audio.wav"
+        sf.write(str(audio_path), audio_arr, SAMPLE_RATE)
+
+        meta = {
+            "session_id": clean_sess,
+            "site_id": site_id,
+            "microphone_id": microphone_id,
+            "operator_id": operator_id,
+            "condition": condition,
+            "distance_m": distance_m,
+            "notes": notes,
+            "duration_sec": duration_sec,
+            "duration_hours": round(duration_sec / 3600.0, 4),
+            "sample_rate": SAMPLE_RATE,
+            "num_samples": len(audio_arr),
+            "timestamp_iso": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "created_epoch": time.time(),
+            "retention_policy_hours": AUDIO_RETENTION_HOURS,
+            "shadow_mode_advisory_only": True,
+            "non_inference_rule": "Audio evidence measures acoustic energy only. Do not infer graffiti intent or identify individuals.",
+        }
+
+        with open(sess_dir / "metadata.json", "w", encoding="utf-8") as f:
+            json.dump(meta, f, indent=2)
+
+        return jsonify({
+            "status": "success",
+            "message": f"Saved {duration_sec}s continuous session '{clean_sess}'",
+            "metadata": meta,
+        })
+    except Exception as e:
+        logger.error("Error saving continuous field session: %s", e, exc_info=True)
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/field_sessions", methods=["GET"])
+def list_field_sessions():
+    """List all continuous field recording sessions with metadata and annotation status."""
+    engine._purge_expired_review_items()
+    sessions = []
+    if FIELD_SESSIONS_DIR.exists():
+        for sess_dir in sorted(FIELD_SESSIONS_DIR.iterdir(), key=lambda p: p.stat().st_mtime, reverse=True):
+            if not sess_dir.is_dir():
+                continue
+            meta_path = sess_dir / "metadata.json"
+            annot_path = sess_dir / "annotations.json"
+            meta = {}
+            if meta_path.exists():
+                try:
+                    with open(meta_path, "r", encoding="utf-8") as f:
+                        meta = json.load(f)
+                except Exception:
+                    pass
+            annot_count = 0
+            if annot_path.exists():
+                try:
+                    with open(annot_path, "r", encoding="utf-8") as f:
+                        ann_data = json.load(f)
+                        annot_count = len(ann_data.get("events", []))
+                except Exception:
+                    pass
+            meta["annotation_count"] = annot_count
+            meta["has_annotations"] = annot_count > 0
+            meta["session_folder"] = sess_dir.name
+            sessions.append(meta)
+    return jsonify({"sessions": sessions, "total_sessions": len(sessions)})
+
+
+@app.route("/api/field_session/annotate", methods=["POST"])
+def annotate_field_session():
+    """Save trained human reviewer interval annotations for a continuous field session."""
+    try:
+        data = request.get_json(force=True, silent=True) or {}
+        session_id = data.get("session_id")
+        events = data.get("events", [])
+        reviewer_id = data.get("reviewer_id") or "reviewer_trained_01"
+        confidence_level = data.get("verification_confidence") or "confirmed_high"
+        reviewer_notes = data.get("reviewer_notes") or ""
+
+        if not session_id:
+            return jsonify({"error": "session_id required"}), 400
+
+        clean_sess = "".join(c if c.isalnum() or c in "_-" else "_" for c in session_id)
+        sess_dir = FIELD_SESSIONS_DIR / clean_sess
+        if not sess_dir.exists():
+            return jsonify({"error": f"Session '{clean_sess}' does not exist"}), 404
+
+        # Validate events
+        valid_classes = list(CLASS_NAMES)
+        for ev in events:
+            if "start_sec" not in ev or "end_sec" not in ev or "class_label" not in ev:
+                return jsonify({"error": "Each event must have 'start_sec', 'end_sec', and 'class_label'"}), 400
+            if ev["start_sec"] >= ev["end_sec"]:
+                return jsonify({"error": f"Invalid interval: start_sec ({ev['start_sec']}) >= end_sec ({ev['end_sec']})"}), 400
+            if ev["class_label"] not in valid_classes:
+                return jsonify({"error": f"Invalid class '{ev['class_label']}'. Must be in {valid_classes}"}), 400
+
+        annot_payload = {
+            "session_id": clean_sess,
+            "reviewer_id": reviewer_id,
+            "verification_confidence": confidence_level,
+            "reviewer_notes": reviewer_notes,
+            "reviewed_timestamp_iso": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "non_inference_statement": "Acoustic ground truth labels strictly define audio physics. No person intent or identity is inferred.",
+            "total_annotated_events": len(events),
+            "events": events,
+        }
+
+        annot_path = sess_dir / "annotations.json"
+        with open(annot_path, "w", encoding="utf-8") as f:
+            json.dump(annot_payload, f, indent=2)
+
+        return jsonify({
+            "status": "success",
+            "message": f"Saved {len(events)} event annotations for session '{clean_sess}'",
+            "annotations": annot_payload,
+        })
+    except Exception as e:
+        logger.error("Error annotating session: %s", e, exc_info=True)
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/field_session/<session_id>/annotations", methods=["GET"])
+def get_session_annotations(session_id):
+    """Retrieve event annotations for a specified field session."""
+    clean_sess = "".join(c if c.isalnum() or c in "_-" else "_" for c in session_id)
+    annot_path = FIELD_SESSIONS_DIR / clean_sess / "annotations.json"
+    if annot_path.exists():
+        try:
+            with open(annot_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                return jsonify(data)
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+    return jsonify({"session_id": clean_sess, "events": [], "total_annotated_events": 0})
+
+
+@app.route("/api/field_session/purge_expired", methods=["POST"])
+def purge_expired_recordings():
+    """Explicitly execute data retention cleanup across review queue and field sessions."""
+    try:
+        engine._purge_expired_review_items()
+        return jsonify({
+            "status": "success",
+            "message": f"Privacy retention cleanup executed (Retention limit: {AUDIO_RETENTION_HOURS} hours)",
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/shadow_alerts", methods=["GET"])
+def get_shadow_alerts():
+    """Fetch recent advisory shadow mode alerts from append-only log."""
+    alerts = []
+    if SHADOW_ALERTS_LOG.exists():
+        try:
+            with open(SHADOW_ALERTS_LOG, "r", encoding="utf-8") as f:
+                for line in f:
+                    if line.strip():
+                        alerts.append(json.loads(line))
+        except Exception as e:
+            logger.warning("Error reading shadow alerts log: %s", e)
+    # Return last 100 alerts newest first
+    return jsonify({"alerts": list(reversed(alerts[-100:])), "total_count": len(alerts)})
+
+
+@app.route("/report.pdf")
+@app.route("/api/download_report")
+def download_presentation_report():
+    """Serve the comprehensive presentation report PDF."""
+    pdf_path = BASE_DIR / "Acoustic_Spray_Can_Detector_Presentation_Report.pdf"
+    if not pdf_path.exists():
+        from generate_presentation_report import build_pdf
+        build_pdf(str(pdf_path))
+    return send_file(
+        pdf_path,
+        mimetype="application/pdf",
+        as_attachment=False,
+        download_name="Acoustic_Spray_Can_Detector_Presentation_Report.pdf",
+    )
 
 
 if __name__ == "__main__":

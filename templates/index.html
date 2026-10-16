@@ -30,7 +30,7 @@
                     <span class="badge-dot" id="system-status-dot"></span>
                     <span id="system-status-text">INITIALIZING</span>
                 </div>
-                <div class="badge metric-badge" id="nc-badge" style="cursor: pointer;" title="Toggle Adaptive Noise Cancellation">
+                <div class="badge metric-badge badge-interactive" id="nc-badge" style="cursor: pointer;" title="Toggle Adaptive Noise Cancellation (Click to switch)">
                     <span class="badge-label">NOISE CANCEL:</span>
                     <span class="badge-value" id="badge-nc-val" style="color: var(--accent-green);">ACTIVE 🟢</span>
                 </div>
@@ -40,7 +40,7 @@
                 </div>
                 <div class="badge metric-badge" id="cooldown-badge">
                     <span class="badge-label">COOLDOWN:</span>
-                    <span class="badge-value" id="badge-cooldown-val">0.5s</span>
+                    <span class="badge-value" id="badge-cooldown-val">0s (Real-Time)</span>
                 </div>
             </div>
         </header>
@@ -110,6 +110,31 @@
                                     <span class="btn-icon" id="mic-btn-icon">▶</span>
                                     <span id="mic-btn-text">Start Listening</span>
                                 </button>
+                            </div>
+                        </div>
+
+                        <!-- Real-Time DSP Noise Cancellation Toggle Control -->
+                        <div class="nc-control-bar" id="nc-control-bar">
+                            <div class="nc-control-left">
+                                <div class="nc-icon-badge" id="nc-icon-badge">
+                                    <span class="nc-icon" id="nc-icon-symbol">🛡️</span>
+                                </div>
+                                <div class="nc-control-text">
+                                    <div class="nc-control-title-row">
+                                        <span class="nc-control-title">Adaptive Noise Cancellation (DSP)</span>
+                                        <span class="nc-status-pill pill-active" id="nc-status-pill">ACTIVE</span>
+                                    </div>
+                                    <p class="nc-control-sub" id="nc-control-desc">
+                                        Adaptive spectral subtraction active • Suppresses room noise, HVAC hum, fan hiss, and low-frequency rumble
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="nc-control-right">
+                                <label class="switch-toggle" for="nc-switch-checkbox" title="Toggle Noise Cancellation On / Off">
+                                    <input type="checkbox" id="nc-switch-checkbox" checked aria-label="Toggle Adaptive Noise Cancellation">
+                                    <span class="switch-slider"></span>
+                                </label>
+                                <span class="nc-toggle-label" id="nc-toggle-label">ON</span>
                             </div>
                         </div>
 
@@ -351,6 +376,45 @@
                                 </tbody>
                             </table>
                         </div>
+
+                        <!-- Shadow Mode Advisory Alerts Feed -->
+                        <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border-color);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <div>
+                                    <h3 class="card-title-sm" style="display: flex; align-items: center; gap: 8px;">
+                                        <span>🛡️</span> Shadow Mode Advisory Alerts Feed
+                                        <span class="badge" style="background: rgba(6, 182, 212, 0.2); color: var(--accent-cyan);">ADVISORY ONLY</span>
+                                    </h3>
+                                    <p style="font-size: 0.8rem; color: var(--text-muted); margin: 4px 0 0 0;">
+                                        All alerts operate in shadow mode: automatic security dispatch is disabled. Human visual verification required.
+                                    </p>
+                                </div>
+                                <button class="btn btn-secondary btn-sm" id="btn-refresh-shadow-alerts">🔄 Refresh Feed</button>
+                            </div>
+
+                            <div class="table-container">
+                                <table class="calibration-table" id="shadow-alerts-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Alert ID</th>
+                                            <th>Timestamp (UTC)</th>
+                                            <th>P(Spray)</th>
+                                            <th>Margin</th>
+                                            <th>Entropy</th>
+                                            <th>Enforcement Status</th>
+                                            <th>Verification Required</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="shadow-alerts-table-body">
+                                        <tr>
+                                            <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 18px;">
+                                                No shadow-mode alerts recorded in current session.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -392,62 +456,117 @@
                                 <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;">PRE-SAVE PLAYBACK & VERIFICATION:</div>
                                 <audio id="record-audio-player" controls style="width: 100%; margin-bottom: 14px;"></audio>
                                 
-                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 14px;">
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 14px;">
                                     <div>
-                                        <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Target Class Label</label>
+                                        <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Target Class Label <span style="color: var(--accent-red);">*</span></label>
                                         <select id="record-class-select" class="form-select" style="width: 100%; background: #1F2937; color: #FFF; border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 10px;">
-                                            <option value="spray_can_shaking">spray_can_shaking (Target: Can Shaking)</option>
-                                            <option value="aerosol_spray_hiss">aerosol_spray_hiss (Negative: Spray Hiss Only)</option>
-                                            <option value="hard_negative_rattle">hard_negative_rattle (Negative: Keys/Coins/Pill)</option>
-                                            <option value="continuous_environmental">continuous_environmental (Negative: Train/Station Noise)</option>
-                                            <option value="ambient_and_speech">ambient_and_speech (Negative: Room/Speech)</option>
+                                            <option value="spray_can_shaking" selected>spray_can_shaking (TARGET: Real Aerosol Can Shaking)</option>
+                                            <option value="aerosol_spray_hiss">aerosol_spray_hiss (NEGATIVE: Spray Hiss Without Shaking)</option>
+                                            <option value="hard_negative_rattle">hard_negative_rattle (NEGATIVE: Coins / Keys / Rattles)</option>
+                                            <option value="loud_impact">loud_impact (NEGATIVE: Handling / Impacts / Claps / Bangs)</option>
+                                            <option value="continuous_environmental">continuous_environmental (NEGATIVE: Fans / Machinery / Continuous)</option>
+                                            <option value="ambient_and_speech">ambient_and_speech (NEGATIVE: Room Tone / Speech / Ordinary Ambient)</option>
                                         </select>
                                     </div>
                                     <div>
-                                        <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Acoustic Condition</label>
-                                        <select id="record-condition-select" class="form-select" style="width: 100%; background: #1F2937; color: #FFF; border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 10px;">
-                                            <option value="quiet_clean">Quiet / Clean Indoor / Solo</option>
-                                            <option value="busy_station">Busy Station / Platform Ambient</option>
-                                            <option value="overlapping_train_announcement">Overlapping Train Pass / Announcement</option>
-                                            <option value="similar_rattles">Similar Rattles (Keys, Coins, Hardware)</option>
-                                            <option value="spray_hiss">Spray Hiss / Nozzle Discharge</option>
+                                        <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Session Identifier <span style="color: var(--accent-red);">*</span></label>
+                                        <input type="text" id="record-session-id" value="session_local_can_01" style="width: 100%; background: #1F2937; color: #FFF; border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 10px;" placeholder="e.g. session_local_can_01">
+                                    </div>
+                                    <div>
+                                        <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Microphone Device</label>
+                                        <input type="text" id="record-mic-name" value="Target Microphone" style="width: 100%; background: #1F2937; color: #FFF; border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 10px;" placeholder="e.g. Realtek Audio / USB Condenser Mic">
+                                    </div>
+                                    <div>
+                                        <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Can Type / Source</label>
+                                        <select id="record-can-type" class="form-select" style="width: 100%; background: #1F2937; color: #FFF; border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 10px;">
+                                            <option value="aerosol_paint_can" selected>Aerosol Spray Paint Can</option>
+                                            <option value="wd40_lubricant_can">WD-40 / Mechanical Lubricant Can</option>
+                                            <option value="deodorant_body_spray">Deodorant / Body Spray Can</option>
+                                            <option value="hair_spray_can">Hair Spray Aerosol Can</option>
+                                            <option value="air_duster_cleaner">Air Duster / Gas Can</option>
+                                            <option value="other_aerosol_can">Other Aerosol Can</option>
+                                            <option value="n_a_negative">Not Applicable (Negative Sound)</option>
                                         </select>
                                     </div>
                                     <div>
-                                        <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Session Identifier</label>
-                                        <input type="text" id="record-session-id" value="session_field_test_1" style="width: 100%; background: #1F2937; color: #FFF; border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 10px;" placeholder="e.g. session_platform1_micA">
+                                        <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Can Fill Level</label>
+                                        <select id="record-fill-level" class="form-select" style="width: 100%; background: #1F2937; color: #FFF; border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 10px;">
+                                            <option value="full" selected>Full / Nearly Full</option>
+                                            <option value="half_full">Half Full</option>
+                                            <option value="near_empty">Near Empty (&lt; 25%)</option>
+                                            <option value="empty">Completely Empty Can</option>
+                                            <option value="n_a_negative">Not Applicable (Negative Sound)</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Shaking Style / Motion</label>
+                                        <select id="record-shake-style" class="form-select" style="width: 100%; background: #1F2937; color: #FFF; border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 10px;">
+                                            <option value="vertical_vigorous" selected>Vertical Vigorous (Fast Cadence)</option>
+                                            <option value="vertical_moderate">Vertical Moderate (Standard Cadence)</option>
+                                            <option value="horizontal_rattle">Horizontal Motion</option>
+                                            <option value="angled_circular">Angled / Circular Motion</option>
+                                            <option value="slow_cadence">Slow Deliberate Cadence</option>
+                                            <option value="pulsed_shakes">Pulsed Shakes (Bursts)</option>
+                                            <option value="n_a_negative">Not Applicable (Negative Sound)</option>
+                                        </select>
                                     </div>
                                     <div>
                                         <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Distance from Mic</label>
                                         <select id="record-distance-select" class="form-select" style="width: 100%; background: #1F2937; color: #FFF; border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 10px;">
-                                            <option value="1.0">1.0 meter (Near-field)</option>
-                                            <option value="3.0" selected>3.0 meters (Recommended mounting)</option>
+                                            <option value="0.5">0.5 meter (Close range)</option>
+                                            <option value="1.0" selected>1.0 meter (Near-field)</option>
+                                            <option value="2.0">2.0 meters (Mid-range)</option>
+                                            <option value="3.0">3.0 meters (Mounted distance)</option>
                                             <option value="5.0">5.0 meters (Far-field)</option>
                                         </select>
+                                    </div>
+                                    <div>
+                                        <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Label Confidence</label>
+                                        <select id="record-confidence-select" class="form-select" style="width: 100%; background: #1F2937; color: #FFF; border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 10px;">
+                                            <option value="confirmed_high" selected>Confirmed High (Physically Verified)</option>
+                                            <option value="medium_probable">Medium (Probable)</option>
+                                            <option value="low_uncertain">Low (Uncertain)</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Acoustic Environment</label>
+                                        <select id="record-condition-select" class="form-select" style="width: 100%; background: #1F2937; color: #FFF; border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 10px;">
+                                            <option value="clean_indoor" selected>Quiet / Clean Indoor</option>
+                                            <option value="ambient_room">Ambient Room / Office Noise</option>
+                                            <option value="handling_movement">Handling &amp; Movement</option>
+                                            <option value="spray_hiss_discharge">Spray Hiss Discharge</option>
+                                            <option value="similar_rattles">Similar Rattles (Keys/Coins)</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Notes / Observations</label>
+                                        <input type="text" id="record-notes" style="width: 100%; background: #1F2937; color: #FFF; border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 10px;" placeholder="e.g. Pea rattling against dome bottom">
                                     </div>
                                 </div>
                                 <div style="display: flex; gap: 10px; justify-content: flex-end;">
                                     <button class="btn btn-secondary" id="btn-record-discard" type="button">Discard</button>
-                                    <button class="btn btn-primary" id="btn-record-save" type="button">💾 Save to Field Dataset</button>
+                                    <button class="btn btn-primary" id="btn-record-save" type="button">💾 Save to Dataset</button>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Already Recorded Samples Table -->
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                            <h3 class="card-title-sm">Collected Field Recordings</h3>
+                            <h3 class="card-title-sm">Collected Local Real-Microphone Recordings</h3>
                             <button class="btn btn-secondary btn-sm" id="btn-refresh-recordings">🔄 Refresh List</button>
                         </div>
-                        <div class="table-container">
+                        <div class="table-container" style="margin-bottom: 30px;">
                             <table class="calibration-table" id="field-recordings-table">
                                 <thead>
                                     <tr>
                                         <th>File Name</th>
                                         <th>Class Label</th>
-                                        <th>Condition</th>
+                                        <th>Can Type / Fill</th>
+                                        <th>Shaking Style</th>
                                         <th>Session ID</th>
                                         <th>Distance</th>
                                         <th>Duration</th>
+                                        <th>Audio Preview</th>
                                     </tr>
                                 </thead>
                                 <tbody id="field-recordings-table-body">
@@ -458,6 +577,96 @@
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+
+                        <!-- Continuous Field Sessions & Interval Annotation Protocol -->
+                        <div style="padding-top: 20px; border-top: 1px solid var(--border-color);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                                <div>
+                                    <h3 class="card-title-sm" style="display: flex; align-items: center; gap: 8px;">
+                                        <span>⏱️</span> Continuous Field Session Capture & Event Interval Annotation
+                                        <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: var(--accent-green);">FULL STREAMING</span>
+                                    </h3>
+                                    <p style="font-size: 0.8rem; color: var(--text-muted); margin: 4px 0 0 0;">
+                                        Record multi-minute platform audio and annotate exact [start_sec, end_sec] intervals for event-level evaluation.
+                                    </p>
+                                </div>
+                                <div style="display: flex; gap: 8px;">
+                                    <button class="btn btn-secondary btn-sm" id="btn-purge-expired-sessions" title="Purge recordings older than 24h">🧹 Run Retention Purge (24h)</button>
+                                    <button class="btn btn-secondary btn-sm" id="btn-refresh-sessions">🔄 Refresh Sessions</button>
+                                </div>
+                            </div>
+
+                            <!-- Non-Inference & Privacy Callout -->
+                            <div class="callout callout-warning" style="margin-bottom: 18px;">
+                                <span class="callout-icon">⚖️</span>
+                                <div>
+                                    <div class="callout-title">Non-Inference Rule & Privacy Retention Governance</div>
+                                    <div class="callout-text">
+                                        • <strong>Non-Inference Rule:</strong> Ground truth labels classify <em>strictly acoustic physics</em> (canister impact cadence, friction hiss, station ambient). <strong>Do NOT infer graffiti intent or track individuals from audio.</strong><br>
+                                        • <strong>24-Hour Ephemeral Limit:</strong> Continuous recordings are automatically purged after 24 hours (<code>AUDIO_RETENTION_HOURS = 24</code>).<br>
+                                        • <strong>Session Isolation:</strong> Sessions are strictly grouped by Session ID, site, and date to prevent data leakage across train/val/test splits.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Continuous Session List & Annotation Editor -->
+                            <div class="card glass-card" style="margin-bottom: 16px; padding: 16px;">
+                                <h4 style="font-size: 0.85rem; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">Active Field Sessions</h4>
+                                <div class="table-container" style="max-height: 220px; overflow-y: auto;">
+                                    <table class="calibration-table" id="field-sessions-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Session ID</th>
+                                                <th>Site / Mic</th>
+                                                <th>Duration</th>
+                                                <th>Condition</th>
+                                                <th>Annotations</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="field-sessions-table-body">
+                                            <tr>
+                                                <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 16px;">
+                                                    No continuous field sessions stored yet.
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Interval Annotation Box -->
+                            <div class="card glass-card" id="annotation-box" style="padding: 16px; border-color: rgba(6, 182, 212, 0.3);">
+                                <h4 style="font-size: 0.85rem; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">Mark Event Intervals [Start Time → End Time]</h4>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 12px;">
+                                    <div>
+                                        <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Target Session ID</label>
+                                        <input type="text" id="annot-session-id" class="form-input" style="width: 100%; background: #1F2937; color: #FFF; border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 10px;" placeholder="session_name">
+                                    </div>
+                                    <div>
+                                        <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Start Time (seconds)</label>
+                                        <input type="number" id="annot-start-sec" class="form-input" step="0.1" min="0" value="0.0" style="width: 100%; background: #1F2937; color: #FFF; border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 10px;">
+                                    </div>
+                                    <div>
+                                        <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;">End Time (seconds)</label>
+                                        <input type="number" id="annot-end-sec" class="form-input" step="0.1" min="0.1" value="2.0" style="width: 100%; background: #1F2937; color: #FFF; border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 10px;">
+                                    </div>
+                                    <div>
+                                        <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Acoustic Class</label>
+                                        <select id="annot-class-select" class="form-select" style="width: 100%; background: #1F2937; color: #FFF; border: 1px solid var(--border-color); border-radius: 6px; padding: 6px 10px;">
+                                            <option value="spray_can_shaking">spray_can_shaking (Target: Can Shaking)</option>
+                                            <option value="aerosol_spray_hiss">aerosol_spray_hiss (Negative: Spray Hiss Only)</option>
+                                            <option value="hard_negative_rattle">hard_negative_rattle (Negative: Keys/Coins)</option>
+                                            <option value="continuous_environmental">continuous_environmental (Negative: Train/Station)</option>
+                                            <option value="ambient_and_speech">ambient_and_speech (Negative: Room/Speech)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                                    <button class="btn btn-primary btn-sm" id="btn-save-annotation" type="button">💾 Save Interval Annotation</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -472,7 +681,7 @@
                     <div class="card-header-compact">
                         <div class="stage-tag" style="background: rgba(16, 185, 129, 0.2); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.4);">DSP NOISE CANCELLER</div>
                         <h3 class="card-title-sm">Adaptive Spectral Subtraction</h3>
-                        <button class="btn-text-sm" id="btn-toggle-nc" style="margin-left: auto; color: var(--accent-green); font-weight: 600; cursor: pointer;">ACTIVE [ON]</button>
+                        <button class="btn-toggle-pill pill-on" id="btn-toggle-nc" style="margin-left: auto; cursor: pointer;" title="Click to Toggle Noise Cancellation">ACTIVE [ON]</button>
                     </div>
                     <p class="card-sub-compact">Suppresses ambient room noise, fan hum & continuous rain bed</p>
 

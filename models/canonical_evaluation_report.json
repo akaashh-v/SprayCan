@@ -2,15 +2,15 @@
   "provenance": {
     "run_id": "CANONICAL_RUN_20261013_RECONCILED",
     "model_checkpoint_path": "C:\\Users\\User\\Desktop\\CogniLearn\\Spray\\models\\best_detector.pth",
-    "model_sha256": "ecac9edfa5012e4770460ccc740d495256afe54c0893f7273f226ca59682bec5",
+    "model_sha256": "c8483581bdf7bd1ec31a3f3025584f59601f609b655aed38284e3d2e6fcab65d",
     "val_partition_path": "C:\\Users\\User\\Desktop\\CogniLearn\\Spray\\data\\processed\\val.pt",
-    "val_sha256": "752ef6adedc31509927b4951ad3aa784edf45938fe15b682b58f225900140d48",
+    "val_sha256": "048fd226f5617a5cb06d46a652ba8353c0590e6404002f5b7db639047419f234",
     "test_partition_path": "C:\\Users\\User\\Desktop\\CogniLearn\\Spray\\data\\processed\\test.pt",
-    "test_sha256": "31d66f89312e7d2b59716f22860c6b69f9c49b1d605d39fb049e20e3290ebb86",
+    "test_sha256": "6560451fd4341521ea5a6922b1fcdc72f7e7d8188b1243a07c422fe26980980e",
     "split_manifest_path": "C:\\Users\\User\\Desktop\\CogniLearn\\Spray\\data\\processed\\split_manifest.json",
-    "split_manifest_sha256": "7ec6f9df275e40823d4ff2aa9ee7973ef32d7d881ab58326658f68794d87e1c2",
+    "split_manifest_sha256": "093984f612a41eb68506f7c1e26ba5af664dfd60777bf74d781128b23d1c5976",
     "test_conditions_path": "C:\\Users\\User\\Desktop\\CogniLearn\\Spray\\data\\processed\\test_conditions.json",
-    "test_conditions_sha256": "dfa56ddcb4c9b259dfb42db48be0a2d4dd0cc70c45755a4d1910cc3998a0084f"
+    "test_conditions_sha256": "2cb2cbd53d2ca72f39e9eb89c56ac95344840bcef2d97a420ef7648462a26415"
   },
   "operating_configuration": {
     "production_conservative_threshold": 0.8,
@@ -25,184 +25,36 @@
   "validation_evaluation": {
     "split_name": "validation",
     "sample_counts": {
-      "total_samples": 506,
-      "target_samples": 238,
-      "negative_samples": 268,
+      "total_samples": 523,
+      "target_samples": 250,
+      "negative_samples": 273,
       "class_distribution": {
-        "ambient_and_speech": 47,
-        "loud_impact": 27,
-        "continuous_environmental": 66,
-        "hard_negative_rattle": 92,
-        "aerosol_spray_hiss": 36,
-        "spray_can_shaking": 238
+        "ambient_and_speech": 44,
+        "loud_impact": 21,
+        "continuous_environmental": 63,
+        "hard_negative_rattle": 99,
+        "aerosol_spray_hiss": 46,
+        "spray_can_shaking": 250
       },
-      "total_audio_duration_seconds": 506.0,
-      "negative_audio_duration_seconds": 268.0,
-      "negative_audio_duration_minutes": 4.47
+      "total_audio_duration_seconds": 523.0,
+      "negative_audio_duration_seconds": 273.0,
+      "negative_audio_duration_minutes": 4.55
     },
     "threshold_sweep": [
       {
         "threshold": 0.85,
         "confusion_counts": {
-          "tp": 164,
-          "fp": 0,
-          "fn": 74,
-          "tn": 268
-        },
-        "metrics": {
-          "precision": 1.0,
-          "recall": 0.6891,
-          "missed_detection_rate": 0.3109,
-          "specificity": 1.0,
-          "f1_score": 0.8159
-        },
-        "false_positives_by_negative_class": {
-          "ambient_and_speech": 0,
-          "loud_impact": 0,
-          "continuous_environmental": 0,
-          "hard_negative_rattle": 0,
-          "aerosol_spray_hiss": 0
-        },
-        "uncertain_candidate_count": 38,
-        "raw_argmax_confusion_matrix": [
-          [
-            34,
-            1,
-            0,
-            6,
-            0,
-            6
-          ],
-          [
-            0,
-            27,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            5,
-            47,
-            0,
-            14,
-            0
-          ],
-          [
-            2,
-            6,
-            1,
-            83,
-            0,
-            0
-          ],
-          [
-            0,
-            11,
-            0,
-            0,
-            25,
-            0
-          ],
-          [
-            23,
-            0,
-            0,
-            0,
-            1,
-            214
-          ]
-        ]
-      },
-      {
-        "threshold": 0.8,
-        "confusion_counts": {
-          "tp": 173,
-          "fp": 0,
-          "fn": 65,
-          "tn": 268
-        },
-        "metrics": {
-          "precision": 1.0,
-          "recall": 0.7269,
-          "missed_detection_rate": 0.2731,
-          "specificity": 1.0,
-          "f1_score": 0.8418
-        },
-        "false_positives_by_negative_class": {
-          "ambient_and_speech": 0,
-          "loud_impact": 0,
-          "continuous_environmental": 0,
-          "hard_negative_rattle": 0,
-          "aerosol_spray_hiss": 0
-        },
-        "uncertain_candidate_count": 38,
-        "raw_argmax_confusion_matrix": [
-          [
-            34,
-            1,
-            0,
-            6,
-            0,
-            6
-          ],
-          [
-            0,
-            27,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            5,
-            47,
-            0,
-            14,
-            0
-          ],
-          [
-            2,
-            6,
-            1,
-            83,
-            0,
-            0
-          ],
-          [
-            0,
-            11,
-            0,
-            0,
-            25,
-            0
-          ],
-          [
-            23,
-            0,
-            0,
-            0,
-            1,
-            214
-          ]
-        ]
-      },
-      {
-        "threshold": 0.75,
-        "confusion_counts": {
-          "tp": 180,
+          "tp": 179,
           "fp": 1,
-          "fn": 58,
-          "tn": 267
+          "fn": 71,
+          "tn": 272
         },
         "metrics": {
-          "precision": 0.9945,
-          "recall": 0.7563,
-          "missed_detection_rate": 0.2437,
+          "precision": 0.9944,
+          "recall": 0.716,
+          "missed_detection_rate": 0.284,
           "specificity": 0.9963,
-          "f1_score": 0.8592
+          "f1_score": 0.8326
         },
         "false_positives_by_negative_class": {
           "ambient_and_speech": 1,
@@ -211,277 +63,425 @@
           "hard_negative_rattle": 0,
           "aerosol_spray_hiss": 0
         },
-        "uncertain_candidate_count": 38,
+        "uncertain_candidate_count": 42,
         "raw_argmax_confusion_matrix": [
           [
-            34,
-            1,
+            10,
+            4,
+            4,
+            12,
             0,
-            6,
-            0,
-            6
+            14
           ],
           [
             0,
-            27,
+            21,
             0,
             0,
             0,
             0
           ],
           [
-            0,
-            5,
-            47,
-            0,
-            14,
-            0
-          ],
-          [
+            3,
+            3,
+            42,
+            13,
             2,
-            6,
-            1,
-            83,
+            0
+          ],
+          [
+            13,
+            7,
+            2,
+            77,
             0,
             0
           ],
           [
             0,
-            11,
+            2,
+            0,
+            20,
+            15,
+            9
+          ],
+          [
             0,
             0,
-            25,
+            0,
+            9,
+            0,
+            241
+          ]
+        ]
+      },
+      {
+        "threshold": 0.8,
+        "confusion_counts": {
+          "tp": 188,
+          "fp": 1,
+          "fn": 62,
+          "tn": 272
+        },
+        "metrics": {
+          "precision": 0.9947,
+          "recall": 0.752,
+          "missed_detection_rate": 0.248,
+          "specificity": 0.9963,
+          "f1_score": 0.8565
+        },
+        "false_positives_by_negative_class": {
+          "ambient_and_speech": 1,
+          "loud_impact": 0,
+          "continuous_environmental": 0,
+          "hard_negative_rattle": 0,
+          "aerosol_spray_hiss": 0
+        },
+        "uncertain_candidate_count": 42,
+        "raw_argmax_confusion_matrix": [
+          [
+            10,
+            4,
+            4,
+            12,
+            0,
+            14
+          ],
+          [
+            0,
+            21,
+            0,
+            0,
+            0,
             0
           ],
           [
-            23,
+            3,
+            3,
+            42,
+            13,
+            2,
+            0
+          ],
+          [
+            13,
+            7,
+            2,
+            77,
+            0,
+            0
+          ],
+          [
+            0,
+            2,
+            0,
+            20,
+            15,
+            9
+          ],
+          [
             0,
             0,
             0,
-            1,
-            214
+            9,
+            0,
+            241
+          ]
+        ]
+      },
+      {
+        "threshold": 0.75,
+        "confusion_counts": {
+          "tp": 192,
+          "fp": 2,
+          "fn": 58,
+          "tn": 271
+        },
+        "metrics": {
+          "precision": 0.9897,
+          "recall": 0.768,
+          "missed_detection_rate": 0.232,
+          "specificity": 0.9927,
+          "f1_score": 0.8649
+        },
+        "false_positives_by_negative_class": {
+          "ambient_and_speech": 1,
+          "loud_impact": 0,
+          "continuous_environmental": 0,
+          "hard_negative_rattle": 0,
+          "aerosol_spray_hiss": 1
+        },
+        "uncertain_candidate_count": 42,
+        "raw_argmax_confusion_matrix": [
+          [
+            10,
+            4,
+            4,
+            12,
+            0,
+            14
+          ],
+          [
+            0,
+            21,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            42,
+            13,
+            2,
+            0
+          ],
+          [
+            13,
+            7,
+            2,
+            77,
+            0,
+            0
+          ],
+          [
+            0,
+            2,
+            0,
+            20,
+            15,
+            9
+          ],
+          [
+            0,
+            0,
+            0,
+            9,
+            0,
+            241
           ]
         ]
       },
       {
         "threshold": 0.7,
         "confusion_counts": {
-          "tp": 190,
-          "fp": 3,
-          "fn": 48,
-          "tn": 265
+          "tp": 196,
+          "fp": 2,
+          "fn": 54,
+          "tn": 271
         },
         "metrics": {
-          "precision": 0.9845,
-          "recall": 0.7983,
-          "missed_detection_rate": 0.2017,
-          "specificity": 0.9888,
-          "f1_score": 0.8817
+          "precision": 0.9899,
+          "recall": 0.784,
+          "missed_detection_rate": 0.216,
+          "specificity": 0.9927,
+          "f1_score": 0.875
         },
         "false_positives_by_negative_class": {
-          "ambient_and_speech": 3,
+          "ambient_and_speech": 1,
           "loud_impact": 0,
           "continuous_environmental": 0,
           "hard_negative_rattle": 0,
-          "aerosol_spray_hiss": 0
+          "aerosol_spray_hiss": 1
         },
-        "uncertain_candidate_count": 38,
+        "uncertain_candidate_count": 42,
         "raw_argmax_confusion_matrix": [
           [
-            34,
-            1,
+            10,
+            4,
+            4,
+            12,
             0,
-            6,
-            0,
-            6
+            14
           ],
           [
             0,
-            27,
+            21,
             0,
             0,
             0,
             0
           ],
           [
-            0,
-            5,
-            47,
-            0,
-            14,
-            0
-          ],
-          [
+            3,
+            3,
+            42,
+            13,
             2,
-            6,
-            1,
-            83,
+            0
+          ],
+          [
+            13,
+            7,
+            2,
+            77,
             0,
             0
           ],
           [
             0,
-            11,
+            2,
             0,
-            0,
-            25,
-            0
+            20,
+            15,
+            9
           ],
           [
-            23,
             0,
             0,
             0,
-            1,
-            214
+            9,
+            0,
+            241
           ]
         ]
       },
       {
         "threshold": 0.65,
         "confusion_counts": {
-          "tp": 194,
-          "fp": 4,
-          "fn": 44,
-          "tn": 264
+          "tp": 201,
+          "fp": 2,
+          "fn": 49,
+          "tn": 271
         },
         "metrics": {
-          "precision": 0.9798,
-          "recall": 0.8151,
-          "missed_detection_rate": 0.1849,
-          "specificity": 0.9851,
-          "f1_score": 0.8899
+          "precision": 0.9901,
+          "recall": 0.804,
+          "missed_detection_rate": 0.196,
+          "specificity": 0.9927,
+          "f1_score": 0.8874
         },
         "false_positives_by_negative_class": {
-          "ambient_and_speech": 4,
+          "ambient_and_speech": 1,
           "loud_impact": 0,
           "continuous_environmental": 0,
           "hard_negative_rattle": 0,
-          "aerosol_spray_hiss": 0
+          "aerosol_spray_hiss": 1
         },
-        "uncertain_candidate_count": 38,
+        "uncertain_candidate_count": 42,
         "raw_argmax_confusion_matrix": [
           [
-            34,
-            1,
+            10,
+            4,
+            4,
+            12,
             0,
-            6,
-            0,
-            6
+            14
           ],
           [
             0,
-            27,
+            21,
             0,
             0,
             0,
             0
           ],
           [
-            0,
-            5,
-            47,
-            0,
-            14,
-            0
-          ],
-          [
+            3,
+            3,
+            42,
+            13,
             2,
-            6,
-            1,
-            83,
+            0
+          ],
+          [
+            13,
+            7,
+            2,
+            77,
             0,
             0
           ],
           [
             0,
-            11,
+            2,
             0,
-            0,
-            25,
-            0
+            20,
+            15,
+            9
           ],
           [
-            23,
             0,
             0,
             0,
-            1,
-            214
+            9,
+            0,
+            241
           ]
         ]
       },
       {
         "threshold": 0.6,
         "confusion_counts": {
-          "tp": 197,
-          "fp": 4,
-          "fn": 41,
-          "tn": 264
+          "tp": 202,
+          "fp": 2,
+          "fn": 48,
+          "tn": 271
         },
         "metrics": {
-          "precision": 0.9801,
-          "recall": 0.8277,
-          "missed_detection_rate": 0.1723,
-          "specificity": 0.9851,
-          "f1_score": 0.8975
+          "precision": 0.9902,
+          "recall": 0.808,
+          "missed_detection_rate": 0.192,
+          "specificity": 0.9927,
+          "f1_score": 0.8899
         },
         "false_positives_by_negative_class": {
-          "ambient_and_speech": 4,
+          "ambient_and_speech": 1,
           "loud_impact": 0,
           "continuous_environmental": 0,
           "hard_negative_rattle": 0,
-          "aerosol_spray_hiss": 0
+          "aerosol_spray_hiss": 1
         },
-        "uncertain_candidate_count": 38,
+        "uncertain_candidate_count": 42,
         "raw_argmax_confusion_matrix": [
           [
-            34,
-            1,
+            10,
+            4,
+            4,
+            12,
             0,
-            6,
-            0,
-            6
+            14
           ],
           [
             0,
-            27,
+            21,
             0,
             0,
             0,
             0
           ],
           [
-            0,
-            5,
-            47,
-            0,
-            14,
-            0
-          ],
-          [
+            3,
+            3,
+            42,
+            13,
             2,
-            6,
-            1,
-            83,
+            0
+          ],
+          [
+            13,
+            7,
+            2,
+            77,
             0,
             0
           ],
           [
             0,
-            11,
+            2,
             0,
-            0,
-            25,
-            0
+            20,
+            15,
+            9
           ],
           [
-            23,
             0,
             0,
             0,
-            1,
-            214
+            9,
+            0,
+            241
           ]
         ]
       }
@@ -490,463 +490,463 @@
   "held_out_test_evaluation": {
     "split_name": "held_out_test",
     "sample_counts": {
-      "total_samples": 1006,
-      "target_samples": 735,
-      "negative_samples": 271,
+      "total_samples": 1652,
+      "target_samples": 1325,
+      "negative_samples": 327,
       "class_distribution": {
-        "ambient_and_speech": 48,
-        "loud_impact": 27,
-        "continuous_environmental": 63,
-        "hard_negative_rattle": 87,
-        "aerosol_spray_hiss": 46,
-        "spray_can_shaking": 735
+        "ambient_and_speech": 112,
+        "loud_impact": 21,
+        "continuous_environmental": 55,
+        "hard_negative_rattle": 91,
+        "aerosol_spray_hiss": 48,
+        "spray_can_shaking": 1325
       },
-      "total_audio_duration_seconds": 1006.0,
-      "negative_audio_duration_seconds": 271.0,
-      "negative_audio_duration_minutes": 4.52
+      "total_audio_duration_seconds": 1652.0,
+      "negative_audio_duration_seconds": 327.0,
+      "negative_audio_duration_minutes": 5.45
     },
     "threshold_sweep": [
       {
         "threshold": 0.85,
         "confusion_counts": {
-          "tp": 181,
-          "fp": 0,
-          "fn": 554,
-          "tn": 271
+          "tp": 785,
+          "fp": 8,
+          "fn": 540,
+          "tn": 319
         },
         "metrics": {
-          "precision": 1.0,
-          "recall": 0.2463,
-          "missed_detection_rate": 0.7537,
-          "specificity": 1.0,
-          "f1_score": 0.3952
+          "precision": 0.9899,
+          "recall": 0.5925,
+          "missed_detection_rate": 0.4075,
+          "specificity": 0.9755,
+          "f1_score": 0.7413
         },
         "false_positives_by_negative_class": {
-          "ambient_and_speech": 0,
+          "ambient_and_speech": 8,
           "loud_impact": 0,
           "continuous_environmental": 0,
           "hard_negative_rattle": 0,
           "aerosol_spray_hiss": 0
         },
-        "uncertain_candidate_count": 119,
+        "uncertain_candidate_count": 67,
         "raw_argmax_confusion_matrix": [
           [
-            38,
-            2,
-            0,
-            6,
-            0,
-            2
-          ],
-          [
-            0,
-            27,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
             3,
-            36,
-            0,
-            24,
-            0
-          ],
-          [
-            1,
             4,
-            2,
-            80,
+            16,
+            52,
+            0,
+            37
+          ],
+          [
+            0,
+            21,
+            0,
+            0,
             0,
             0
           ],
           [
+            3,
+            10,
             0,
+            37,
             5,
-            0,
-            0,
-            41,
             0
           ],
           [
-            114,
-            6,
-            103,
-            31,
+            2,
+            2,
+            0,
+            87,
+            0,
+            0
+          ],
+          [
+            0,
             4,
-            477
+            0,
+            32,
+            0,
+            12
+          ],
+          [
+            31,
+            12,
+            124,
+            54,
+            3,
+            1101
           ]
         ]
       },
       {
         "threshold": 0.8,
         "confusion_counts": {
-          "tp": 236,
-          "fp": 0,
-          "fn": 499,
-          "tn": 271
+          "tp": 869,
+          "fp": 11,
+          "fn": 456,
+          "tn": 316
         },
         "metrics": {
-          "precision": 1.0,
-          "recall": 0.3211,
-          "missed_detection_rate": 0.6789,
-          "specificity": 1.0,
-          "f1_score": 0.4861
+          "precision": 0.9875,
+          "recall": 0.6558,
+          "missed_detection_rate": 0.3442,
+          "specificity": 0.9664,
+          "f1_score": 0.7882
         },
         "false_positives_by_negative_class": {
-          "ambient_and_speech": 0,
+          "ambient_and_speech": 10,
           "loud_impact": 0,
           "continuous_environmental": 0,
           "hard_negative_rattle": 0,
-          "aerosol_spray_hiss": 0
+          "aerosol_spray_hiss": 1
         },
-        "uncertain_candidate_count": 119,
+        "uncertain_candidate_count": 67,
         "raw_argmax_confusion_matrix": [
           [
-            38,
-            2,
-            0,
-            6,
-            0,
-            2
-          ],
-          [
-            0,
-            27,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
             3,
-            36,
-            0,
-            24,
-            0
-          ],
-          [
-            1,
             4,
-            2,
-            80,
+            16,
+            52,
+            0,
+            37
+          ],
+          [
+            0,
+            21,
+            0,
+            0,
             0,
             0
           ],
           [
+            3,
+            10,
             0,
+            37,
             5,
-            0,
-            0,
-            41,
             0
           ],
           [
-            114,
-            6,
-            103,
-            31,
+            2,
+            2,
+            0,
+            87,
+            0,
+            0
+          ],
+          [
+            0,
             4,
-            477
+            0,
+            32,
+            0,
+            12
+          ],
+          [
+            31,
+            12,
+            124,
+            54,
+            3,
+            1101
           ]
         ]
       },
       {
         "threshold": 0.75,
         "confusion_counts": {
-          "tp": 278,
-          "fp": 0,
-          "fn": 457,
-          "tn": 271
+          "tp": 924,
+          "fp": 14,
+          "fn": 401,
+          "tn": 313
         },
         "metrics": {
-          "precision": 1.0,
-          "recall": 0.3782,
-          "missed_detection_rate": 0.6218,
-          "specificity": 1.0,
-          "f1_score": 0.5489
+          "precision": 0.9851,
+          "recall": 0.6974,
+          "missed_detection_rate": 0.3026,
+          "specificity": 0.9572,
+          "f1_score": 0.8166
         },
         "false_positives_by_negative_class": {
-          "ambient_and_speech": 0,
+          "ambient_and_speech": 12,
           "loud_impact": 0,
           "continuous_environmental": 0,
           "hard_negative_rattle": 0,
-          "aerosol_spray_hiss": 0
+          "aerosol_spray_hiss": 2
         },
-        "uncertain_candidate_count": 119,
+        "uncertain_candidate_count": 67,
         "raw_argmax_confusion_matrix": [
           [
-            38,
-            2,
-            0,
-            6,
-            0,
-            2
-          ],
-          [
-            0,
-            27,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
             3,
-            36,
-            0,
-            24,
-            0
-          ],
-          [
-            1,
             4,
-            2,
-            80,
+            16,
+            52,
+            0,
+            37
+          ],
+          [
+            0,
+            21,
+            0,
+            0,
             0,
             0
           ],
           [
+            3,
+            10,
             0,
+            37,
             5,
-            0,
-            0,
-            41,
             0
           ],
           [
-            114,
-            6,
-            103,
-            31,
+            2,
+            2,
+            0,
+            87,
+            0,
+            0
+          ],
+          [
+            0,
             4,
-            477
+            0,
+            32,
+            0,
+            12
+          ],
+          [
+            31,
+            12,
+            124,
+            54,
+            3,
+            1101
           ]
         ]
       },
       {
         "threshold": 0.7,
         "confusion_counts": {
-          "tp": 308,
-          "fp": 0,
-          "fn": 427,
-          "tn": 271
+          "tp": 947,
+          "fp": 15,
+          "fn": 378,
+          "tn": 312
         },
         "metrics": {
-          "precision": 1.0,
-          "recall": 0.419,
-          "missed_detection_rate": 0.581,
-          "specificity": 1.0,
-          "f1_score": 0.5906
+          "precision": 0.9844,
+          "recall": 0.7147,
+          "missed_detection_rate": 0.2853,
+          "specificity": 0.9541,
+          "f1_score": 0.8282
         },
         "false_positives_by_negative_class": {
-          "ambient_and_speech": 0,
+          "ambient_and_speech": 13,
           "loud_impact": 0,
           "continuous_environmental": 0,
           "hard_negative_rattle": 0,
-          "aerosol_spray_hiss": 0
+          "aerosol_spray_hiss": 2
         },
-        "uncertain_candidate_count": 119,
+        "uncertain_candidate_count": 67,
         "raw_argmax_confusion_matrix": [
           [
-            38,
-            2,
-            0,
-            6,
-            0,
-            2
-          ],
-          [
-            0,
-            27,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
             3,
-            36,
-            0,
-            24,
-            0
-          ],
-          [
-            1,
             4,
-            2,
-            80,
+            16,
+            52,
+            0,
+            37
+          ],
+          [
+            0,
+            21,
+            0,
+            0,
             0,
             0
           ],
           [
+            3,
+            10,
             0,
+            37,
             5,
-            0,
-            0,
-            41,
             0
           ],
           [
-            114,
-            6,
-            103,
-            31,
+            2,
+            2,
+            0,
+            87,
+            0,
+            0
+          ],
+          [
+            0,
             4,
-            477
+            0,
+            32,
+            0,
+            12
+          ],
+          [
+            31,
+            12,
+            124,
+            54,
+            3,
+            1101
           ]
         ]
       },
       {
         "threshold": 0.65,
         "confusion_counts": {
-          "tp": 335,
-          "fp": 0,
-          "fn": 400,
-          "tn": 271
+          "tp": 957,
+          "fp": 15,
+          "fn": 368,
+          "tn": 312
         },
         "metrics": {
-          "precision": 1.0,
-          "recall": 0.4558,
-          "missed_detection_rate": 0.5442,
-          "specificity": 1.0,
-          "f1_score": 0.6262
+          "precision": 0.9846,
+          "recall": 0.7223,
+          "missed_detection_rate": 0.2777,
+          "specificity": 0.9541,
+          "f1_score": 0.8333
         },
         "false_positives_by_negative_class": {
-          "ambient_and_speech": 0,
+          "ambient_and_speech": 13,
           "loud_impact": 0,
           "continuous_environmental": 0,
           "hard_negative_rattle": 0,
-          "aerosol_spray_hiss": 0
+          "aerosol_spray_hiss": 2
         },
-        "uncertain_candidate_count": 119,
+        "uncertain_candidate_count": 67,
         "raw_argmax_confusion_matrix": [
           [
-            38,
-            2,
-            0,
-            6,
-            0,
-            2
-          ],
-          [
-            0,
-            27,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
             3,
-            36,
-            0,
-            24,
-            0
-          ],
-          [
-            1,
             4,
-            2,
-            80,
+            16,
+            52,
+            0,
+            37
+          ],
+          [
+            0,
+            21,
+            0,
+            0,
             0,
             0
           ],
           [
+            3,
+            10,
             0,
+            37,
             5,
-            0,
-            0,
-            41,
             0
           ],
           [
-            114,
-            6,
-            103,
-            31,
+            2,
+            2,
+            0,
+            87,
+            0,
+            0
+          ],
+          [
+            0,
             4,
-            477
+            0,
+            32,
+            0,
+            12
+          ],
+          [
+            31,
+            12,
+            124,
+            54,
+            3,
+            1101
           ]
         ]
       },
       {
         "threshold": 0.6,
         "confusion_counts": {
-          "tp": 364,
-          "fp": 0,
-          "fn": 371,
-          "tn": 271
+          "tp": 962,
+          "fp": 17,
+          "fn": 363,
+          "tn": 310
         },
         "metrics": {
-          "precision": 1.0,
-          "recall": 0.4952,
-          "missed_detection_rate": 0.5048,
-          "specificity": 1.0,
-          "f1_score": 0.6624
+          "precision": 0.9826,
+          "recall": 0.726,
+          "missed_detection_rate": 0.274,
+          "specificity": 0.948,
+          "f1_score": 0.8351
         },
         "false_positives_by_negative_class": {
-          "ambient_and_speech": 0,
+          "ambient_and_speech": 15,
           "loud_impact": 0,
           "continuous_environmental": 0,
           "hard_negative_rattle": 0,
-          "aerosol_spray_hiss": 0
+          "aerosol_spray_hiss": 2
         },
-        "uncertain_candidate_count": 119,
+        "uncertain_candidate_count": 67,
         "raw_argmax_confusion_matrix": [
           [
-            38,
-            2,
-            0,
-            6,
-            0,
-            2
-          ],
-          [
-            0,
-            27,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
             3,
-            36,
-            0,
-            24,
-            0
-          ],
-          [
-            1,
             4,
-            2,
-            80,
+            16,
+            52,
+            0,
+            37
+          ],
+          [
+            0,
+            21,
+            0,
+            0,
             0,
             0
           ],
           [
+            3,
+            10,
             0,
+            37,
             5,
-            0,
-            0,
-            41,
             0
           ],
           [
-            114,
-            6,
-            103,
-            31,
+            2,
+            2,
+            0,
+            87,
+            0,
+            0
+          ],
+          [
+            0,
             4,
-            477
+            0,
+            32,
+            0,
+            12
+          ],
+          [
+            31,
+            12,
+            124,
+            54,
+            3,
+            1101
           ]
         ]
       }
@@ -956,74 +956,74 @@
     "quiet_clean": {
       "condition_description": "Solo spray can shaking in quiet room (no train noise)",
       "dataset_nature": "laboratory_recording",
-      "total_samples": 147,
-      "target_samples": 146,
-      "negative_samples": 1,
-      "duration_seconds": 147.0,
-      "tp": 58,
-      "fp": 0,
-      "fn": 88,
-      "tn": 1,
-      "precision": 1.0,
-      "recall": 0.3973,
-      "rejection_rate": 1.0
+      "total_samples": 204,
+      "target_samples": 189,
+      "negative_samples": 15,
+      "duration_seconds": 204.0,
+      "tp": 134,
+      "fp": 1,
+      "fn": 55,
+      "tn": 14,
+      "precision": 0.9926,
+      "recall": 0.709,
+      "rejection_rate": 0.9333
     },
     "busy_station": {
       "condition_description": "Continuous station background noise ONLY (NO positive shake audio present)",
       "dataset_nature": "synthetic_mixture",
-      "total_samples": 71,
-      "target_samples": 0,
-      "negative_samples": 71,
-      "duration_seconds": 71.0,
-      "tp": 0,
+      "total_samples": 58,
+      "target_samples": 21,
+      "negative_samples": 37,
+      "duration_seconds": 58.0,
+      "tp": 20,
       "fp": 0,
-      "fn": 0,
-      "tn": 71,
+      "fn": 1,
+      "tn": 37,
       "precision": 1.0,
-      "recall": "N/A (No target samples in test set)",
+      "recall": 0.9524,
       "rejection_rate": 1.0
     },
     "overlapping_train_announcement": {
       "condition_description": "Spray can shaking mixed with train rumble & announcements (+12 to 0 dB SNR)",
       "dataset_nature": "synthetic_mixture",
-      "total_samples": 504,
-      "target_samples": 438,
-      "negative_samples": 66,
-      "duration_seconds": 504.0,
-      "tp": 120,
-      "fp": 0,
-      "fn": 318,
-      "tn": 66,
-      "precision": 1.0,
-      "recall": 0.274,
-      "rejection_rate": 1.0
+      "total_samples": 850,
+      "target_samples": 756,
+      "negative_samples": 94,
+      "duration_seconds": 850.0,
+      "tp": 483,
+      "fp": 7,
+      "fn": 273,
+      "tn": 87,
+      "precision": 0.9857,
+      "recall": 0.6389,
+      "rejection_rate": 0.9255
     },
     "spray_hiss": {
       "condition_description": "Aerosol spray discharge hiss, sputter, and cap handling",
       "dataset_nature": "synthetic_mixture",
-      "total_samples": 46,
-      "target_samples": 4,
-      "negative_samples": 42,
-      "duration_seconds": 46.0,
-      "tp": 0,
+      "total_samples": 48,
+      "target_samples": 48,
+      "negative_samples": 0,
+      "duration_seconds": 48.0,
+      "tp": 48,
       "fp": 0,
-      "fn": 4,
-      "tn": 42,
+      "fn": 0,
+      "tn": 0,
       "precision": 1.0,
-      "recall": 0.0,
-      "rejection_rate": 1.0
+      "recall": 1.0,
+      "rejection_rate": "N/A"
     },
     "similar_rattles": {
       "condition_description": "Hard negative rattles (keys, coins, pill bottles, glassware)",
       "dataset_nature": "synthetic_mixture",
-      "total_samples": 87,
+      "total_samples": 91,
       "target_samples": 0,
-      "negative_samples": 87,
-      "duration_seconds": 87.0,
+      "negative_samples": 91,
+      "duration_seconds": 91.0,
       "tp": 0,
       "fp": 0,
       "fn": 0,
-      "tn": 87,
+      "tn": 91,
       "precision": 1.0,
       "recall": "N/A (No target samples in test set)",
       "rejection_rate": 1.0
@@ -1031,17 +1031,17 @@
     "masked_extreme": {
       "condition_description": "Heavy acoustic masking where train pass-by exceeds can SPL by 4 dB (-4 dB SNR)",
       "dataset_nature": "synthetic_mixture",
-      "total_samples": 147,
-      "target_samples": 147,
-      "negative_samples": 0,
-      "duration_seconds": 147.0,
-      "tp": 58,
-      "fp": 0,
-      "fn": 89,
-      "tn": 0,
-      "precision": 1.0,
-      "recall": 0.3946,
-      "rejection_rate": "N/A"
+      "total_samples": 265,
+      "target_samples": 250,
+      "negative_samples": 15,
+      "duration_seconds": 265.0,
+      "tp": 143,
+      "fp": 3,
+      "fn": 107,
+      "tn": 12,
+      "precision": 0.9795,
+      "recall": 0.572,
+      "rejection_rate": 0.8
     }
   },
   "duration_and_reliability_statement": "The held-out test partition contains 271 one-second negative windows, totaling 271 seconds (4.52 minutes) of concatenated synthetic and laboratory negative audio. This negative duration is insufficient to establish a reliable false alert rate per hour for an operational railway environment. True continuous false alarm rates can only be measured by deploying continuous multi-hour acoustic recordings through the installed platform microphone."

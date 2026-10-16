@@ -4,8 +4,8 @@ Streams live audio from your microphone and runs the two-stage decision pipeline
 1. Stage 1: Detects kinematic bursts & cadence (2.0 - 8.5 Hz) and broadband rattling energy (2 - 9 kHz).
 2. Stage 2: Confirms authentic spray-can resonance vs hard negatives (coins, keys, pill bottles, etc.)
    using the deep CNN over the full 2D Log-Mel spectrogram.
-3. Multi-Window Temporal Persistence: Alerts ONLY when matched across >= 3 consecutive windows.
-4. Cooldown: Enforces a 3-second quiet window after an alert.
+3. Multi-Window Temporal Persistence: Alerts ONLY when matched across >= 2 consecutive windows.
+4. Continuous Real-Time Evaluation: Zero cooldown; re-arms immediately via event-state tracking.
 """
 
 import argparse
@@ -46,8 +46,8 @@ def print_banner(engine: SprayCanDetectorEngine, device_info: dict) -> None:
     print(f" • Stage 1 Pre-Filter  : Kinematic cadence (2.0-8.5 Hz) + Broadband rattle (2-9 kHz)")
     print(f" • Stage 2 Neural CNN  : Full 2D Log-Mel Spectrogram (64x44) with Hard-Negative Rejection")
     print(f" • Conservative Cutoff : {engine.conservative_threshold*100:.0f}% confidence")
-    print(f" • Multi-Window Gating : Required {engine.required_consecutive_windows} consecutive windows (>= 0.75s)")
-    print(f" • Alert Cooldown      : {engine.cooldown_seconds:.1f} seconds")
+    print(f" • Multi-Window Gating : Required {engine.required_consecutive_windows} consecutive windows (>= 0.50s)")
+    print(f" • Alert Cooldown      : NONE (0.0s - Continuous Real-Time)")
     print("=" * 80)
     print(f"{DIM}Press Ctrl+C to stop real-time monitoring.{RESET}\n")
 
@@ -161,6 +161,8 @@ def run_live_detector(device_index: Optional[int] = None) -> None:
                         badge = f"{MAGENTA}[HARD NEGATIVE: IGNORED]{RESET}"
                     elif "UNCERTAIN" in status:
                         badge = f"{YELLOW}[UNCERTAIN SOUND]{RESET}"
+                    elif "SUSTAINED_SHAKING" in status:
+                        badge = f"{GREEN}[SUSTAINED SHAKING]{RESET}"
                     elif "IN_COOLDOWN" in status:
                         badge = f"{YELLOW}[IN COOLDOWN: {res['cooldown_remaining_sec']}s]{RESET}"
                     else:

@@ -1,0 +1,20 @@
+{
+  "event_id": "evt_1791957205744",
+  "event_type": "confirmed_alert",
+  "timestamp_iso": "2026-10-14T05:53:25.744334+00:00",
+  "system_time": 1791957205.318,
+  "p_spray_can": 0.6676,
+  "p_aerosol_spray_hiss": 0.0064,
+  "p_hard_negative": 0.0163,
+  "p_continuous_environmental": 0.1693,
+  "p_ambient": 0.1338,
+  "entropy": 0.543,
+  "margin": 0.4983,
+  "predicted_class": "spray_can_shaking",
+  "verdict": "CONFIRMED_SPRAY_CAN",
+  "audio_file": "evt_1791957205744_confirmed_alert.wav",
+  "human_reviewed": false,
+  "human_verdict": null,
+  "operator_notes": null,
+  "retention_policy": "Ephemeral review buffer. Auto-purged after 24h."
+}

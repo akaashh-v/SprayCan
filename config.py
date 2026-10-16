@@ -26,6 +26,8 @@ RAW_AMBIENT_DIR = RAW_DIR / "ambient_negatives"
 RAW_LOUD_IMPACT_DIR = RAW_DIR / "loud_impacts"
 RAW_ENV_DIR = RAW_DIR / "continuous_environmental"
 FIELD_RECORDINGS_DIR = RAW_DIR / "field_recordings"
+RAW_REAL_SPRAY_DIR = RAW_DIR / "real spray can shaking"
+RAW_MORE_NEGATIVES_DIR = RAW_DIR / "more negatives"
 
 # Model Checkpoints & Evaluation artifacts
 MODEL_SAVE_PATH = MODELS_DIR / "best_detector.pth"
@@ -33,7 +35,7 @@ BASELINE_MODEL_SAVE_PATH = MODELS_DIR / "baseline_detector.pth"
 EVALUATION_REPORT_PATH = MODELS_DIR / "evaluation_report.json"
 CALIBRATION_PATH = MODELS_DIR / "threshold_calibration.json"
 
-for d in [RAW_SPRAY_DIR, RAW_SPRAY_HISS_DIR, RAW_HARD_NEG_DIR, RAW_AMBIENT_DIR, RAW_LOUD_IMPACT_DIR, RAW_ENV_DIR, FIELD_RECORDINGS_DIR, PROCESSED_DIR, MODELS_DIR]:
+for d in [RAW_SPRAY_DIR, RAW_SPRAY_HISS_DIR, RAW_HARD_NEG_DIR, RAW_AMBIENT_DIR, RAW_LOUD_IMPACT_DIR, RAW_ENV_DIR, FIELD_RECORDINGS_DIR, RAW_REAL_SPRAY_DIR, RAW_MORE_NEGATIVES_DIR, PROCESSED_DIR, MODELS_DIR]:
     d.mkdir(parents=True, exist_ok=True)
 
 # Audio Parameters
@@ -84,7 +86,7 @@ IDX_TO_CLASS = {i: name for i, name in enumerate(CLASS_NAMES)}
 NUM_CLASSES = len(CLASS_NAMES)
 
 # Conservative Decision & Gating Thresholds
-CONSERVATIVE_THRESHOLD = 0.70         # Baseline confidence required for spray can class (tuned on validation set)
+CONSERVATIVE_THRESHOLD = 0.80         # Locked production conservative threshold (validated zero false alarms on benchmark)
 MAX_COMPETING_CONFIDENCE = 0.20       # Physical mimics (spray hiss, hard rattle, impact) must remain low
 MAX_ENV_CONFIDENCE = 0.25             # Environmental background tolerance (rain, train rumble)
 MIN_CONFIDENCE_MARGIN = 0.35          # Margin: P(spray) - max(P(physical mimics)) >= 0.35
@@ -93,14 +95,16 @@ UNCERTAIN_ENTROPY_THRESHOLD = 0.70    # Normalized Shannon entropy threshold for
 # Multi-Window Temporal Persistence & Cooldown Gating
 REQUIRED_CONSECUTIVE_WINDOWS = 2      # Alert promptness: requires 2 consecutive windows (prompt confirmation, no long delay)
 MIN_EVENT_DURATION_SECONDS = 0.75     # Minimum duration to confirm sustained shaking
-ALERT_COOLDOWN_SECONDS = 3.0          # Cooldown to prevent repeating alerts for one episode (3.0s)
+ALERT_COOLDOWN_SECONDS = 0.0          # Cooldown removed: continuous real-time detection with zero lockout
+EVENT_END_QUIET_WINDOWS = 2           # Consecutive non-detection windows (0.5s at 0.25s hop) to confirm event end and rearm
 
-# Alert & Operator Instructions
+# Shadow Mode & Operator Non-Inference Policy
+SHADOW_MODE_ENABLED = True            # Shadow mode: advisory notifications only; no automatic enforcement actions
 ALERT_TITLE = "possible aerosol-can shaking detected"
 OPERATOR_REVIEW_NOTICE = (
     "Direct trained human operator to review the event. "
     "A sound alert is not proof that a person is spraying graffiti; "
-    "do not identify or track people from audio."
+    "do not identify, accuse, or track people from audio evidence."
 )
 
 # Noise Cancellation Settings
@@ -109,12 +113,17 @@ NOISE_SUBTRACTION_FACTOR = 1.6        # Over-subtraction factor alpha for statio
 NOISE_FLOOR_FACTOR = 0.08             # Spectral floor factor beta (preserves acoustic transients, avoids musical noise)
 
 # Privacy & Monitoring Settings (Railway Operator Data Governance)
-SAVE_MIC_AUDIO = False                # Do NOT store raw continuous microphone audio
+SAVE_MIC_AUDIO = False                # Do NOT store raw continuous microphone audio unless in explicit field evaluation mode
 ENABLE_EPHEMERAL_REVIEW = True        # Store only ambiguous/candidate clips for human operator review
-AUDIO_RETENTION_HOURS = 24            # Automatically purge review clips older than 24 hours
+AUDIO_RETENTION_HOURS = 24            # Automatically purge continuous & review recordings older than 24 hours
 MAX_REVIEW_QUEUE_ITEMS = 100          # Bounded FIFO buffer for uncertain event review
 REVIEW_QUEUE_DIR = DATA_DIR / "review_queue"
-REVIEW_QUEUE_DIR.mkdir(parents=True, exist_ok=True)
+SHADOW_ALERTS_LOG = DATA_DIR / "shadow_mode_alerts.jsonl"
+FIELD_SESSIONS_DIR = RAW_DIR / "field_sessions"
+FIELD_ANNOTATIONS_DIR = DATA_DIR / "annotations"
+
+for d in [REVIEW_QUEUE_DIR, FIELD_SESSIONS_DIR, FIELD_ANNOTATIONS_DIR]:
+    d.mkdir(parents=True, exist_ok=True)
 
 # Training Hyperparameters
 BATCH_SIZE = 32

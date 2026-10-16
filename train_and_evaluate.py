@@ -31,6 +31,7 @@ from config import (
     DEVICE,
     EPOCHS,
     EVALUATION_REPORT_PATH,
+    EVENT_END_QUIET_WINDOWS,
     LEARNING_RATE,
     MAX_COMPETING_CONFIDENCE,
     MIN_CONFIDENCE_MARGIN,
@@ -146,24 +147,26 @@ def evaluate_baseline_model(
     neg_stream = [w for w in evaluated_windows if not w["is_shaking_true"]]
     streaming_alert_episodes = 0
     consecutive_counter = 0
+    consecutive_quiet = 0
+    in_episode = False
     last_alert_time = -999.0
     current_time = 0.0
     time_step = WINDOW_DURATION * 0.5
 
     for win in neg_stream:
         current_time += time_step
-        if (current_time - last_alert_time) < ALERT_COOLDOWN_SECONDS:
-            consecutive_counter = 0
-            continue
-
         if win["is_spray_pred"]:
             consecutive_counter += 1
-            if consecutive_counter >= REQUIRED_CONSECUTIVE_WINDOWS:
+            consecutive_quiet = 0
+            if consecutive_counter >= REQUIRED_CONSECUTIVE_WINDOWS and not in_episode:
                 streaming_alert_episodes += 1
+                in_episode = True
                 last_alert_time = current_time
-                consecutive_counter = 0
         else:
             consecutive_counter = 0
+            consecutive_quiet += 1
+            if in_episode and consecutive_quiet >= EVENT_END_QUIET_WINDOWS:
+                in_episode = False
 
     total_neg_hours = (len(neg_stream) * WINDOW_DURATION) / 3600.0
     fa_per_hour = streaming_alert_episodes / total_neg_hours if total_neg_hours > 0 else 0.0
@@ -425,26 +428,26 @@ def evaluate_held_out_test_set(
     negative_stream = [w for w in evaluated_windows if not w["is_spray_true"]]
     streaming_alert_episodes = 0
     consecutive_counter = 0
+    consecutive_quiet = 0
+    in_episode = False
     last_alert_time = -999.0
     current_time = 0.0
     time_step = WINDOW_DURATION * 0.5  # 0.5s step between consecutive window evaluations
 
     for win in negative_stream:
         current_time += time_step
-        in_cooldown = (current_time - last_alert_time) < ALERT_COOLDOWN_SECONDS
-
-        if in_cooldown:
-            consecutive_counter = 0
-            continue
-
         if win["is_spray_pred"]:
             consecutive_counter += 1
-            if consecutive_counter >= REQUIRED_CONSECUTIVE_WINDOWS:
+            consecutive_quiet = 0
+            if consecutive_counter >= REQUIRED_CONSECUTIVE_WINDOWS and not in_episode:
                 streaming_alert_episodes += 1
+                in_episode = True
                 last_alert_time = current_time
-                consecutive_counter = 0
         else:
             consecutive_counter = 0
+            consecutive_quiet += 1
+            if in_episode and consecutive_quiet >= EVENT_END_QUIET_WINDOWS:
+                in_episode = False
 
     total_negative_hours = (len(negative_stream) * WINDOW_DURATION) / 3600.0
     fa_per_hour = streaming_alert_episodes / total_negative_hours if total_negative_hours > 0 else 0.0
@@ -591,8 +594,13 @@ def evaluate_held_out_test_set(
     }
 
 
-def train_and_evaluate(epochs: int = EPOCHS) -> None:
-    """Train SprayCanShakingCNN and execute validation tuning & held-out test evaluation."""
+def train_and_evaluate(
+    epochs: int = EPOCHS,
+    force_train: bool = False,
+    fine_tune: bool = False,
+    locked_production_threshold: float = CONSERVATIVE_THRESHOLD,
+) -> Dict:
+    """Train or fine-tune SprayCanShakingCNN and execute validation tuning & held-out test evaluation."""
     torch.manual_seed(RANDOM_SEED)
     np.random.seed(RANDOM_SEED)
 
@@ -619,15 +627,29 @@ def train_and_evaluate(epochs: int = EPOCHS) -> None:
 
     model = SprayCanShakingCNN(num_classes=NUM_CLASSES).to(DEVICE)
     criterion = nn.CrossEntropyLoss(weight=class_weights_t)
-    optimizer = optim.AdamW(model.parameters(), lr=LEARNING_RATE, weight_decay=WEIGHT_DECAY)
-    scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs, eta_min=1e-5)
 
     best_val_f1 = -1.0
     best_epoch = 0
 
-    should_train = not MODEL_SAVE_PATH.exists()
+    if fine_tune and MODEL_SAVE_PATH.exists():
+        logger.info("Fine-tuning existing model checkpoint from %s with lr=%.1e...", MODEL_SAVE_PATH, LEARNING_RATE * 0.2)
+        ckpt = torch.load(MODEL_SAVE_PATH, map_location=DEVICE, weights_only=False)
+        model.load_state_dict(ckpt["model_state_dict"])
+        best_val_f1 = ckpt.get("val_f1", 0.0)
+        optimizer = optim.AdamW(model.parameters(), lr=LEARNING_RATE * 0.2, weight_decay=WEIGHT_DECAY)
+        scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs, eta_min=1e-6)
+        should_train = True
+    elif force_train or not MODEL_SAVE_PATH.exists():
+        logger.info("Training neural network from scratch for %d epochs...", epochs)
+        optimizer = optim.AdamW(model.parameters(), lr=LEARNING_RATE, weight_decay=WEIGHT_DECAY)
+        scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs, eta_min=1e-5)
+        should_train = True
+    else:
+        logger.info("Using existing model checkpoint from %s (use --retrain or --fine-tune to update).", MODEL_SAVE_PATH)
+        should_train = False
+
     if should_train:
-        logger.info("Starting neural network training for %d epochs...", epochs)
+        logger.info("Starting neural network optimization for %d epochs...", epochs)
         for epoch in range(1, epochs + 1):
             model.train()
             train_loss = 0.0
@@ -741,7 +763,7 @@ def train_and_evaluate(epochs: int = EPOCHS) -> None:
                 "hiss_false_alerts": revised_report["spray_hiss_specific_metrics"]["false_alerts_on_hiss"],
                 "hiss_rejection_rate": revised_report["spray_hiss_specific_metrics"]["rejection_rate"],
                 "total_false_positives": revised_report["shaking_alert_metrics"]["false_positives_total"],
-                "streaming_fa_per_hour": revised_report["streaming_metrics"]["false_alarms_per_hour"],
+                "streaming_fa_per_hour": revised_report["streaming_metrics"].get("false_alarms_per_hour_extrapolated", revised_report["streaming_metrics"].get("false_alarms_per_hour", 0.0)),
             },
         },
     }
@@ -776,10 +798,26 @@ def train_and_evaluate(epochs: int = EPOCHS) -> None:
                 baseline_report.get("shaking_metrics", {}).get("false_positives_total", 0),
                 revised_report["shaking_alert_metrics"]["false_positives_total"])
     logger.info("  Streaming FA/hour       | %.3f FA/hr         | %.3f FA/hr",
-                baseline_report.get("streaming_metrics", {}).get("false_alarms_per_hour", 0.0),
-                revised_report["streaming_metrics"]["false_alarms_per_hour"])
+                baseline_report.get("streaming_metrics", {}).get("false_alarms_per_hour_extrapolated", baseline_report.get("streaming_metrics", {}).get("false_alarms_per_hour", 0.0)),
+                revised_report["streaming_metrics"].get("false_alarms_per_hour_extrapolated", revised_report["streaming_metrics"].get("false_alarms_per_hour", 0.0)))
     logger.info("=================================================================")
 
 
+    return full_report
+
+
 if __name__ == "__main__":
-    train_and_evaluate()
+    import argparse
+    parser = argparse.ArgumentParser(description="Train, fine-tune, or evaluate spray can sound detector.")
+    parser.add_argument("--retrain", action="store_true", help="Force retraining from scratch")
+    parser.add_argument("--fine-tune", action="store_true", help="Fine-tune existing checkpoint on updated dataset")
+    parser.add_argument("--epochs", type=int, default=EPOCHS, help="Number of training epochs")
+    parser.add_argument("--threshold", type=float, default=CONSERVATIVE_THRESHOLD, help="Locked production threshold")
+    args = parser.parse_args()
+
+    train_and_evaluate(
+        epochs=args.epochs,
+        force_train=args.retrain,
+        fine_tune=args.fine_tune,
+        locked_production_threshold=args.threshold,
+    )

@@ -49,6 +49,7 @@ from config import (
     DEVICE,
     ENABLE_EPHEMERAL_REVIEW,
     ENABLE_NOISE_CANCELLATION,
+    EVENT_END_QUIET_WINDOWS,
     HOP_SAMPLES,
     MAX_COMPETING_CONFIDENCE,
     MAX_ENV_CONFIDENCE,
@@ -63,6 +64,9 @@ from config import (
     REVIEW_QUEUE_DIR,
     SAMPLE_RATE,
     SAVE_MIC_AUDIO,
+    SHADOW_ALERTS_LOG,
+    SHADOW_MODE_ENABLED,
+    FIELD_SESSIONS_DIR,
     STAGE1_MIN_RMS,
     UNCERTAIN_ENTROPY_THRESHOLD,
     WINDOW_DURATION,
@@ -126,13 +130,29 @@ class SprayCanDetectorEngine:
         self._load_model_weights()
 
         # 5. State tracking for real-time streaming
+        self.shadow_mode = SHADOW_MODE_ENABLED
         self.consecutive_positive_windows = 0
-        self.last_alert_time = -999.0
+        self.consecutive_quiet_windows = 0
+        self.required_quiet_windows = EVENT_END_QUIET_WINDOWS  # Consecutive quiet windows to confirm event end and rearm
+        self.alert_episode_active = False
+        self._last_alert_time = -999.0
         self.rolling_audio_buffer = np.zeros(AUDIO_SAMPLES, dtype=np.float32)
         self.history = deque(maxlen=50)
         self._was_recent_candidate = False
         self.review_queue = deque(maxlen=MAX_REVIEW_QUEUE_ITEMS)
         self._purge_expired_review_items()
+
+    @property
+    def last_alert_time(self) -> float:
+        """Timestamp of the most recent alert onset."""
+        return self._last_alert_time
+
+    @last_alert_time.setter
+    def last_alert_time(self, val: float) -> None:
+        self._last_alert_time = float(val)
+        if self._last_alert_time > 0:
+            self.alert_episode_active = True
+            self.consecutive_quiet_windows = 0
 
     def _load_model_weights(self) -> None:
         """Load trained neural network checkpoint if available."""
@@ -169,7 +189,9 @@ class SprayCanDetectorEngine:
     def reset_state(self) -> None:
         """Reset temporal state counters, rolling buffer, and noise filter."""
         self.consecutive_positive_windows = 0
-        self.last_alert_time = -999.0
+        self.consecutive_quiet_windows = 0
+        self.alert_episode_active = False
+        self._last_alert_time = -999.0
         self.rolling_audio_buffer.fill(0.0)
         self.history.clear()
         self.noise_canceller.reset()
@@ -188,11 +210,18 @@ class SprayCanDetectorEngine:
             audio_window = pad_or_trim(audio_window, AUDIO_SAMPLES)
 
         # -------------------------------------------------------------
-        # Check Alert Cooldown
+        # Check Alert State & Rearming Logic (Zero Cooldown, Real-Time Continuous)
         # -------------------------------------------------------------
         time_since_alert = current_time - self.last_alert_time
-        in_cooldown = time_since_alert < self.cooldown_seconds
-        cooldown_remaining = max(0.0, self.cooldown_seconds - time_since_alert) if in_cooldown else 0.0
+
+        # Fallback safety timeout: auto-rearm if no candidate shaking observed for > 15s
+        if self.alert_episode_active and time_since_alert > 15.0 and not self._was_recent_candidate:
+            self.alert_episode_active = False
+            self.consecutive_quiet_windows = 0
+
+        # Cooldown completely removed: continuous real-time evaluation with zero delay
+        in_cooldown = False
+        cooldown_remaining = 0.0
 
         # -------------------------------------------------------------
         # Rule 1: Loudness may be used ONLY to identify clipping or unusable audio
@@ -249,6 +278,7 @@ class SprayCanDetectorEngine:
         # Background adaptation freezes during candidate persistence, active alerts, or cooldown
         # -------------------------------------------------------------
         freeze_adaptation = bool(
+            self.alert_episode_active or
             in_cooldown or
             (self.consecutive_positive_windows > 0) or
             self._was_recent_candidate
@@ -272,6 +302,24 @@ class SprayCanDetectorEngine:
         # -------------------------------------------------------------
         s1 = self.stage1.analyze_window(processed_window)
         self._was_recent_candidate = bool(s1.get("is_candidate", False))
+
+        # Check if current window is verified quiet (clean ambient platform noise or silence)
+        is_verified_quiet = bool(
+            (s1["rms"] < STAGE1_MIN_RMS) or
+            (not s1["is_candidate"] and s1["rms"] < 0.015 and s1.get("burst_count", 0) == 0)
+        )
+
+        if is_verified_quiet:
+            self.consecutive_quiet_windows += 1
+            if self.alert_episode_active and self.consecutive_quiet_windows >= self.required_quiet_windows:
+                # Event-end confirmed: REARM detector state machine!
+                self.alert_episode_active = False
+                self.consecutive_positive_windows = 0
+                logger.debug("Engine: Rearmed after %d verified quiet windows.", self.consecutive_quiet_windows)
+        else:
+            # Active bursts or elevated energy reset quiet count
+            if s1.get("is_candidate", False) or s1.get("burst_count", 0) >= 2 or s1["rms"] >= 0.025:
+                self.consecutive_quiet_windows = 0
 
         # Baseline result template
         result = {
@@ -308,6 +356,8 @@ class SprayCanDetectorEngine:
             "required_windows": self.required_consecutive_windows,
             "in_cooldown": in_cooldown,
             "cooldown_remaining_sec": round(cooldown_remaining, 2),
+            "alert_episode_active": self.alert_episode_active,
+            "is_verified_quiet": is_verified_quiet,
             "alert_fired": False,
             "status": "STATUS: SILENT",
             "explanation": "",
@@ -322,18 +372,16 @@ class SprayCanDetectorEngine:
             logger.debug("Engine: Unusable audio clipping: %s", s1['reason'])
             return result
 
-        # If in cooldown, suppress any alert
-        if in_cooldown:
-            self.consecutive_positive_windows = 0
-            result["status"] = "IN_COOLDOWN"
-            result["explanation"] = f"Alert suppressed by cooldown ({cooldown_remaining:.1f}s remaining)."
-            self.history.append(result)
-            return result
-
         # Silent or energy floor rejection
         if s1["rms"] < STAGE1_MIN_RMS:
             self.consecutive_positive_windows = 0
+            self.consecutive_quiet_windows += 1
+            if self.alert_episode_active and self.consecutive_quiet_windows >= self.required_quiet_windows:
+                self.alert_episode_active = False
+                logger.debug("Engine: Event ended after %d quiet windows. Detector rearmed.", self.consecutive_quiet_windows)
             result["status"] = "STATUS: SILENT"
+            result["alert_episode_active"] = self.alert_episode_active
+            result["is_event_active"] = self.alert_episode_active
             result["explanation"] = f"Ambient silence or low energy (RMS {s1['rms']:.4f} < {STAGE1_MIN_RMS})."
             self.history.append(result)
             return result
@@ -346,8 +394,14 @@ class SprayCanDetectorEngine:
         # -------------------------------------------------------------
         if not s1["is_candidate"]:
             self.consecutive_positive_windows = max(0, self.consecutive_positive_windows - 1)
+            self.consecutive_quiet_windows += 1
+            if self.alert_episode_active and self.consecutive_quiet_windows >= self.required_quiet_windows:
+                self.alert_episode_active = False
+                logger.debug("Engine: Event ended after %d non-candidate windows. Detector rearmed.", self.consecutive_quiet_windows)
             result["alert_fired"] = False
             result["is_stage1_candidate"] = False
+            result["alert_episode_active"] = self.alert_episode_active
+            result["is_event_active"] = self.alert_episode_active
             result["status"] = "NO_SHAKING_CADENCE"
             result["explanation"] = f"Stage 1 rejected: {s1['reason']}"
             self.history.append(result)
@@ -414,8 +468,14 @@ class SprayCanDetectorEngine:
         # Case A: Ambiguous / High entropy sound or uncertain evidence
         if s2_eval["is_uncertain"] or s2_eval["verdict"] == "UNCERTAIN_AMBIGUOUS_SOUND":
             self.consecutive_positive_windows = max(0, self.consecutive_positive_windows - 1)
+            self.consecutive_quiet_windows += 1
+            if self.alert_episode_active and self.consecutive_quiet_windows >= self.required_quiet_windows:
+                self.alert_episode_active = False
+                logger.debug("Engine: Shaking event ended after ambiguous gap. Detector rearmed.")
             result["status"] = "UNCERTAIN_AMBIGUOUS_SOUND"
             result["is_uncertain"] = True
+            result["alert_episode_active"] = self.alert_episode_active
+            result["is_event_active"] = self.alert_episode_active
             result["explanation"] = (
                 f"Ambiguous acoustic evidence (Entropy {s2_eval['entropy']:.2f}, Margin {s2_eval['confidence_margin']:.2f}). "
                 "No alert issued. Dispatched to operator review queue as uncertain candidate."
@@ -432,31 +492,55 @@ class SprayCanDetectorEngine:
         # Case B: Confirmed Spray Can Pattern
         if s2_eval["is_confirmed_spray"]:
             self.consecutive_positive_windows += 1
+            self.consecutive_quiet_windows = 0
             result["consecutive_windows"] = self.consecutive_positive_windows
 
             # Persistence Gating: Must persist across consecutive windows
             if self.consecutive_positive_windows >= self.required_consecutive_windows:
-                # ALERT TRIGGERED!
-                now_iso = datetime.datetime.now(datetime.timezone.utc).isoformat()
-                result["alert_fired"] = True
-                result["alert_title"] = ALERT_TITLE
-                result["status"] = f"ALERT: {ALERT_TITLE.upper()}"
-                result["timestamp_iso"] = now_iso
-                result["confidence"] = round(s2_eval["p_spray_can"], 4)
-                result["explanation"] = (
-                    f"possible aerosol-can shaking detected (Confidence: {s2_eval['p_spray_can']*100:.1f}%, "
-                    f"Timestamp: {now_iso}). {OPERATOR_REVIEW_NOTICE}"
-                )
-                result["operator_action_required"] = True
-                self._log_to_review_queue(
-                    audio_window=audio_window,
-                    evaluation=s2_eval,
-                    current_time=current_time,
-                    event_type="confirmed_alert",
-                )
-                self.last_alert_time = current_time
-                self.consecutive_positive_windows = 0  # reset persistence after firing
-                logger.info("ALERT TRIGGERED: %s at %s", ALERT_TITLE, now_iso)
+                if not self.alert_episode_active:
+                    # New distinct shaking event detected!
+                    now_iso = datetime.datetime.now(datetime.timezone.utc).isoformat()
+                    result["alert_fired"] = True
+                    result["alert_title"] = ALERT_TITLE
+                    result["status"] = f"ALERT: {ALERT_TITLE.upper()} (SHADOW MODE - ADVISORY ONLY)"
+                    result["timestamp_iso"] = now_iso
+                    result["confidence"] = round(s2_eval["p_spray_can"], 4)
+                    result["shadow_mode"] = self.shadow_mode
+                    result["dispatch_authorized"] = False
+                    result["automatic_enforcement"] = False
+                    result["human_verification_required"] = True
+                    result["explanation"] = (
+                        f"possible aerosol-can shaking detected (Confidence: {s2_eval['p_spray_can']*100:.1f}%, "
+                        f"Timestamp: {now_iso}). Shadow Mode Active: {OPERATOR_REVIEW_NOTICE}"
+                    )
+                    result["operator_action_required"] = True
+                    self._log_to_review_queue(
+                        audio_window=audio_window,
+                        evaluation=s2_eval,
+                        current_time=current_time,
+                        event_type="confirmed_alert",
+                    )
+                    self._log_shadow_alert(
+                        timestamp_iso=now_iso,
+                        evaluation=s2_eval,
+                        current_time=current_time,
+                    )
+                    self.last_alert_time = current_time
+                    self.alert_episode_active = True
+                    self.consecutive_quiet_windows = 0
+                    logger.info("SHADOW ALERT TRIGGERED: %s at %s (Advisory Only)", ALERT_TITLE, now_iso)
+                else:
+                    # Sustained shake continues within the active event:
+                    # Model inference ran completely; event remains active without duplicate alert trigger.
+                    result["alert_fired"] = False
+                    result["status"] = "SUSTAINED_SHAKING_ACTIVE"
+                    result["confidence"] = round(s2_eval["p_spray_can"], 4)
+                    result["explanation"] = (
+                        f"Sustained aerosol spray can shaking continues within active event "
+                        f"(Confidence: {s2_eval['p_spray_can']*100:.1f}%, Persistence: {self.consecutive_positive_windows}). Event ongoing."
+                    )
+                result["alert_episode_active"] = True
+                result["is_event_active"] = True
             else:
                 result["status"] = f"STAGE1_CANDIDATE (Persistence: {self.consecutive_positive_windows}/{self.required_consecutive_windows})"
                 result["explanation"] = (
@@ -478,6 +562,14 @@ class SprayCanDetectorEngine:
             # Ambient speech syllable, background voice overlap, or brief uncertain fluctuation:
             # Leaky decay instead of brutal instant zeroing
             self.consecutive_positive_windows = max(0, self.consecutive_positive_windows - 1)
+
+        self.consecutive_quiet_windows += 1
+        if self.alert_episode_active and self.consecutive_quiet_windows >= self.required_quiet_windows:
+            self.alert_episode_active = False
+            logger.debug("Engine: Shaking event ended on non-spray sound. Detector rearmed.")
+
+        result["alert_episode_active"] = self.alert_episode_active
+        result["is_event_active"] = self.alert_episode_active
 
         if s2_eval["verdict"] == "AEROSOL_SPRAY_HISS_REJECTED":
             result["status"] = "AEROSOL_SPRAY_HISS_REJECTED"
@@ -687,20 +779,55 @@ class SprayCanDetectorEngine:
 
         self.review_queue.append(record)
 
+    def _log_shadow_alert(
+        self,
+        timestamp_iso: str,
+        evaluation: Dict,
+        current_time: float,
+    ) -> None:
+        """Log advisory shadow mode alert to append-only JSONL log."""
+        try:
+            alert_entry = {
+                "alert_id": f"shadow_{int(time.time() * 1000)}",
+                "timestamp_iso": timestamp_iso,
+                "system_time": round(current_time, 3),
+                "shadow_mode": True,
+                "dispatch_authorized": False,
+                "automatic_enforcement": False,
+                "human_verification_required": True,
+                "confidence_p_spray": float(evaluation.get("p_spray_can", 0.0)),
+                "confidence_margin": float(evaluation.get("confidence_margin", 0.0)),
+                "entropy": float(evaluation.get("entropy", 0.0)),
+                "operator_notice": OPERATOR_REVIEW_NOTICE,
+            }
+            with open(SHADOW_ALERTS_LOG, "a", encoding="utf-8") as f:
+                f.write(json.dumps(alert_entry) + "\n")
+        except Exception as e:
+            logger.warning("Could not append shadow alert log: %s", e)
+
     def _purge_expired_review_items(self) -> None:
         """Purge review records and audio files older than AUDIO_RETENTION_HOURS."""
-        if not REVIEW_QUEUE_DIR.exists():
-            return
         cutoff_epoch = time.time() - (AUDIO_RETENTION_HOURS * 3600)
-        try:
-            for item in REVIEW_QUEUE_DIR.glob("*"):
-                if item.stat().st_mtime < cutoff_epoch:
-                    try:
-                        item.unlink()
-                    except Exception:
-                        pass
-        except Exception as e:
-            logger.warning("Error running privacy retention purge: %s", e)
+        if REVIEW_QUEUE_DIR.exists():
+            try:
+                for item in REVIEW_QUEUE_DIR.glob("*"):
+                    if item.stat().st_mtime < cutoff_epoch:
+                        try:
+                            item.unlink()
+                        except Exception:
+                            pass
+            except Exception as e:
+                logger.warning("Error running privacy retention purge on review queue: %s", e)
+
+        if FIELD_SESSIONS_DIR.exists():
+            try:
+                for sess_dir in FIELD_SESSIONS_DIR.iterdir():
+                    if sess_dir.is_dir() and sess_dir.stat().st_mtime < cutoff_epoch:
+                        # Auto-purge expired continuous session folder
+                        import shutil
+                        shutil.rmtree(sess_dir, ignore_errors=True)
+            except Exception as e:
+                logger.warning("Error running privacy retention purge on field sessions: %s", e)
 
     def get_review_queue(self) -> List[Dict]:
         """Fetch all events in the review queue ordered by newest first."""

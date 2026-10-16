@@ -6,40 +6,40 @@
     64,
     44
   ],
-  "total_samples": 5559,
+  "total_samples": 7399,
   "partitions": {
     "train": {
       "counts": {
-        "ambient_and_speech": 447,
-        "loud_impact": 220,
-        "continuous_environmental": 606,
-        "hard_negative_rattle": 832,
-        "aerosol_spray_hiss": 376,
-        "spray_can_shaking": 1566
+        "ambient_and_speech": 407,
+        "loud_impact": 304,
+        "continuous_environmental": 672,
+        "hard_negative_rattle": 1422,
+        "aerosol_spray_hiss": 352,
+        "spray_can_shaking": 2067
       },
-      "total": 4047
+      "total": 5224
     },
     "val": {
       "counts": {
-        "ambient_and_speech": 47,
-        "loud_impact": 27,
-        "continuous_environmental": 66,
-        "hard_negative_rattle": 92,
-        "aerosol_spray_hiss": 36,
-        "spray_can_shaking": 238
+        "ambient_and_speech": 44,
+        "loud_impact": 21,
+        "continuous_environmental": 63,
+        "hard_negative_rattle": 99,
+        "aerosol_spray_hiss": 46,
+        "spray_can_shaking": 250
       },
-      "total": 506
+      "total": 523
     },
     "test": {
       "counts": {
-        "ambient_and_speech": 48,
-        "loud_impact": 27,
-        "continuous_environmental": 63,
-        "hard_negative_rattle": 87,
-        "aerosol_spray_hiss": 46,
-        "spray_can_shaking": 735
+        "ambient_and_speech": 112,
+        "loud_impact": 21,
+        "continuous_environmental": 55,
+        "hard_negative_rattle": 91,
+        "aerosol_spray_hiss": 48,
+        "spray_can_shaking": 1325
       },
-      "total": 1006
+      "total": 1652
     }
   }
 }

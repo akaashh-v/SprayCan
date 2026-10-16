@@ -7,7 +7,7 @@ Proves the required behavior:
 4. Isolated transient rattles (keys / coins < 0.7s) NEVER alert.
 5. Ambiguous audio / white noise / digital clipping NEVER alert (safe no-alert / uncertain).
 6. Reset / clear rule: brief hiss or transient immediately resets accumulation to 0.
-7. Cooldown rule: 3.0s cooldown strictly prevents repeated alerts for one episode.
+7. Zero cooldown rule: continuous detection evaluates incoming audio immediately with zero lockout.
 8. Authentic sustained spray can shaking sequence DOES alert.
 """
 
@@ -154,27 +154,44 @@ class TestSprayCanDetectorBehavior(unittest.TestCase):
         self.assertFalse(res3["alert_fired"])
         self.assertLessEqual(self.engine.consecutive_positive_windows, 1)
 
-    def test_cooldown_enforcement(self):
-        """After a confirmed event fires, subsequent windows within cooldown are suppressed."""
-        # Simulate firing an alert
-        self.engine.last_alert_time = 10.0
+    def test_continuous_detection_without_cooldown(self):
+        """Zero cooldown: incoming audio is evaluated immediately; duplicate alerts suppressed by event-state tracking."""
+        self.assertEqual(self.engine.cooldown_seconds, 0.0)
 
-        # Evaluate at t = 10.25s (0.25s into cooldown)
         shake_file = RAW_SPRAY_DIR / "1.mp3"
         raw_shake = load_audio(shake_file, sr=self.sr)
-        shake_win = raw_shake[:AUDIO_SAMPLES]
-        res = self.engine.evaluate_window(shake_win, current_time=10.25)
+        shake_win = raw_shake[int(self.sr * 1.0) : int(self.sr * 2.0)]
 
-        self.assertFalse(res["alert_fired"])
-        self.assertTrue(res["in_cooldown"])
-        self.assertEqual(res["status"], "IN_COOLDOWN")
-        expected_remaining = round(self.engine.cooldown_seconds - 0.25, 2)
-        self.assertAlmostEqual(res["cooldown_remaining_sec"], expected_remaining, places=2)
+        # Reset engine and build persistence to trigger initial alert at t = 10.0s
+        self.engine.reset_state()
+        res1 = self.engine.evaluate_window(shake_win, current_time=9.75)
+        res2 = self.engine.evaluate_window(shake_win, current_time=10.0)
+        self.assertTrue(res2["alert_fired"], "Initial alert should fire upon reaching persistence")
+        self.assertTrue(res2["alert_episode_active"])
 
-        # After cooldown passes (t = 10.0 + cooldown + 0.1s)
-        t_after = 10.0 + self.engine.cooldown_seconds + 0.1
-        res_post = self.engine.evaluate_window(shake_win, current_time=t_after)
-        self.assertFalse(res_post["in_cooldown"])
+        # Immediately evaluate window at t = 10.25s (0.25s later - previously blocked by 3s cooldown)
+        res3 = self.engine.evaluate_window(shake_win, current_time=10.25)
+        # Verify NO cooldown lockout
+        self.assertFalse(res3["in_cooldown"], "Should never be marked in_cooldown when cooldown is 0")
+        self.assertEqual(res3["cooldown_remaining_sec"], 0.0)
+        # Verify inference was NOT skipped
+        self.assertTrue(res3["stage2_evaluated"], "Stage 2 inference must continue running in real time")
+        # Verify duplicate alert is prevented by event-state tracking, NOT cooldown
+        self.assertFalse(res3["alert_fired"], "Duplicate alert notification must not fire during ongoing event")
+        self.assertEqual(res3["status"], "SUSTAINED_SHAKING_ACTIVE")
+        self.assertTrue(res3["alert_episode_active"])
+
+        # Shaking ends: 2 consecutive quiet windows confirm event end and rearm detector
+        quiet_win = np.zeros(AUDIO_SAMPLES, dtype=np.float32)
+        self.engine.evaluate_window(quiet_win, current_time=10.50)
+        res_end = self.engine.evaluate_window(quiet_win, current_time=10.75)
+        self.assertFalse(self.engine.alert_episode_active, "Detector should rearm after verified quiet gap")
+
+        # Second genuine shake starts immediately at t = 11.0s (only 1.0s after initial alert!)
+        res4 = self.engine.evaluate_window(shake_win, current_time=11.0)
+        res5 = self.engine.evaluate_window(shake_win, current_time=11.25)
+        self.assertTrue(res5["alert_fired"], "New distinct shake must alert immediately with zero cooldown lockout!")
+        self.assertTrue(res5["alert_episode_active"])
 
     def test_light_rain_never_alerts(self):
         """Continuous light rain audio across multiple windows must NEVER trigger an alert."""

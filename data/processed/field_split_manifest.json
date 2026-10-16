@@ -1,0 +1,101 @@
+{
+  "manifest_type": "field_evaluation_partition_manifest",
+  "split_strategy": "chronological",
+  "random_seed": null,
+  "isolation_guarantee": "Strict atomic session isolation: all items sharing a session_id stay together in the same split. Chronological block isolation: earlier sessions are used for train/val; later continuous days/time blocks are reserved for untouched final test.",
+  "site_cross_split_audit": {
+    "same_site_in_multiple_splits": true,
+    "sites_across_multiple_splits": [
+      "station_central"
+    ],
+    "note": "Under site_held_out strategy, sites NEVER appear in multiple splits. Under chronological and random session strategies, different sessions from the same site may appear across splits unless multi-station holdout is explicitly selected."
+  },
+  "split_ratios": {
+    "train": 0.5,
+    "val": 0.25,
+    "final_test": 0.25
+  },
+  "summary": {
+    "train": {
+      "num_items": 2,
+      "total_duration_sec": 0.0,
+      "total_duration_hours": 0.0,
+      "total_events": 0,
+      "session_ids": [
+        "sess_1",
+        "sess_2"
+      ],
+      "site_ids": [
+        "station_central"
+      ]
+    },
+    "val": {
+      "num_items": 1,
+      "total_duration_sec": 0.0,
+      "total_duration_hours": 0.0,
+      "total_events": 0,
+      "session_ids": [
+        "sess_3"
+      ],
+      "site_ids": [
+        "station_central"
+      ]
+    },
+    "final_test": {
+      "num_items": 1,
+      "total_duration_sec": 0.0,
+      "total_duration_hours": 0.0,
+      "total_events": 0,
+      "session_ids": [
+        "sess_4"
+      ],
+      "site_ids": [
+        "station_central"
+      ]
+    }
+  },
+  "partitions": {
+    "train": [
+      {
+        "source_type": "continuous_session",
+        "session_id": "sess_1",
+        "site_id": "station_central",
+        "recording_date": "2026-10-01",
+        "timestamp_iso": "2026-10-01T10:00:00Z",
+        "duration_hours": 1.0,
+        "file_sha256": "7e79ea3ae003b9038acbf23c2e0312ce184d2dfc857b345c4ed9955632a1c175"
+      },
+      {
+        "source_type": "continuous_session",
+        "session_id": "sess_2",
+        "site_id": "station_central",
+        "recording_date": "2026-10-02",
+        "timestamp_iso": "2026-10-02T10:00:00Z",
+        "duration_hours": 1.0,
+        "file_sha256": "7e79ea3ae003b9038acbf23c2e0312ce184d2dfc857b345c4ed9955632a1c175"
+      }
+    ],
+    "val": [
+      {
+        "source_type": "continuous_session",
+        "session_id": "sess_3",
+        "site_id": "station_central",
+        "recording_date": "2026-10-03",
+        "timestamp_iso": "2026-10-03T10:00:00Z",
+        "duration_hours": 1.0,
+        "file_sha256": "7e79ea3ae003b9038acbf23c2e0312ce184d2dfc857b345c4ed9955632a1c175"
+      }
+    ],
+    "final_test": [
+      {
+        "source_type": "continuous_session",
+        "session_id": "sess_4",
+        "site_id": "station_central",
+        "recording_date": "2026-10-04",
+        "timestamp_iso": "2026-10-04T10:00:00Z",
+        "duration_hours": 1.0,
+        "file_sha256": "7e79ea3ae003b9038acbf23c2e0312ce184d2dfc857b345c4ed9955632a1c175"
+      }
+    ]
+  }
+}

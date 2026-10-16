@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let systemInfo = {
         conservative_threshold: 0.80,
         required_consecutive_windows: 2,
-        cooldown_seconds: 0.5,
+        cooldown_seconds: 0.0,
         enable_noise_cancellation: true,
     };
 
@@ -39,6 +39,13 @@ document.addEventListener("DOMContentLoaded", () => {
         ncBadge: document.getElementById("nc-badge"),
         badgeNcVal: document.getElementById("badge-nc-val"),
         btnToggleNc: document.getElementById("btn-toggle-nc"),
+        ncControlBar: document.getElementById("nc-control-bar"),
+        ncIconBadge: document.getElementById("nc-icon-badge"),
+        ncIconSymbol: document.getElementById("nc-icon-symbol"),
+        ncStatusPill: document.getElementById("nc-status-pill"),
+        ncControlDesc: document.getElementById("nc-control-desc"),
+        ncSwitchCheckbox: document.getElementById("nc-switch-checkbox"),
+        ncToggleLabel: document.getElementById("nc-toggle-label"),
 
         meterSnrVal: document.getElementById("meter-snr-val"),
         meterSnrFill: document.getElementById("meter-snr-fill"),
@@ -191,14 +198,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
             systemInfo.conservative_threshold = data.conservative_threshold || 0.80;
             systemInfo.required_consecutive_windows = data.required_consecutive_windows || 2;
-            systemInfo.cooldown_seconds = data.cooldown_seconds !== undefined ? data.cooldown_seconds : 0.5;
+            systemInfo.cooldown_seconds = data.cooldown_seconds !== undefined ? data.cooldown_seconds : 0.0;
             systemInfo.enable_noise_cancellation = data.enable_noise_cancellation !== undefined ? data.enable_noise_cancellation : true;
 
             const threshPct = Math.round(systemInfo.conservative_threshold * 100);
             updateSensitivityUI(systemInfo.conservative_threshold);
             updateNoiseCancellationUI(systemInfo.enable_noise_cancellation);
             renderPersistenceDots(0, systemInfo.required_consecutive_windows);
-            elements.badgeCooldownVal.innerText = `${systemInfo.cooldown_seconds}s`;
+            elements.badgeCooldownVal.innerText = (systemInfo.cooldown_seconds === 0) ? "0s (Real-Time)" : `${systemInfo.cooldown_seconds}s`;
 
             addLogEntry(
                 `Detector engine ready: Noise Cancellation=${systemInfo.enable_noise_cancellation ? "ON" : "OFF"}, Threshold=${threshPct}%, Persistence=${systemInfo.required_consecutive_windows} windows`,
@@ -282,29 +289,68 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function updateNoiseCancellationUI(isActive) {
         systemInfo.enable_noise_cancellation = !!isActive;
+
+        if (elements.ncControlBar) {
+            if (isActive) {
+                elements.ncControlBar.classList.remove("nc-off");
+            } else {
+                elements.ncControlBar.classList.add("nc-off");
+            }
+        }
+
+        if (elements.ncSwitchCheckbox && elements.ncSwitchCheckbox.checked !== isActive) {
+            elements.ncSwitchCheckbox.checked = isActive;
+        }
+
+        if (elements.ncToggleLabel) {
+            elements.ncToggleLabel.innerText = isActive ? "ON" : "OFF";
+            elements.ncToggleLabel.style.color = isActive ? "var(--accent-green)" : "var(--text-muted)";
+        }
+
+        if (elements.ncStatusPill) {
+            elements.ncStatusPill.innerText = isActive ? "ACTIVE" : "BYPASSED";
+            elements.ncStatusPill.className = isActive ? "nc-status-pill pill-active" : "nc-status-pill pill-inactive";
+        }
+
+        if (elements.ncControlDesc) {
+            elements.ncControlDesc.innerText = isActive
+                ? "Adaptive spectral subtraction active • Suppresses room noise, HVAC hum, fan hiss, and low-frequency rumble"
+                : "Noise cancellation bypassed (Off) • Raw microphone audio is fed directly to Stage 1 & Stage 2 detectors";
+        }
+
+        if (elements.ncIconSymbol) {
+            elements.ncIconSymbol.innerText = isActive ? "🛡️" : "⚪";
+        }
+
         if (elements.badgeNcVal) {
             elements.badgeNcVal.innerText = isActive ? "ACTIVE 🟢" : "OFF ⚪";
             elements.badgeNcVal.style.color = isActive ? "var(--accent-green)" : "var(--text-muted)";
         }
+
         if (elements.btnToggleNc) {
             elements.btnToggleNc.innerText = isActive ? "ACTIVE [ON]" : "BYPASSED [OFF]";
-            elements.btnToggleNc.style.color = isActive ? "var(--accent-green)" : "var(--text-muted)";
+            elements.btnToggleNc.className = isActive ? "btn-toggle-pill pill-on" : "btn-toggle-pill pill-off";
         }
     }
 
-    async function toggleNoiseCancellation() {
-        const nextVal = !systemInfo.enable_noise_cancellation;
-        updateNoiseCancellationUI(nextVal);
+    async function setNoiseCancellation(newVal) {
+        newVal = !!newVal;
+        systemInfo.enable_noise_cancellation = newVal;
+        updateNoiseCancellationUI(newVal);
         try {
             await fetch("/api/config", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ enable_noise_cancellation: nextVal }),
+                body: JSON.stringify({ enable_noise_cancellation: newVal }),
             });
-            addLogEntry(`Noise cancellation ${nextVal ? "enabled (Active)" : "bypassed (Off)"}`, "info");
+            addLogEntry(`Noise cancellation ${newVal ? "enabled (Active DSP spectral subtraction)" : "bypassed (Off / Raw microphone audio)"}`, "info");
         } catch (e) {
             console.error("Failed to toggle noise cancellation:", e);
         }
+    }
+
+    function toggleNoiseCancellation() {
+        setNoiseCancellation(!systemInfo.enable_noise_cancellation);
     }
 
     // -------------------------------------------------------------------------
@@ -337,15 +383,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const ncActive = res.noise_cancellation_active !== undefined ? res.noise_cancellation_active : systemInfo.enable_noise_cancellation;
 
         if (elements.meterSnrVal) {
-            elements.meterSnrVal.innerText = `${snr.toFixed(1)} dB`;
-            elements.meterSnrFill.style.width = `${Math.min(100, Math.max(0, (snr / 25.0) * 100))}%`;
+            elements.meterSnrVal.innerText = ncActive ? `${snr.toFixed(1)} dB` : "Bypassed (0.0 dB)";
+            elements.meterSnrFill.style.width = ncActive ? `${Math.min(100, Math.max(0, (snr / 25.0) * 100))}%` : "0%";
         }
         if (elements.meterNrVal) {
-            elements.meterNrVal.innerText = `${nr.toFixed(1)} dB`;
-            elements.meterNrFill.style.width = `${Math.min(100, Math.max(0, (nr / 20.0) * 100))}%`;
+            elements.meterNrVal.innerText = ncActive ? `${nr.toFixed(1)} dB` : "0.0 dB (Off)";
+            elements.meterNrFill.style.width = ncActive ? `${Math.min(100, Math.max(0, (nr / 20.0) * 100))}%` : "0%";
         }
         if (elements.meterNoiseFloorVal) {
-            elements.meterNoiseFloorVal.innerText = noiseFloor.toFixed(4);
+            elements.meterNoiseFloorVal.innerText = ncActive ? noiseFloor.toFixed(4) : "Raw";
         }
         updateNoiseCancellationUI(ncActive);
 
@@ -433,6 +479,11 @@ document.addEventListener("DOMContentLoaded", () => {
             playAlertBeep();
             const tsIso = res.timestamp_iso || new Date().toISOString();
             addLogEntry(`🚨 Alert: possible aerosol-can shaking detected (Confidence=${(pSpray * 100).toFixed(1)}%, Timestamp=${tsIso}). Trained operator review requested.`, "alert");
+        } else if (status === "SUSTAINED_SHAKING_ACTIVE" || status.includes("SUSTAINED_SHAKING")) {
+            elements.mainStatusBanner.classList.add("status-alert");
+            elements.bannerStatusEmoji.innerText = "🔄";
+            elements.bannerHeadline.innerText = "SUSTAINED SHAKING ACTIVE (EVENT ONGOING)";
+            elements.bannerDescription.innerText = `${explanation}\nContinuous real-time evaluation running with zero cooldown lockout.`;
         } else if (res.in_cooldown) {
             elements.mainStatusBanner.classList.add("status-cooldown");
             elements.bannerStatusEmoji.innerText = "⏳";
@@ -756,6 +807,24 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 startListening();
             }
+        });
+    }
+
+    if (elements.ncSwitchCheckbox) {
+        elements.ncSwitchCheckbox.addEventListener("change", (e) => {
+            setNoiseCancellation(e.target.checked);
+        });
+    }
+
+    if (elements.btnToggleNc) {
+        elements.btnToggleNc.addEventListener("click", () => {
+            toggleNoiseCancellation();
+        });
+    }
+
+    if (elements.ncBadge) {
+        elements.ncBadge.addEventListener("click", () => {
+            toggleNoiseCancellation();
         });
     }
 
@@ -1193,6 +1262,16 @@ document.addEventListener("DOMContentLoaded", () => {
                             autoGainControl: false,
                         },
                     });
+
+                    // Auto-detect microphone hardware device label
+                    const audioTrack = stream.getAudioTracks()[0];
+                    if (audioTrack && audioTrack.label) {
+                        const micInput = document.getElementById("record-mic-name");
+                        if (micInput && (!micInput.value || micInput.value === "Target Microphone")) {
+                            micInput.value = audioTrack.label;
+                        }
+                    }
+
                     fieldRecordedChunks = [];
                     fieldMediaRecorder = new MediaRecorder(stream);
                     fieldMediaRecorder.ondataavailable = (e) => {
@@ -1253,13 +1332,25 @@ document.addEventListener("DOMContentLoaded", () => {
             const conditionSelect = document.getElementById("record-condition-select");
             const sessionInput = document.getElementById("record-session-id");
             const distanceSelect = document.getElementById("record-distance-select");
+            const micInput = document.getElementById("record-mic-name");
+            const canTypeSelect = document.getElementById("record-can-type");
+            const fillLevelSelect = document.getElementById("record-fill-level");
+            const shakeStyleSelect = document.getElementById("record-shake-style");
+            const confSelect = document.getElementById("record-confidence-select");
+            const notesInput = document.getElementById("record-notes");
 
             const formData = new FormData();
             formData.append("audio", fieldRecordedBlob, "recorded_sample.wav");
             formData.append("class_name", classSelect ? classSelect.value : "spray_can_shaking");
-            formData.append("condition", conditionSelect ? conditionSelect.value : "clean");
-            formData.append("session_id", sessionInput ? sessionInput.value : "session_live");
-            formData.append("distance_m", distanceSelect ? distanceSelect.value : "3.0");
+            formData.append("condition", conditionSelect ? conditionSelect.value : "clean_indoor");
+            formData.append("session_id", sessionInput ? sessionInput.value : "session_local_can_01");
+            formData.append("distance_m", distanceSelect ? distanceSelect.value : "1.0");
+            formData.append("microphone_name", micInput ? micInput.value : "Target Microphone");
+            formData.append("can_type", canTypeSelect ? canTypeSelect.value : "n_a_negative");
+            formData.append("can_fill_level", fillLevelSelect ? fillLevelSelect.value : "n_a_negative");
+            formData.append("shaking_style", shakeStyleSelect ? shakeStyleSelect.value : "n_a_negative");
+            formData.append("label_confidence", confSelect ? confSelect.value : "confirmed_high");
+            formData.append("notes", notesInput ? notesInput.value : "");
 
             try {
                 const resp = await fetch("/api/record_sample", {
@@ -1268,7 +1359,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
                 const resData = await resp.json();
                 if (resp.ok) {
-                    alert(`Sample saved successfully to ${resData.entry.class_name}!`);
+                    alert(`Sample saved successfully to class [${resData.entry.class_name}]!`);
                     btnRecordDiscard.click();
                     loadFieldRecordings();
                 } else {
@@ -1279,7 +1370,220 @@ document.addEventListener("DOMContentLoaded", () => {
                 alert("Failed to save recorded sample: " + err.message);
             } finally {
                 btnRecordSave.disabled = false;
-                btnRecordSave.innerText = "💾 Save to Field Dataset";
+                btnRecordSave.innerText = "💾 Save to Dataset";
+            }
+        });
+    }
+
+    async function loadFieldRecordings() {
+        const tableBody = document.getElementById("field-recordings-table-body");
+        if (!tableBody) return;
+        try {
+            const resp = await fetch("/api/field_recordings");
+            const data = await resp.json();
+            const recordings = data.recordings || [];
+            if (recordings.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 20px;">
+                            No real microphone recordings captured yet. Use the recorder above to capture real aerosol can shakes and verified negatives.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            tableBody.innerHTML = "";
+            recordings.forEach((r) => {
+                const tr = document.createElement("tr");
+                const isTarget = r.class_name === "spray_can_shaking";
+                const badgeColor = isTarget ? "var(--accent-red)" : "var(--accent-cyan)";
+                const badgeBg = isTarget ? "rgba(239, 68, 68, 0.2)" : "rgba(6, 182, 212, 0.2)";
+                const canInfo = r.can_type && r.can_type !== "n_a_negative" ? `${r.can_type} (${r.can_fill_level || "unknown"})` : "N/A";
+                const shakeStyle = r.shaking_style && r.shaking_style !== "n_a_negative" ? r.shaking_style : (r.condition || "standard");
+                const audioUrl = `/api/audio_file?path=${encodeURIComponent(r.filepath)}`;
+
+                tr.innerHTML = `
+                    <td><code style="font-size: 0.75rem;">${r.filename || r.id}</code></td>
+                    <td><span class="badge" style="background: ${badgeBg}; color: ${badgeColor};">${r.class_name}</span></td>
+                    <td style="font-size: 0.8rem;">${canInfo}</td>
+                    <td style="font-size: 0.8rem;">${shakeStyle}</td>
+                    <td><code>${r.session_id}</code></td>
+                    <td>${r.distance_m || "1.0"}m</td>
+                    <td>${r.duration_sec ? r.duration_sec + "s" : "N/A"}</td>
+                    <td>
+                        <audio controls src="${audioUrl}" style="height: 28px; width: 140px; vertical-align: middle;"></audio>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        } catch (err) {
+            console.error("Failed to load field recordings:", err);
+        }
+    }
+
+    // Call on load
+    loadFieldRecordings();
+
+    // -------------------------------------------------------------------------
+    // Shadow Mode Alerts & Continuous Field Sessions Management
+    // -------------------------------------------------------------------------
+    async function loadShadowAlerts() {
+        const tableBody = document.getElementById("shadow-alerts-table-body");
+        if (!tableBody) return;
+        try {
+            const resp = await fetch("/api/shadow_alerts");
+            const data = await resp.json();
+            const alerts = data.alerts || [];
+            if (alerts.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 18px;">
+                            No shadow-mode alerts recorded in current session. All detections operate in advisory mode.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            tableBody.innerHTML = "";
+            alerts.forEach((alt) => {
+                const tr = document.createElement("tr");
+                const pSpray = alt.confidence_p_spray ? (alt.confidence_p_spray * 100).toFixed(1) + "%" : "N/A";
+                const margin = alt.confidence_margin ? (alt.confidence_margin * 100).toFixed(1) + "%" : "N/A";
+                const entropy = alt.entropy ? alt.entropy.toFixed(2) : "N/A";
+                const timeIso = alt.timestamp_iso ? alt.timestamp_iso.replace("T", " ").substring(0, 19) : "N/A";
+
+                tr.innerHTML = `
+                    <td><code>${alt.alert_id}</code></td>
+                    <td>${timeIso}</td>
+                    <td style="color: var(--accent-red); font-weight: bold;">${pSpray}</td>
+                    <td>${margin}</td>
+                    <td>${entropy}</td>
+                    <td><span class="badge" style="background: rgba(245, 158, 11, 0.2); color: #F59E0B;">DISABLED (Shadow Mode)</span></td>
+                    <td><span class="badge" style="background: rgba(239, 68, 68, 0.2); color: #EF4444;">Human CCTV Required</span></td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        } catch (err) {
+            console.error("Failed to load shadow alerts:", err);
+        }
+    }
+
+    async function loadFieldSessions() {
+        const tableBody = document.getElementById("field-sessions-table-body");
+        if (!tableBody) return;
+        try {
+            const resp = await fetch("/api/field_sessions");
+            const data = await resp.json();
+            const sessions = data.sessions || [];
+            if (sessions.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 16px;">
+                            No continuous field sessions stored yet.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            tableBody.innerHTML = "";
+            sessions.forEach((s) => {
+                const tr = document.createElement("tr");
+                const sessId = s.session_id || s.session_folder || "session";
+                const durStr = s.duration_sec ? `${s.duration_sec}s (${(s.duration_sec / 60).toFixed(1)}m)` : "N/A";
+                const annotCount = s.annotation_count !== undefined ? s.annotation_count : 0;
+                tr.innerHTML = `
+                    <td><code>${sessId}</code></td>
+                    <td>${s.site_id || "Platform"} / ${s.microphone_id || "Mic"}</td>
+                    <td>${durStr}</td>
+                    <td>${s.condition || "ambient"}</td>
+                    <td><span class="badge" style="background: rgba(6, 182, 212, 0.2); color: var(--accent-cyan);">${annotCount} event(s)</span></td>
+                    <td>
+                        <button class="btn btn-secondary btn-sm" onclick="document.getElementById('annot-session-id').value='${sessId}'">Select</button>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        } catch (err) {
+            console.error("Failed to load field sessions:", err);
+        }
+    }
+
+    const btnRefreshShadowAlerts = document.getElementById("btn-refresh-shadow-alerts");
+    if (btnRefreshShadowAlerts) {
+        btnRefreshShadowAlerts.addEventListener("click", loadShadowAlerts);
+    }
+
+    const btnRefreshSessions = document.getElementById("btn-refresh-sessions");
+    if (btnRefreshSessions) {
+        btnRefreshSessions.addEventListener("click", loadFieldSessions);
+    }
+
+    const btnPurgeExpiredSessions = document.getElementById("btn-purge-expired-sessions");
+    if (btnPurgeExpiredSessions) {
+        btnPurgeExpiredSessions.addEventListener("click", async () => {
+            if (!confirm("Execute privacy retention purge? This purges recordings older than 24 hours.")) return;
+            try {
+                const resp = await fetch("/api/field_session/purge_expired", { method: "POST" });
+                const res = await resp.json();
+                alert(res.message || "Retention purge completed.");
+                loadFieldSessions();
+                loadReviewQueue();
+            } catch (err) {
+                alert("Purge failed: " + err.message);
+            }
+        });
+    }
+
+    const btnSaveAnnotation = document.getElementById("btn-save-annotation");
+    if (btnSaveAnnotation) {
+        btnSaveAnnotation.addEventListener("click", async () => {
+            const sessInput = document.getElementById("annot-session-id");
+            const startInput = document.getElementById("annot-start-sec");
+            const endInput = document.getElementById("annot-end-sec");
+            const classSelect = document.getElementById("annot-class-select");
+
+            const sessId = sessInput ? sessInput.value.trim() : "";
+            const startSec = parseFloat(startInput ? startInput.value : 0);
+            const endSec = parseFloat(endInput ? endInput.value : 0);
+            const classLabel = classSelect ? classSelect.value : "spray_can_shaking";
+
+            if (!sessId) {
+                alert("Please enter or select a Target Session ID first.");
+                return;
+            }
+            if (isNaN(startSec) || isNaN(endSec) || startSec >= endSec) {
+                alert("Invalid interval: Start Time must be less than End Time.");
+                return;
+            }
+
+            try {
+                const payload = {
+                    session_id: sessId,
+                    events: [{
+                        start_sec: startSec,
+                        end_sec: endSec,
+                        class_label: classLabel,
+                        condition: "field_verified",
+                        notes: "Trained reviewer interval annotation",
+                    }],
+                    reviewer_id: "reviewer_field_tech",
+                    verification_confidence: "confirmed_high",
+                };
+
+                const resp = await fetch("/api/field_session/annotate", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload),
+                });
+                const res = await resp.json();
+                if (resp.ok) {
+                    alert(`Saved interval annotation [${startSec}s - ${endSec}s] as ${classLabel}!`);
+                    loadFieldSessions();
+                } else {
+                    alert(`Error: ${res.error || "Could not save annotation"}`);
+                }
+            } catch (err) {
+                alert("Failed to submit annotation: " + err.message);
             }
         });
     }
@@ -1288,4 +1592,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initSystemStatus();
     loadReviewQueue();
     loadFieldRecordings();
+    loadShadowAlerts();
+    loadFieldSessions();
 });
+

@@ -51,10 +51,38 @@ def load_audio(source: Union[str, Path, bytes, np.ndarray], sr: int = SAMPLE_RAT
     try:
         audio, orig_sr = sf.read(source, dtype="float32", always_2d=False)
     except Exception:
-        if isinstance(source, io.BytesIO):
-            source.seek(0)
-        audio, orig_sr = librosa.load(source, sr=sr, mono=mono)
-        return audio.astype(np.float32)
+        try:
+            if isinstance(source, io.BytesIO):
+                source.seek(0)
+            audio, orig_sr = librosa.load(source, sr=sr, mono=mono)
+            return audio.astype(np.float32)
+        except Exception:
+            # Fallback to PyAV for formats not supported by libsndfile/audioread on Windows (.m4a, .aac, .mp4)
+            try:
+                import av
+                if isinstance(source, io.BytesIO):
+                    source.seek(0)
+                container = av.open(str(source) if isinstance(source, Path) else source)
+                stream = container.streams.audio[0]
+                orig_sr = stream.rate
+                frames = [frame.to_ndarray() for frame in container.decode(stream)]
+                if not frames:
+                    raise ValueError("No audio frames decoded")
+                raw_arr = np.concatenate(frames, axis=-1)
+                if raw_arr.dtype == np.int16:
+                    raw_arr = raw_arr.astype(np.float32) / 32768.0
+                elif raw_arr.dtype == np.int32:
+                    raw_arr = raw_arr.astype(np.float32) / 2147483648.0
+                else:
+                    raw_arr = raw_arr.astype(np.float32)
+                if mono and raw_arr.ndim > 1:
+                    audio = np.mean(raw_arr, axis=0)
+                elif raw_arr.ndim > 1:
+                    audio = raw_arr[0]
+                else:
+                    audio = raw_arr
+            except Exception as av_err:
+                raise RuntimeError(f"Could not load audio from {source}: {av_err}")
 
     if mono and audio.ndim > 1:
         audio = np.mean(audio, axis=-1)
@@ -501,9 +529,10 @@ def generate_env_rain(duration: float = 1.5, sr: int = SAMPLE_RATE) -> np.ndarra
     audio = 0.4 * (rain_noise / (np.max(np.abs(rain_noise)) + 1e-8))
     # Add random soft droplet clicks
     for _ in range(random.randint(8, 20)):
-        pos = random.randint(0, n - 200)
-        c_len = random.randint(80, 250)
-        audio[pos : pos + c_len] += 0.15 * np.random.randn(c_len) * np.hanning(c_len)
+        pos = random.randint(0, max(0, n - 250))
+        c_len = min(random.randint(80, 250), n - pos)
+        if c_len > 0:
+            audio[pos : pos + c_len] += 0.15 * np.random.randn(c_len) * np.hanning(c_len)
     peak = np.max(np.abs(audio))
     return (audio / (peak + 1e-8) * random.uniform(0.3, 0.7)).astype(np.float32)
 

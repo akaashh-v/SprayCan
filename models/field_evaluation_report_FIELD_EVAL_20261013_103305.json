@@ -1,0 +1,43 @@
+{
+  "run_id": "FIELD_EVAL_20261013_103305",
+  "evaluation_timestamp_iso": "2026-10-13T10:33:05.330057+00:00",
+  "model_provenance": {
+    "checkpoint_path": "C:\\Users\\User\\Desktop\\CogniLearn\\Spray\\models\\best_detector.pth",
+    "model_sha256": "ecac9edfa5012e4770460ccc740d495256afe54c0893f7273f226ca59682bec5",
+    "architecture": "SprayCanShakingCNN_5class",
+    "operating_conservative_threshold": 0.8,
+    "max_competing_confidence": 0.2,
+    "max_env_confidence": 0.25,
+    "min_confidence_margin": 0.35,
+    "uncertain_entropy_threshold": 0.7,
+    "required_consecutive_windows": 2,
+    "cooldown_seconds": 3.0,
+    "shadow_mode_enabled": true,
+    "automatic_enforcement_allowed": false
+  },
+  "aggregate_field_metrics": {
+    "total_sessions_evaluated": 0,
+    "total_negative_audio_hours": 0.0,
+    "total_target_events": 0,
+    "detected_target_events": 0,
+    "missed_target_events": 0,
+    "event_detection_rate": "N/A (No target events collected yet)",
+    "event_detection_rate_95ci": null,
+    "detection_delay_seconds": {
+      "median": null,
+      "mean": null,
+      "min": null,
+      "max": null
+    },
+    "total_false_alert_episodes": 0,
+    "false_alert_episodes_per_hour": 0.0,
+    "false_alert_episodes_per_hour_95ci": {
+      "lower": 0.0,
+      "upper": 0.0,
+      "note": "Poisson exact 95% confidence interval based on negative audio hours"
+    }
+  },
+  "condition_breakdown": {},
+  "statistical_uncertainty_and_guarantee_statement": "CRITICAL RELIABILITY NOTICE: Zero false alerts observed over limited test duration DOES NOT constitute a zero-risk guarantee. True platform false-alert rates require continuous multi-day and multi-week recordings through the installed microphone under all weather, passenger density, and railway operational schedules. Acoustic alerts are advisory shadow-mode signals only; human visual review is mandatory.",
+  "session_evaluations": []
+}

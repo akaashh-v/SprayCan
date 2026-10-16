@@ -1102,3 +1102,240 @@ audio {
     transform: scale(1.2);
 }
 
+/* Noise Cancellation Live Toggle Bar */
+.nc-control-bar {
+    background: var(--bg-inset);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    border-radius: var(--radius-md);
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease;
+}
+
+.nc-control-bar.nc-off {
+    border-color: var(--border-color);
+    background: rgba(12, 18, 32, 0.7);
+    opacity: 0.85;
+}
+
+.nc-control-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.nc-icon-badge {
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.25), rgba(6, 182, 212, 0.15));
+    border: 1px solid rgba(16, 185, 129, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.nc-control-bar.nc-off .nc-icon-badge {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--border-color);
+}
+
+.nc-control-text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.nc-control-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.nc-control-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+}
+
+.nc-status-pill {
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+    transition: all 0.25s ease;
+}
+
+.pill-active {
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--accent-green);
+    border: 1px solid rgba(16, 185, 129, 0.5);
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.25);
+}
+
+.pill-inactive {
+    background: rgba(107, 114, 128, 0.2);
+    color: var(--text-muted);
+    border: 1px solid rgba(107, 114, 128, 0.35);
+}
+
+.nc-control-sub {
+    font-size: 0.775rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.35;
+    transition: color 0.25s ease;
+}
+
+.nc-control-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.nc-toggle-label {
+    font-family: var(--font-mono);
+    font-size: 0.825rem;
+    font-weight: 700;
+    color: var(--accent-green);
+    min-width: 32px;
+    transition: color 0.25s ease;
+}
+
+.nc-control-bar.nc-off .nc-toggle-label {
+    color: var(--text-muted);
+}
+
+/* Modern iOS / Futuristic Toggle Switch */
+.switch-toggle {
+    position: relative;
+    display: inline-block;
+    width: 52px;
+    height: 28px;
+    cursor: pointer;
+}
+
+.switch-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.switch-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.12);
+    border: 1px solid var(--border-color);
+    border-radius: 28px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.switch-slider::before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background: #ffffff;
+    border-radius: 50%;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.switch-toggle input:checked + .switch-slider {
+    background: linear-gradient(135deg, var(--accent-green), var(--accent-teal));
+    border-color: rgba(16, 185, 129, 0.6);
+    box-shadow: 0 0 14px rgba(16, 185, 129, 0.4);
+}
+
+.switch-toggle input:checked + .switch-slider::before {
+    transform: translateX(24px);
+    background: #ffffff;
+}
+
+.switch-toggle input:focus + .switch-slider {
+    box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.5);
+}
+
+/* Badge Interactive Hover */
+.badge-interactive {
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease;
+}
+
+.badge-interactive:hover {
+    border-color: var(--accent-green);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+}
+
+.badge-interactive:active {
+    transform: translateY(0);
+}
+
+/* Toggle Pill Button in DSP Card */
+.btn-toggle-pill {
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+    font-size: 0.725rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-toggle-pill.pill-on {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--accent-green);
+    border-color: rgba(16, 185, 129, 0.45);
+}
+
+.btn-toggle-pill.pill-on:hover {
+    background: rgba(16, 185, 129, 0.25);
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.35);
+}
+
+.btn-toggle-pill.pill-off {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-muted);
+    border-color: var(--border-color);
+}
+
+.btn-toggle-pill.pill-off:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
+}
+
+@media (max-width: 640px) {
+    .nc-control-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    .nc-control-right {
+        align-self: flex-end;
+    }
+}
+
+
