@@ -1,0 +1,121 @@
+{
+  "model_name": "Model C (YAMNet Transfer Learning)",
+  "timestamp": "2026-10-17T11:54:21Z",
+  "test_accuracy": 0.5543710021321961,
+  "test_macro_f1": 0.5304382394912588,
+  "classification_report": {
+    "ambient_and_speech": {
+      "precision": 0.7526881720430108,
+      "recall": 0.7865168539325843,
+      "f1-score": 0.7692307692307693,
+      "support": 89.0
+    },
+    "loud_impact": {
+      "precision": 0.49333333333333335,
+      "recall": 0.3217391304347826,
+      "f1-score": 0.3894736842105263,
+      "support": 115.0
+    },
+    "continuous_environmental": {
+      "precision": 0.3984375,
+      "recall": 0.7285714285714285,
+      "f1-score": 0.5151515151515151,
+      "support": 70.0
+    },
+    "hard_negative_rattle": {
+      "precision": 0.9873417721518988,
+      "recall": 0.7647058823529411,
+      "f1-score": 0.861878453038674,
+      "support": 102.0
+    },
+    "aerosol_spray_hiss": {
+      "precision": 0.2037037037037037,
+      "recall": 0.13924050632911392,
+      "f1-score": 0.16541353383458646,
+      "support": 79.0
+    },
+    "spray_can_shaking": {
+      "precision": 0.325,
+      "recall": 0.9285714285714286,
+      "f1-score": 0.48148148148148145,
+      "support": 14.0
+    },
+    "accuracy": 0.5543710021321961,
+    "macro avg": {
+      "precision": 0.5267507468719911,
+      "recall": 0.6115575383653798,
+      "f1-score": 0.5304382394912588,
+      "support": 469.0
+    },
+    "weighted avg": {
+      "precision": 0.5820141982883743,
+      "recall": 0.5543710021321961,
+      "f1-score": 0.548041855714228,
+      "support": 469.0
+    }
+  },
+  "confusion_matrix": [
+    [
+      70,
+      9,
+      5,
+      1,
+      2,
+      2
+    ],
+    [
+      20,
+      37,
+      2,
+      0,
+      36,
+      20
+    ],
+    [
+      2,
+      16,
+      51,
+      0,
+      1,
+      0
+    ],
+    [
+      1,
+      12,
+      2,
+      78,
+      4,
+      5
+    ],
+    [
+      0,
+      0,
+      68,
+      0,
+      11,
+      0
+    ],
+    [
+      0,
+      1,
+      0,
+      0,
+      0,
+      13
+    ]
+  ],
+  "spray_can_shaking_metrics": {
+    "total_test_events": 14,
+    "detected_events": 13,
+    "missed_events": 1,
+    "missed_event_rate": 0.07142857142857142,
+    "false_alarms_total": 27,
+    "false_alarm_rate": 0.05934065934065934,
+    "hard_negative_rattle_false_alarms": 5,
+    "hard_negative_rattle_total": 102
+  },
+  "epochs_trained": 13,
+  "best_val_loss": 1.5236948728561401,
+  "best_val_accuracy": 0.5847952961921692,
+  "checkpoint_path": "C:\\Users\\User\\Desktop\\CogniLearn\\Spray\\experiments\\yamnet_transfer_learning\\models\\model_c_yamnet_classifier\\yamnet_classifier_best.keras"
+}

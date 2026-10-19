@@ -1,0 +1,29 @@
+{
+  "generated_timestamp": "2026-10-17T11:47:05Z",
+  "total_master_recordings": 1849,
+  "source_breakdown": {
+    "ESC-50": 255,
+    "ESP32_INMP441": 645,
+    "Own_Recording": 949
+  },
+  "class_counts_by_recording": {
+    "ambient_and_speech": 845,
+    "loud_impact": 200,
+    "continuous_environmental": 265,
+    "hard_negative_rattle": 313,
+    "aerosol_spray_hiss": 140,
+    "spray_can_shaking": 86
+  },
+  "partition_counts_by_recording": {
+    "train": 1520,
+    "val": 123,
+    "test": 206
+  },
+  "quality_filters_applied": [
+    "corrupted_audio_rejection",
+    "silent_audio_filter_rms_0.0003",
+    "clipping_rejection_0.99_peak_0.2pct_clipped",
+    "sha256_exact_deduplication",
+    "disjoint_recording_session_grouping"
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "extractor": "YAMNet (TF Hub: https://tfhub.dev/google/yamnet/1)",
+  "input_sample_rate": 16000,
+  "input_audio_length_samples": 16000,
+  "input_normalization": "float32 in [-1.0, 1.0]",
+  "embedding_dimension": 1024,
+  "temporal_pooling": "mean across temporal frames",
+  "class_mapping": {
+    "0": "ambient_and_speech",
+    "1": "loud_impact",
+    "2": "continuous_environmental",
+    "3": "hard_negative_rattle",
+    "4": "aerosol_spray_hiss",
+    "5": "spray_can_shaking"
+  },
+  "splits": {
+    "train": {
+      "num_windows": 3131,
+      "features_shape": [
+        3131,
+        1024
+      ],
+      "file": "yamnet_train.npz",
+      "class_distribution": {
+        "ambient_and_speech": 1142,
+        "loud_impact": 317,
+        "continuous_environmental": 791,
+        "hard_negative_rattle": 568,
+        "aerosol_spray_hiss": 153,
+        "spray_can_shaking": 160
+      }
+    },
+    "val": {
+      "num_windows": 342,
+      "features_shape": [
+        342,
+        1024
+      ],
+      "file": "yamnet_val.npz",
+      "class_distribution": {
+        "ambient_and_speech": 84,
+        "loud_impact": 80,
+        "continuous_environmental": 60,
+        "hard_negative_rattle": 16,
+        "aerosol_spray_hiss": 79,
+        "spray_can_shaking": 23
+      }
+    },
+    "test": {
+      "num_windows": 469,
+      "features_shape": [
+        469,
+        1024
+      ],
+      "file": "yamnet_test.npz",
+      "class_distribution": {
+        "ambient_and_speech": 89,
+        "loud_impact": 115,
+        "continuous_environmental": 70,
+        "hard_negative_rattle": 102,
+        "aerosol_spray_hiss": 79,
+        "spray_can_shaking": 14
+      }
+    }
+  },
+  "created_at": "2026-10-17T11:52:20Z"
+}

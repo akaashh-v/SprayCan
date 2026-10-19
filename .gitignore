@@ -1,23 +1,101 @@
+# =========================================================================
 # Byte-compiled / optimized / DLL files
+# =========================================================================
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyd
 
-# PyTorch and cache
-.cache/
-.pytest_cache/
-
-# Environments
+# =========================================================================
+# Python virtual environments & packages
+# =========================================================================
 .env
 .venv
-env/
 venv/
+env/
 ENV/
+build/
+dist/
+*.egg-info/
 
-# IDE files
+# =========================================================================
+# Testing, coverage & caches
+# =========================================================================
+.pytest_cache/
+.cache/
+.coverage
+htmlcov/
+*.log
+logs/
+
+# =========================================================================
+# IDEs & OS generated files
+# =========================================================================
 .vscode/
 .idea/
-
-# OS generated files
 .DS_Store
 Thumbs.db
+*.swp
+*.swo
+
+# =========================================================================
+# Backup & temporary editor files
+# =========================================================================
+*.bak
+*.bak_*
+*~
+*.orig
+
+# =========================================================================
+# ESP32 live streaming & temporary audio buffers
+# (Prevent live microphone captures from flooding the repository)
+# =========================================================================
+backend/tmp_esp32_audio/*.wav
+backend/tmp_esp32_audio/*.json
+!backend/tmp_esp32_audio/.gitkeep
+
+# =========================================================================
+# Runtime review queue & live event recordings
+# =========================================================================
+backend/data/review_queue/*.wav
+backend/data/review_queue/*.json
+!backend/data/review_queue/.gitkeep
+
+# Runtime security alert audio recordings & fixtures
+backend/recordings/
+backend/data/demo_samples/
+
+# Test generated temporary duplicate files
+**/test_dup_*
+
+# =========================================================================
+# Runtime databases, telemetry & audit logs
+# =========================================================================
+backend/data/*.db
+backend/data/*.sqlite
+backend/data/*.sqlite3
+backend/data/audit_log.jsonl
+backend/data/shadow_mode_alerts.jsonl
+
+# =========================================================================
+# Intermediate model training checkpoints & backups
+# =========================================================================
+backend/models/checkpoints/
+backend/models/candidate_checkpoints/
+*.weights.h5
+*.ckpt
+
+# =========================================================================
+# Processed heavy tensors (>10MB)
+# =========================================================================
+backend/data/processed/*.pt
+backend/data/processed/*.npz
+
+# =========================================================================
+# Large experimental datasets, embeddings & model weights
+# (Files >100MB block GitHub pushes)
+# =========================================================================
+experiments/**/data/*.npz
+experiments/**/data/esc50_raw/
+experiments/**/data/yamnet_embeddings/*.npz
+experiments/**/data/own_recordings/

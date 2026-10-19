@@ -13,7 +13,9 @@ import io
 import json
 import logging
 import os
+import queue
 import sys
+import threading
 from pathlib import Path
 from typing import Dict
 
@@ -27,7 +29,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import soundfile as sf
-from flask import Flask, jsonify, render_template, request, send_file, send_from_directory, session
+from flask import Flask, Response, jsonify, render_template, request, send_file, send_from_directory, session
 
 from admin_auth import (
     authenticate_user,
@@ -98,11 +100,37 @@ from config import (
     SHADOW_MODE_ENABLED,
     STATIC_DIR,
     TEMPLATES_DIR,
+    ESP32_RECEIVER_HOST,
+    ESP32_RECEIVER_PORT,
 )
 from detector_engine import SprayCanDetectorEngine
+from esp32_manager import esp32_manager, ESP32State
+from alert_recorder import alert_recorder
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
+
+
+class HttpRequestCategoryFilter(logging.Filter):
+    """Tags incoming HTTP requests with clear functional categories."""
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        try:
+            msg = record.getMessage()
+            if "/api/esp32/status" in msg and not str(record.msg).startswith("[DASHBOARD-STATUS-POLL]"):
+                record.msg = f"[DASHBOARD-STATUS-POLL] {record.msg}"
+            elif "/esp32/command" in msg and not str(record.msg).startswith("[COMMAND-POLL]"):
+                record.msg = f"[COMMAND-POLL] {record.msg}"
+            elif "/esp32/test-audio" in msg and not str(record.msg).startswith("[AUDIO-UPLOAD]"):
+                record.msg = f"[AUDIO-UPLOAD] {record.msg}"
+            elif "/esp32/status" in msg and not str(record.msg).startswith("[STATE-ACK]"):
+                record.msg = f"[STATE-ACK] {record.msg}"
+        except Exception:
+            pass
+        return True
+
+
+logging.getLogger("werkzeug").addFilter(HttpRequestCategoryFilter())
 
 app = Flask(
     __name__,
@@ -268,7 +296,216 @@ def get_status():
         "shadow_mode": getattr(engine, "shadow_mode", True),
         "audio_retention_hours": AUDIO_RETENTION_HOURS,
         "automatic_enforcement_allowed": False,
+        "esp32": esp32_manager.get_status_dict(),
     })
+
+
+# =========================================================================
+# ESP32 Hardware & Web Dashboard Integration Routes
+# =========================================================================
+
+_esp32_server_thread = None
+
+
+def start_esp32_receiver_service(host: str = ESP32_RECEIVER_HOST, port: int = ESP32_RECEIVER_PORT):
+    """Start the dedicated ESP32 hardware receiver on port 5001 in a background daemon thread."""
+    global _esp32_server_thread
+    if _esp32_server_thread is not None and _esp32_server_thread.is_alive():
+        return
+
+    from werkzeug.serving import make_server
+    try:
+        srv = make_server(host, port, app, threaded=True)
+        t = threading.Thread(target=srv.serve_forever, daemon=True, name="ESP32Receiver5001")
+        t.start()
+        _esp32_server_thread = t
+        logger.info("ESP32 hardware receiver daemon active on http://%s:%d", host, port)
+    except OSError as e:
+        logger.error(
+            "FATAL: ESP32 receiver could not bind to %s:%d (%s). "
+            "Another process is already using port %d. Please terminate existing instances.",
+            host, port, e, port
+        )
+        raise RuntimeError(f"Port {port} is already in use. Please terminate existing processes before starting run.py.")
+    except Exception as e:
+        logger.error("ESP32 receiver service error: %s", e)
+        raise
+
+
+@app.route("/api/esp32/status", methods=["GET"])
+def api_esp32_status():
+    """Return live ESP32 recording state, connection health, and latest audio detection results."""
+    return jsonify(esp32_manager.get_status_dict())
+
+
+@app.route("/api/esp32/start", methods=["POST"])
+def api_esp32_start():
+    """Trigger the ESP32 to start recording audio via local Wi-Fi."""
+    res = esp32_manager.request_start()
+    return jsonify(res)
+
+
+@app.route("/api/esp32/stop", methods=["POST"])
+def api_esp32_stop():
+    """Trigger the ESP32 to stop recording audio."""
+    res = esp32_manager.request_stop()
+    return jsonify(res)
+
+
+@app.route("/api/esp32/latest_prediction", methods=["GET"])
+def api_esp32_latest_prediction():
+    """Return the most recent detection analysis evaluated from the ESP32 stream."""
+    pred = esp32_manager.latest_prediction
+    if pred is None:
+        return jsonify({"status": "no_prediction_yet", "alert_fired": False})
+    return jsonify(pred)
+
+
+@app.route("/api/esp32/stream", methods=["GET"])
+def api_esp32_stream():
+    """Server-Sent Events (SSE) stream for real-time ESP32 predictions & waveforms (<1ms push latency)."""
+    q = esp32_manager.subscribe_events()
+
+    def event_stream():
+        try:
+            # Send initial status snapshot immediately on connect
+            initial_status = esp32_manager.get_status_dict()
+            yield f"event: status\ndata: {json.dumps(initial_status)}\n\n"
+
+            while True:
+                try:
+                    payload = q.get(timeout=2.0)
+                    yield f"event: prediction\ndata: {json.dumps(payload)}\n\n"
+                except queue.Empty:
+                    # Keep-alive heartbeat ping to prevent proxy/browser timeout
+                    yield ": ping\n\n"
+        except GeneratorExit:
+            pass
+        finally:
+            esp32_manager.unsubscribe_events(q)
+
+    return Response(
+        event_stream(),
+        mimetype="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "X-Accel-Buffering": "no",
+            "Connection": "keep-alive",
+            "Access-Control-Allow-Origin": "*",
+        },
+    )
+
+
+@app.route("/esp32/command", methods=["GET"])
+def esp32_command_poll():
+    """Command polling endpoint for ESP32. Returns START or STOP command."""
+    supplied_token = request.headers.get("X-Device-Token", "")
+    reported_state = request.args.get("state") or request.headers.get("X-Device-State")
+    client_ip = request.remote_addr or "unknown"
+    resp, code = esp32_manager.handle_command_poll(supplied_token, client_ip, reported_state=reported_state)
+    return jsonify(resp), code
+
+
+@app.route("/esp32/status", methods=["POST"])
+def esp32_status_ack():
+    """State acknowledgement endpoint called by ESP32 to confirm state transitions."""
+    supplied_token = request.headers.get("X-Device-Token", "")
+    data = request.get_json(silent=True) or {}
+    reported_state = data.get("state") or request.headers.get("X-Device-State", "")
+    client_ip = request.remote_addr or "unknown"
+    resp, code = esp32_manager.handle_status_update(supplied_token, client_ip, reported_state=reported_state)
+    return jsonify(resp), code
+
+
+@app.route("/esp32/alert", methods=["POST"])
+def esp32_receive_alert():
+    """Receive instant lightweight detection alert (< 300 bytes) from ESP32 edge CNN."""
+    supplied_token = request.headers.get("X-Device-Token", "")
+    client_ip = request.remote_addr or "unknown"
+    data = request.get_json(silent=True) or {}
+    resp, code = esp32_manager.handle_edge_alert(supplied_token, client_ip, data)
+    response = jsonify(resp)
+    response.headers["Connection"] = "close"
+    return response, code
+
+
+@app.route("/esp32/test-audio", methods=["POST"])
+def esp32_receive_audio():
+    """Receive, save, and process 1.0-second 22050 Hz WAV audio uploaded by ESP32."""
+    supplied_token = request.headers.get("X-Device-Token", "")
+    client_ip = request.remote_addr or "unknown"
+    audio_data = request.get_data(cache=False)
+    resp, code = esp32_manager.handle_audio_upload(
+        supplied_token=supplied_token,
+        audio_bytes=audio_data,
+        mimetype=request.mimetype,
+        client_ip=client_ip,
+        engine=engine,
+        headers=dict(request.headers),
+    )
+    response = jsonify(resp)
+    response.headers["Connection"] = "close"
+    return response, code
+
+
+@app.route("/esp32/health", methods=["GET"])
+def esp32_health():
+    """Health check endpoint for ESP32 receiver service."""
+    status = esp32_manager.get_status_dict()
+    return jsonify({
+        "status": "ok",
+        "service": "ESP32 acoustic detector receiver",
+        "state": status["state"],
+        "desired_state": status["desired_state"],
+    })
+
+
+@app.route("/api/alerts/recordings", methods=["GET"])
+def get_alert_recordings():
+    """Return list of confirmed alert event recordings with metadata."""
+    recordings = alert_recorder.list_saved_recordings(limit=100)
+    return jsonify({
+        "status": "success",
+        "recordings": recordings,
+        "count": len(recordings),
+        "total_saved": alert_recorder.total_saved_alerts,
+    })
+
+
+@app.route("/api/alerts/recordings/<path:filename>", methods=["GET"])
+def get_alert_recording_file(filename: str):
+    """Stream a confirmed alert WAV audio recording for browser playback/download."""
+    wav_path = alert_recorder.get_recording_file(filename)
+    if not wav_path or not wav_path.exists():
+        return jsonify({"error": "Alert recording not found"}), 404
+    return send_file(str(wav_path), mimetype="audio/wav")
+
+
+@app.route("/api/alerts/config", methods=["GET"])
+def get_alert_config():
+    """Return runtime configuration for event-based alert audio recording."""
+    return jsonify({
+        "status": "success",
+        "config": alert_recorder.get_config(),
+    })
+
+
+@app.route("/api/alerts/config", methods=["POST"])
+def update_alert_config():
+    """Update runtime configuration for event-based alert audio recording."""
+    data = request.get_json(force=True, silent=True) or {}
+    updated = alert_recorder.update_config(
+        pre_event_seconds=data.get("pre_event_seconds"),
+        post_event_seconds=data.get("post_event_seconds"),
+        cooldown_seconds=data.get("cooldown_seconds"),
+        enabled=data.get("enabled"),
+    )
+    return jsonify({
+        "status": "success",
+        "config": updated,
+    })
+
+
 
 
 @app.route("/api/config", methods=["POST"])
@@ -1337,5 +1574,6 @@ def admin_audit_logs():
 
 if __name__ == "__main__":
     ensure_demo_samples()
+    start_esp32_receiver_service()
     logger.info("Starting Flask Server on http://127.0.0.1:5000 ...")
     app.run(host="127.0.0.1", port=5000, debug=False)

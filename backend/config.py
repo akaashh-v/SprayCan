@@ -7,6 +7,7 @@ Implements two-stage decision hyperparameters:
 """
 
 from pathlib import Path
+import os
 import torch
 
 # Base directories
@@ -35,7 +36,9 @@ RAW_REAL_SPRAY_DIR = RAW_DIR / "real spray can shaking"
 RAW_MORE_NEGATIVES_DIR = RAW_DIR / "more negatives"
 
 # Model Checkpoints & Evaluation artifacts
+MODEL_BACKEND = os.environ.get("MODEL_BACKEND", "tensorflow").lower()
 MODEL_SAVE_PATH = MODELS_DIR / "best_detector.pth"
+TF_MODEL_SAVE_PATH = MODELS_DIR / "best_detector.keras"
 BASELINE_MODEL_SAVE_PATH = MODELS_DIR / "baseline_detector.pth"
 EVALUATION_REPORT_PATH = MODELS_DIR / "evaluation_report.json"
 CALIBRATION_PATH = MODELS_DIR / "threshold_calibration.json"
@@ -137,3 +140,41 @@ LEARNING_RATE = 1e-3
 WEIGHT_DECAY = 1e-4
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 RANDOM_SEED = 42
+
+# ESP32 Remote Microphone Hardware Configuration
+ESP32_DEVICE_TOKEN = os.environ.get(
+    "ESP32_TEST_TOKEN",
+    os.environ.get("ESP32_DEVICE_TOKEN", "SprayDetectorTest_ChangeThis_8392")
+)
+ESP32_RECEIVER_HOST = os.environ.get("ESP32_RECEIVER_HOST", "0.0.0.0")
+ESP32_RECEIVER_PORT = int(os.environ.get("ESP32_RECEIVER_PORT", "5001"))
+ESP32_AUDIO_SAVE_DIR = Path(os.environ.get("ESP32_AUDIO_DIR", BACKEND_DIR / "tmp_esp32_audio"))
+ESP32_AUDIO_SAVE_DIR.mkdir(parents=True, exist_ok=True)
+ESP32_START_TIMEOUT = float(os.environ.get("ESP32_START_TIMEOUT", "20.0"))
+ESP32_STOP_TIMEOUT = float(os.environ.get("ESP32_STOP_TIMEOUT", "10.0"))
+ESP32_HEARTBEAT_TIMEOUT = float(os.environ.get("ESP32_HEARTBEAT_TIMEOUT", "15.0"))
+
+# ESP32 Audio Chunk In-Memory / Disk Storage Configuration
+# When False (recommended default), audio is processed purely in memory with zero disk I/O latency.
+# When True, audio files are saved to tmp_esp32_audio for offline inspection.
+ESP32_SAVE_AUDIO_CHUNKS = os.environ.get("ESP32_SAVE_AUDIO_CHUNKS", "false").lower() in ("true", "1")
+ESP32_MAX_SAVED_CHUNKS = int(os.environ.get("ESP32_MAX_SAVED_CHUNKS", "50"))
+
+# Event-Based Alert Audio Recording Configuration
+# In accordance with privacy & continuous real-time operation:
+# - Normal microphone audio is processed in RAM ONLY and never saved to disk.
+# - Audio is saved ONLY when a confirmed alert is triggered.
+# - Preserves pre-event context (rolling RAM buffer) + shaking event + post-event sound.
+RECORDINGS_DIR = BACKEND_DIR / "recordings"
+ALERT_RECORDINGS_DIR = Path(os.environ.get("ALERT_RECORDINGS_DIR", RECORDINGS_DIR / "alerts"))
+ALERT_RECORDINGS_DIR.mkdir(parents=True, exist_ok=True)
+
+ALERT_RECORDING_ENABLED = os.environ.get("ALERT_RECORDING_ENABLED", "true").lower() in ("true", "1")
+ALERT_PRE_EVENT_SECONDS = float(os.environ.get("ALERT_PRE_EVENT_SECONDS", "4.0"))    # Rolling RAM buffer (3-5s default)
+ALERT_POST_EVENT_SECONDS = float(os.environ.get("ALERT_POST_EVENT_SECONDS", "3.0"))  # Post-event duration (3s default)
+ALERT_RECORDING_COOLDOWN_SECONDS = float(os.environ.get("ALERT_RECORDING_COOLDOWN_SECONDS", "5.0"))  # Event grouping debounce (5s)
+ALERT_MAX_SAVED_RECORDINGS = int(os.environ.get("ALERT_MAX_SAVED_RECORDINGS", "100")) # Bounded file retention
+
+
+
+

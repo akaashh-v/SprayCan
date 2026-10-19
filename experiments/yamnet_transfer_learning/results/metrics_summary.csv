@@ -1,0 +1,15 @@
+Metric,Model A (Production CNN),Model B (Expanded-Data CNN),Model C (YAMNet Transfer Learning)
+Test Accuracy,40.94%,64.82%,55.44%
+Macro F1-Score,0.3513,0.6412,0.5304
+Shaking Precision,11.11%,52.00%,32.50%
+Shaking Recall,71.43%,92.86%,92.86%
+Shaking F1-Score,0.1923,0.6667,0.4815
+Missed Shaking Rate,28.57%,7.14%,7.14%
+False Alarm Rate (Negatives),17.58%,2.64%,5.93%
+False Positives Per Hour,633.0 FP/hr,94.9 FP/hr,213.6 FP/hr
+Hard Negative Rattle False Alarm Rate,20.59%,3.92%,4.90%
+Total Parameters,505,222,505,222,3,880,614
+Model Disk Size,2067.7 KB,6026.0 KB,16.11 MB
+Audio Preprocessing Time,78.49 ms,1.32 ms,15.69 ms
+Inference Latency,126.62 ms,123.96 ms,66.20 ms
+Total Latency per 1.0s Window,205.11 ms,125.29 ms,81.89 ms

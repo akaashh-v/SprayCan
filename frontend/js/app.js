@@ -561,6 +561,12 @@ document.addEventListener("DOMContentLoaded", () => {
             elements.bannerStatusEmoji.innerText = "🗣️";
             elements.bannerHeadline.innerText = "AMBIENT SOUND / SPEECH (IGNORED)";
             elements.bannerDescription.innerText = explanation;
+        } else if (res.is_preliminary) {
+            elements.mainStatusBanner.classList.add("status-preliminary");
+            elements.bannerStatusEmoji.innerText = "⚡";
+            elements.bannerHeadline.innerText = "PRELIMINARY: SHAKING PATTERN DETECTED (STAGE 1)";
+            elements.bannerDescription.innerText = `Kinematic burst pattern (${cadence.toFixed(1)} Hz). On-device CNN is verifying spectro-temporal signature...`;
+            addLogEntry(`⚡ Preliminary Warning: Potential shaking pattern at ${cadence.toFixed(1)} Hz. Verifying with edge CNN...`, "candidate");
         } else if (res.is_stage1_candidate) {
             elements.mainStatusBanner.classList.add("status-candidate");
             elements.bannerStatusEmoji.innerText = "⚡";
@@ -716,136 +722,476 @@ document.addEventListener("DOMContentLoaded", () => {
         return output;
     }
 
-    async function startListening() {
-        try {
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            if (audioContext.state === "suspended") {
-                await audioContext.resume();
-            }
-            nativeSampleRate = audioContext.sampleRate || 22050;
-            nativeWindowSamples = Math.round(nativeSampleRate * 1.0);
-            nativeBuffer = new Float32Array(nativeWindowSamples);
-            nativeBufferWriteIdx = 0;
+    // =========================================================================
+    // ESP32 Remote Hardware Listening Control & Telemetry Pipeline
+    // =========================================================================
+    let esp32State = "Stopped"; // Exact states: "Starting", "Listening", "Stopping", "Stopped", "Connection Error"
+    let esp32PollInterval = null;
+    let lastHandledAudioFile = null;
+    let esp32ChunkCount = 0;
 
-            if (elements.canvasRateTag) {
-                elements.canvasRateTag.innerText = `${nativeSampleRate} Hz → 22,050 Hz`;
-            }
-            if (elements.micDeviceName) {
-                elements.micDeviceName.innerText = `Active Mic (${nativeSampleRate} Hz)`;
-            }
+    function updateEsp32StateUI(state, data = {}) {
+        esp32State = state;
+        const badge = document.getElementById("esp32-status-badge");
+        const btn = elements.btnToggleMic;
+        const btnText = elements.micBtnText;
+        const btnIcon = elements.micBtnIcon;
+        const streamStat = document.getElementById("esp32-stream-stat");
 
-            const stream = await navigator.mediaDevices.getUserMedia({
-                audio: {
-                    echoCancellation: false,
-                    noiseSuppression: false,
-                    autoGainControl: false,
-                },
-            });
-            micStream = stream;
+        if (elements.micDeviceName) {
+            elements.micDeviceName.innerText = "ESP32 INMP441 (Wi-Fi)";
+        }
+        if (elements.canvasRateTag) {
+            elements.canvasRateTag.innerText = "22,050 Hz (ESP32 Stream)";
+        }
 
-            const source = audioContext.createMediaStreamSource(stream);
-            analyserNode = audioContext.createAnalyser();
-            analyserNode.fftSize = 1024;
-            source.connect(analyserNode);
+        if (data.audio_chunk_count !== undefined) {
+            esp32ChunkCount = data.audio_chunk_count;
+        }
+        if (streamStat) {
+            streamStat.innerText = `${esp32ChunkCount} chunk${esp32ChunkCount === 1 ? "" : "s"} received`;
+        }
 
-            // Use zero-gain node to prevent speaker feedback while keeping scriptProcessor alive
-            const muteGainNode = audioContext.createGain();
-            muteGainNode.gain.value = 0;
-
-            // Process audio frames with ScriptProcessor (bufferSize = 4096)
-            scriptProcessor = audioContext.createScriptProcessor(4096, 1, 1);
-            source.connect(scriptProcessor);
-            scriptProcessor.connect(muteGainNode);
-            muteGainNode.connect(audioContext.destination);
-
-            scriptProcessor.onaudioprocess = (event) => {
-                const inputData = event.inputBuffer.getChannelData(0);
-                // Copy into native rate circular rolling buffer
-                for (let i = 0; i < inputData.length; i++) {
-                    nativeBuffer[nativeBufferWriteIdx] = inputData[i];
-                    nativeBufferWriteIdx = (nativeBufferWriteIdx + 1) % nativeWindowSamples;
+        switch (state) {
+            case "Starting":
+                if (badge) {
+                    badge.innerText = "⏳ STARTING...";
+                    badge.style.background = "rgba(245, 158, 11, 0.2)";
+                    badge.style.color = "#F59E0B";
+                    badge.style.borderColor = "rgba(245, 158, 11, 0.4)";
                 }
-            };
-
-            isListening = true;
-            elements.micBtnText.innerText = "Stop Listening";
-            elements.micBtnIcon.innerText = "⏹";
-            elements.btnToggleMic.classList.replace("btn-primary", "btn-secondary");
-
-            addLogEntry(`Microphone started (${nativeSampleRate} Hz). Auto-resampling to 22,050 Hz every 250ms.`, "info");
-            drawWaveform();
-
-            let isRequestInFlight = false;
-
-            // Send rolling 1.0s window every 250ms
-            pollInterval = setInterval(async () => {
-                if (!isListening || isRequestInFlight) return;
-
-                // Assemble chronologically ordered 1.0s window from circular buffer
-                const orderedWindow = new Float32Array(nativeWindowSamples);
-                for (let i = 0; i < nativeWindowSamples; i++) {
-                    orderedWindow[i] = nativeBuffer[(nativeBufferWriteIdx + i) % nativeWindowSamples];
+                if (btn) {
+                    btn.disabled = true;
+                    btn.className = "btn btn-primary";
+                    btn.style.opacity = "0.75";
+                    btn.style.cursor = "wait";
                 }
+                if (btnIcon) btnIcon.innerText = "⏳";
+                if (btnText) btnText.innerText = "Starting...";
+                break;
 
-                // Transmit native hardware rate window directly so server applies polyphase sinc anti-aliasing filter
-                const base64Pcm = floatTo16BitPCMBase64(orderedWindow);
-
-                isRequestInFlight = true;
-                try {
-                    const resp = await fetch("/api/predict_window", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                            audio_base64: base64Pcm,
-                            sample_rate: TARGET_SAMPLE_RATE,
-                            native_sample_rate: nativeSampleRate,
-                        }),
-                    });
-                    const resData = await resp.json();
-                    updateDecisionUI(resData);
-                } catch (e) {
-                    console.error("Window prediction request failed:", e);
-                } finally {
-                    isRequestInFlight = false;
+            case "Listening":
+                if (badge) {
+                    badge.innerText = "● LISTENING";
+                    badge.style.background = "rgba(16, 185, 129, 0.2)";
+                    badge.style.color = "#10B981";
+                    badge.style.borderColor = "rgba(16, 185, 129, 0.5)";
                 }
-            }, 350);
+                if (btn) {
+                    btn.disabled = false;
+                    btn.className = "btn btn-secondary";
+                    btn.style.opacity = "1.0";
+                    btn.style.cursor = "pointer";
+                }
+                if (btnIcon) btnIcon.innerText = "⏹";
+                if (btnText) btnText.innerText = "Stop Listening";
+                break;
 
-        } catch (err) {
-            console.error("Microphone access failed:", err);
-            alert(`Unable to access microphone: ${err.message}. Please check browser microphone permissions.`);
+            case "Stopping":
+                if (badge) {
+                    badge.innerText = "⏳ STOPPING...";
+                    badge.style.background = "rgba(245, 158, 11, 0.2)";
+                    badge.style.color = "#F59E0B";
+                    badge.style.borderColor = "rgba(245, 158, 11, 0.4)";
+                }
+                if (btn) {
+                    btn.disabled = true;
+                    btn.style.opacity = "0.75";
+                    btn.style.cursor = "wait";
+                }
+                if (btnIcon) btnIcon.innerText = "⏳";
+                if (btnText) btnText.innerText = "Stopping...";
+                break;
+
+            case "Stopped":
+                if (badge) {
+                    badge.innerText = "STANDBY / STOPPED";
+                    badge.style.background = "rgba(107, 114, 128, 0.2)";
+                    badge.style.color = "#9CA3AF";
+                    badge.style.borderColor = "rgba(156, 163, 175, 0.3)";
+                }
+                if (btn) {
+                    btn.disabled = false;
+                    btn.className = "btn btn-primary";
+                    btn.style.opacity = "1.0";
+                    btn.style.cursor = "pointer";
+                }
+                if (btnIcon) btnIcon.innerText = "▶";
+                if (btnText) btnText.innerText = "Start Listening";
+                break;
+
+            case "Connection Error":
+                if (badge) {
+                    badge.innerText = "⚠️ CONNECTION ERROR";
+                    badge.style.background = "rgba(239, 68, 68, 0.2)";
+                    badge.style.color = "#EF4444";
+                    badge.style.borderColor = "rgba(239, 68, 68, 0.5)";
+                }
+                if (btn) {
+                    btn.disabled = false;
+                    btn.className = "btn btn-primary";
+                    btn.style.opacity = "1.0";
+                    btn.style.cursor = "pointer";
+                }
+                if (btnIcon) btnIcon.innerText = "🔄";
+                if (btnText) btnText.innerText = "Retry Connection";
+                break;
         }
     }
 
-    function stopListening() {
-        isListening = false;
-        if (pollInterval) clearInterval(pollInterval);
-        if (scriptProcessor) {
-            scriptProcessor.disconnect();
-            scriptProcessor = null;
-        }
-        if (micStream) {
-            micStream.getTracks().forEach((track) => track.stop());
-            micStream = null;
-        }
-        if (audioContext && audioContext.state !== "closed") {
-            audioContext.close();
+    function drawEsp32Waveform(points, rms) {
+        if (!elements.waveformCanvas) return;
+        const canvas = elements.waveformCanvas;
+        const ctx = canvas.getContext("2d");
+        const width = canvas.width;
+        const height = canvas.height;
+
+        ctx.fillStyle = "#0c1220";
+        ctx.fillRect(0, 0, width, height);
+
+        // Center line
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.08)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(0, height / 2);
+        ctx.lineTo(width, height / 2);
+        ctx.stroke();
+
+        if (!points || points.length === 0) {
+            if (elements.canvasRmsTag) {
+                elements.canvasRmsTag.innerText = `RMS: ${(rms || 0).toFixed(4)}`;
+            }
+            return;
         }
 
-        elements.micBtnText.innerText = "Start Listening";
-        elements.micBtnIcon.innerText = "▶";
-        elements.btnToggleMic.classList.replace("btn-secondary", "btn-primary");
-        addLogEntry("Microphone stream stopped.", "info");
+        // Draw dynamic cyan waveform from ESP32 audio samples
+        ctx.strokeStyle = "#06B6D4";
+        ctx.lineWidth = 1.8;
+        ctx.beginPath();
+        const sliceWidth = width / (points.length - 1);
+        for (let i = 0; i < points.length; i++) {
+            const v = points[i];
+            const y = (height / 2) - (v * (height / 2) * 2.8);
+            const x = i * sliceWidth;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+
+        if (elements.canvasRmsTag) {
+            elements.canvasRmsTag.innerText = `RMS: ${(rms || 0).toFixed(4)}`;
+        }
+    }
+
+    let pollInFlight = false;
+    let pollTimerId = null;
+    let lastHandledChunkSeq = 0;
+    let sseConnected = false;
+    let esp32EventSource = null;
+
+    function updateLatencyDisplay(timing) {
+        if (!timing) return;
+        const latencyStat = document.getElementById("esp32-latency-stat");
+        if (latencyStat) {
+            if (timing.end_to_end_server_ms !== undefined) {
+                latencyStat.innerText = `${timing.end_to_end_server_ms.toFixed(1)} ms`;
+            } else {
+                const lat = timing.server_total_ms || timing.server_inference_ms || 0;
+                latencyStat.innerText = `${lat.toFixed(1)} ms`;
+            }
+        }
+        const canvasLatency = document.getElementById("canvas-latency-tag");
+        if (canvasLatency) {
+            canvasLatency.style.display = "inline-block";
+            if (timing.cnn_ms !== undefined) {
+                canvasLatency.innerText = `CNN: ${timing.cnn_ms}ms | Net: ${timing.net_tx_ms || 15}ms | SSE: ${timing.server_dispatch_ms || 0.5}ms`;
+            } else {
+                canvasLatency.innerText = `Infer: ${timing.server_inference_ms || 0}ms | Server: ${timing.server_total_ms || 0}ms`;
+            }
+        }
+    }
+
+    let alertLatchUntil = 0;
+
+    function handleEsp32Prediction(pred) {
+        if (!pred) return;
+        const now = Date.now();
+        const seq = pred.chunk_seq || 0;
+
+        // Reset sequence tracker if counter wrapped or server/device restarted
+        if (seq > 0 && lastHandledChunkSeq > 0 && seq < lastHandledChunkSeq - 50) {
+            lastHandledChunkSeq = 0;
+        }
+
+        // Latch alert state so brief background uploads don't clobber active alerts
+        const isAlertLatched = now < alertLatchUntil;
+        if (pred.alert_fired) {
+            alertLatchUntil = now + 4000; // Hold red alert banner for 4.0s
+        } else if (isAlertLatched) {
+            pred.alert_fired = true;
+            pred.status = "ALERT: POSSIBLE AEROSOL-CAN SHAKING DETECTED";
+        }
+
+        // Sequence guard: drop exact duplicate sequence polls without waveforms or explicit state changes
+        const isExplicitStateChange = pred.alert_fired || pred.is_preliminary || (pred.alert_type === "REJECTED");
+        if (seq > 0 && seq < lastHandledChunkSeq && !isExplicitStateChange) {
+            return;
+        }
+        if (seq > 0 && seq === lastHandledChunkSeq && !isExplicitStateChange && !pred.waveform_points) {
+            return;
+        }
+
+        if (seq > 0) {
+            lastHandledChunkSeq = seq;
+        }
+        lastHandledAudioFile = pred.audio_file || lastHandledAudioFile;
+
+        // Instantly update decision UI meters, classifications, and alerts (<1ms push)
+        updateDecisionUI(pred);
+
+        // Update waveform canvas immediately
+        if (pred.waveform_points) {
+            drawEsp32Waveform(pred.waveform_points, pred.rms || 0);
+        }
+
+        // Update latency telemetry display
+        updateLatencyDisplay(pred.timing);
+
+        // Auto-refresh saved alert recordings if an alert was confirmed or finalized
+        if (pred.alert_fired || pred.saved_recording) {
+            fetchAlertRecordings();
+        }
+    }
+
+    function initEsp32SSE() {
+        if (esp32EventSource || !window.EventSource) return;
+        try {
+            esp32EventSource = new EventSource("/api/esp32/stream");
+
+            esp32EventSource.addEventListener("prediction", (evt) => {
+                try {
+                    const pred = JSON.parse(evt.data);
+                    if (esp32State === "Listening" || esp32State === "Starting") {
+                        handleEsp32Prediction(pred);
+                    }
+                } catch (e) {
+                    console.warn("SSE prediction parse error:", e);
+                }
+            });
+
+            esp32EventSource.addEventListener("alert", (evt) => {
+                try {
+                    const alertData = JSON.parse(evt.data);
+                    if (esp32State === "Listening" || esp32State === "Starting") {
+                        handleEsp32Prediction(alertData);
+                    }
+                } catch (e) {
+                    console.warn("SSE alert parse error:", e);
+                }
+            });
+
+            esp32EventSource.addEventListener("status", (evt) => {
+                try {
+                    const statusData = JSON.parse(evt.data);
+                    const serverState = statusData.state || "Stopped";
+                    updateEsp32StateUI(serverState, statusData);
+                    if (serverState === "Stopped") {
+                        drawEsp32Waveform([], 0);
+                        const canvasLatency = document.getElementById("canvas-latency-tag");
+                        if (canvasLatency) canvasLatency.style.display = "none";
+                    }
+                } catch (e) {
+                    console.warn("SSE status parse error:", e);
+                }
+            });
+
+            esp32EventSource.onopen = () => {
+                sseConnected = true;
+            };
+
+            esp32EventSource.onerror = () => {
+                sseConnected = false;
+            };
+        } catch (err) {
+            console.warn("Failed to initialize SSE EventSource:", err);
+            sseConnected = false;
+        }
+    }
+
+    async function pollEsp32Status() {
+        if (pollInFlight) return;
+        pollInFlight = true;
+
+        let delayMs = (esp32State === "Listening" || esp32State === "Starting")
+            ? (sseConnected ? 1500 : 350)
+            : 1200;
+
+        try {
+            const resp = await fetch("/api/esp32/status");
+            if (resp.ok) {
+                const data = await resp.json();
+                const serverState = data.state || "Stopped";
+                updateEsp32StateUI(serverState, data);
+
+                delayMs = (serverState === "Listening" || serverState === "Starting")
+                    ? (sseConnected ? 1500 : 350)
+                    : 1200;
+
+                // When stopped, flatline the waveform canvas to provide unambiguous visual feedback that mic is inactive
+                if (serverState === "Stopped") {
+                    drawEsp32Waveform([], 0);
+                    const canvasLatency = document.getElementById("canvas-latency-tag");
+                    if (canvasLatency) canvasLatency.style.display = "none";
+                }
+
+                // Update detection results and meters whenever a new chunk arrives while active (fallback path)
+                if (serverState === "Listening" && data.latest_prediction) {
+                    handleEsp32Prediction(data.latest_prediction);
+                }
+            }
+        } catch (err) {
+            console.warn("ESP32 status poll error:", err);
+            delayMs = 2000;
+        } finally {
+            pollInFlight = false;
+            pollTimerId = setTimeout(pollEsp32Status, delayMs);
+        }
+    }
+
+    async function startListening() {
+        if (esp32State === "Starting" || esp32State === "Stopping") return;
+
+        try {
+            updateEsp32StateUI("Starting");
+            addLogEntry("Requesting ESP32 microphone to START listening over Wi-Fi...", "info");
+
+            const resp = await fetch("/api/esp32/start", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" }
+            });
+            const data = await resp.json();
+
+            if (pollTimerId) clearTimeout(pollTimerId);
+            pollInFlight = false;
+            pollEsp32Status();
+        } catch (err) {
+            console.error("Failed to trigger ESP32 start:", err);
+            updateEsp32StateUI("Connection Error");
+            addLogEntry(`Failed to start ESP32 listening: ${err.message}`, "error");
+        }
+    }
+
+    async function stopListening() {
+        if (esp32State === "Starting" || esp32State === "Stopping") return;
+
+        try {
+            updateEsp32StateUI("Stopping");
+            addLogEntry("Requesting ESP32 microphone to STOP listening...", "info");
+
+            // Instant visual feedback: flatline waveform canvas
+            drawEsp32Waveform([], 0);
+
+            const resp = await fetch("/api/esp32/stop", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" }
+            });
+            const data = await resp.json();
+
+            if (pollTimerId) clearTimeout(pollTimerId);
+            pollInFlight = false;
+            pollEsp32Status();
+        } catch (err) {
+            console.error("Failed to trigger ESP32 stop:", err);
+            updateEsp32StateUI("Stopped");
+            addLogEntry(`Error sending STOP command: ${err.message}`, "error");
+        }
     }
 
     if (elements.btnToggleMic) {
         elements.btnToggleMic.addEventListener("click", () => {
-            if (isListening) {
+            if (esp32State === "Listening") {
                 stopListening();
-            } else {
+            } else if (esp32State === "Stopped" || esp32State === "Connection Error") {
                 startListening();
             }
         });
     }
+
+    // Launch continuous real-time ESP32 SSE stream & status heartbeat immediately on load
+    initEsp32SSE();
+    pollEsp32Status();
+
+    // -------------------------------------------------------------------------
+    // Event-Based Saved Alert Recordings UI
+    // -------------------------------------------------------------------------
+    async function fetchAlertRecordings() {
+        const listEl = document.getElementById("alert-recordings-list");
+        const badgeEl = document.getElementById("alert-recordings-badge");
+        if (!listEl) return;
+
+        try {
+            const resp = await fetch("/api/alerts/recordings");
+            if (!resp.ok) return;
+            const data = await resp.json();
+            const recordings = data.recordings || [];
+
+            if (badgeEl) {
+                badgeEl.innerText = `${recordings.length} SAVED`;
+                badgeEl.style.color = recordings.length > 0 ? "var(--accent-green)" : "var(--text-muted)";
+            }
+
+            if (recordings.length === 0) {
+                listEl.innerHTML = `
+                    <div style="text-align: center; color: var(--text-muted); padding: 16px; font-size: 0.8rem; background: rgba(0,0,0,0.2); border-radius: 6px;">
+                        Normal background audio is processed in RAM only. Confirmed spray-can alerts automatically save a combined pre-event + event + post-event WAV recording here.
+                    </div>
+                `;
+                return;
+            }
+
+            listEl.innerHTML = recordings.map(rec => {
+                const ts = rec.timestamp_iso ? new Date(rec.timestamp_iso).toLocaleTimeString() : "Recent";
+                const confPct = ((rec.confidence || 0) * 100).toFixed(1);
+                const durTotal = (rec.total_duration_sec || 0).toFixed(1);
+                const durPre = (rec.pre_event_sec || 0).toFixed(1);
+                const durEvt = (rec.event_sec || 0).toFixed(1);
+                const durPost = (rec.post_event_sec || 0).toFixed(1);
+                const filename = rec.filename || "";
+
+                return `
+                    <div style="display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; background: rgba(17, 24, 39, 0.7); border: 1px solid var(--border-color); border-radius: 6px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-weight: 700; font-size: 0.85rem; color: var(--accent-cyan);">${rec.event_id || "Alert Event"}</span>
+                                <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: var(--accent-green); font-size: 0.7rem; font-weight: 600;">
+                                    ${confPct}% SPRAY
+                                </span>
+                                <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">${ts}</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="font-size: 0.72rem; color: var(--text-muted);">
+                                    Total: <strong>${durTotal}s</strong> (Pre: ${durPre}s | Event: ${durEvt}s | Post: ${durPost}s)
+                                </span>
+                                <a href="/api/alerts/recordings/${encodeURIComponent(filename)}" download="${filename}" class="btn btn-secondary btn-sm" style="padding: 2px 8px; font-size: 0.7rem;" title="Download WAV audio">
+                                    ⬇️ WAV
+                                </a>
+                            </div>
+                        </div>
+                        <audio controls preload="none" style="width: 100%; height: 32px;" src="/api/alerts/recordings/${encodeURIComponent(filename)}"></audio>
+                    </div>
+                `;
+            }).join("");
+        } catch (err) {
+            console.warn("Failed to fetch alert recordings:", err);
+        }
+    }
+
+    const btnRefreshAlerts = document.getElementById("btn-refresh-alert-recordings");
+    if (btnRefreshAlerts) {
+        btnRefreshAlerts.addEventListener("click", fetchAlertRecordings);
+    }
+    fetchAlertRecordings();
+
 
     if (elements.ncSwitchCheckbox) {
         elements.ncSwitchCheckbox.addEventListener("change", (e) => {

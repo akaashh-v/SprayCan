@@ -119,10 +119,15 @@
                     <div class="card glass-card">
                         <div class="card-header">
                             <div>
-                                <h2 class="card-title">Real-Time Microphone Stream</h2>
-                                <p class="card-subtitle">Streams 1-second rolling audio chunks evaluated every 250ms</p>
+                                <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                                    <h2 class="card-title">Real-Time Microphone Stream</h2>
+                                    <span class="badge" id="esp32-status-badge" style="background: rgba(107, 114, 128, 0.2); color: #9CA3AF; border: 1px solid rgba(156, 163, 175, 0.3); font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 9999px; letter-spacing: 0.5px; transition: all 0.3s ease;">
+                                        STANDBY / STOPPED
+                                    </span>
+                                </div>
+                                <p class="card-subtitle" id="mic-status-subtitle">Autonomous ESP32-WROVER-R &amp; INMP441 Microphone (22,050 Hz Wi-Fi stream)</p>
                             </div>
-                            <div class="card-actions">
+                            <div class="card-actions" style="display: flex; align-items: center; gap: 10px;">
                                 <button class="btn btn-primary" id="btn-toggle-mic">
                                     <span class="btn-icon" id="mic-btn-icon">▶</span>
                                     <span id="mic-btn-text">Start Listening</span>
@@ -177,6 +182,7 @@
                             <div class="canvas-overlay">
                                 <span class="overlay-tag" id="canvas-rate-tag">22,050 Hz</span>
                                 <span class="overlay-tag" id="canvas-rms-tag">RMS: 0.000</span>
+                                <span class="overlay-tag" id="canvas-latency-tag" style="display:none; color:#10B981; font-weight:600;">Latency: --</span>
                             </div>
                         </div>
 
@@ -184,19 +190,43 @@
                         <div class="mic-status-row">
                             <div class="mic-meta-item">
                                 <span class="meta-label">Audio Input:</span>
-                                <span class="meta-value" id="mic-device-name">Default Microphone</span>
+                                <span class="meta-value" id="mic-device-name">ESP32 INMP441 (Wi-Fi)</span>
                             </div>
                             <div class="mic-meta-item">
-                                <span class="meta-label">Rolling Buffer:</span>
-                                <span class="meta-value">22,050 samples (1.0 sec)</span>
+                                <span class="meta-label">Buffer Window:</span>
+                                <span class="meta-value">22,050 samples (1.0s)</span>
                             </div>
                             <div class="mic-meta-item">
-                                <span class="meta-label">Hop Step:</span>
-                                <span class="meta-value">5,512 samples (250 ms)</span>
+                                <span class="meta-label">ESP32 Stream:</span>
+                                <span class="meta-value" id="esp32-stream-stat">0 chunks received</span>
+                            </div>
+                            <div class="mic-meta-item">
+                                <span class="meta-label">Latency:</span>
+                                <span class="meta-value" id="esp32-latency-stat" style="color: #10B981; font-weight: 600;">-- ms</span>
                             </div>
                             <div class="mic-meta-item">
                                 <span class="meta-label">Alert Count:</span>
                                 <span class="meta-value highlight-alert" id="mic-alert-count">0</span>
+                            </div>
+                        </div>
+
+                        <!-- Saved Alert Recordings (Event-Based Audio) -->
+                        <div class="alert-recordings-section" style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-color);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="font-size: 1.1rem;">💾</span>
+                                    <span style="font-weight: 700; font-size: 0.9rem; color: #FFF;">Confirmed Alert Audio Recordings</span>
+                                    <span class="badge" id="alert-recordings-badge" style="background: rgba(16, 185, 129, 0.2); color: var(--accent-green); font-size: 0.7rem;">0 SAVED</span>
+                                </div>
+                                <div style="display: flex; gap: 8px; align-items: center;">
+                                    <span style="font-size: 0.72rem; color: var(--text-muted);">RAM buffer: 4.0s pre + event + 3.0s post</span>
+                                    <button class="btn btn-secondary btn-sm" id="btn-refresh-alert-recordings" style="padding: 4px 8px; font-size: 0.75rem;">🔄 Refresh</button>
+                                </div>
+                            </div>
+                            <div id="alert-recordings-list" style="max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;">
+                                <div style="text-align: center; color: var(--text-muted); padding: 16px; font-size: 0.8rem; background: rgba(0,0,0,0.2); border-radius: 6px;">
+                                    Normal background audio is processed in RAM only. Confirmed spray-can alerts automatically save a combined pre-event + event + post-event WAV recording here.
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1524,6 +1554,6 @@
         </div>
     </div>
 
-    <script src="/js/app.js"></script>
+    <script src="/js/app.js?v=2.5"></script>
 </body>
 </html>

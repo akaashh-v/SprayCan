@@ -1,0 +1,61 @@
+{
+  "model_name": "Model B (Expanded-Data CNN)",
+  "timestamp": "2026-10-17T11:51:35Z",
+  "test_accuracy": 0.6481876332622601,
+  "test_macro_f1": 0.6412441257772908,
+  "classification_report": {
+    "ambient_and_speech": {
+      "precision": 0.7954545454545454,
+      "recall": 0.39325842696629215,
+      "f1-score": 0.5263157894736842,
+      "support": 89.0
+    },
+    "loud_impact": {
+      "precision": 0.6923076923076923,
+      "recall": 0.6260869565217392,
+      "f1-score": 0.6575342465753424,
+      "support": 115.0
+    },
+    "continuous_environmental": {
+      "precision": 0.5047619047619047,
+      "recall": 0.7571428571428571,
+      "f1-score": 0.6057142857142858,
+      "support": 70.0
+    },
+    "hard_negative_rattle": {
+      "precision": 0.8936170212765957,
+      "recall": 0.8235294117647058,
+      "f1-score": 0.8571428571428571,
+      "support": 102.0
+    },
+    "aerosol_spray_hiss": {
+      "precision": 0.4845360824742268,
+      "recall": 0.5949367088607594,
+      "f1-score": 0.5340909090909091,
+      "support": 79.0
+    },
+    "spray_can_shaking": {
+      "precision": 0.52,
+      "recall": 0.9285714285714286,
+      "f1-score": 0.6666666666666666,
+      "support": 14.0
+    },
+    "accuracy": 0.6481876332622601,
+    "macro avg": {
+      "precision": 0.6484462077124942,
+      "recall": 0.6872542983046305,
+      "f1-score": 0.6412441257772908,
+      "support": 469.0
+    },
+    "weighted avg": {
+      "precision": 0.6875297637096996,
+      "recall": 0.6481876332622601,
+      "f1-score": 0.6477902562887182,
+      "support": 469.0
+    }
+  },
+  "epochs_trained": 10,
+  "best_val_loss": 1.580702543258667,
+  "best_val_accuracy": 0.48830410838127136,
+  "checkpoint_path": "C:\\Users\\User\\Desktop\\CogniLearn\\Spray\\experiments\\yamnet_transfer_learning\\models\\model_b_expanded_cnn\\expanded_cnn_best.keras"
+}

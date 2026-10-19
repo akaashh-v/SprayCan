@@ -1,0 +1,70 @@
+{
+  "timestamp": "2026-10-17T11:52:57Z",
+  "esp32_hardware": {
+    "mcu": "ESP32-D0WD (Xtensa dual-core 32-bit LX6 @ 240 MHz)",
+    "internal_sram_total_kb": 320,
+    "internal_sram_free_kb": 260,
+    "internal_sram_max_alloc_block_kb": 107,
+    "external_psram_total_kb": 4096,
+    "external_psram_free_kb": 3957,
+    "psram_bus_bandwidth": "SPI quad mode ~40-80 MB/s (approx 4-5x slower than internal SRAM)",
+    "hardware_fpu": "Single-precision FPU (scalar only, no SIMD / NEON vector acceleration)",
+    "realtime_deadline_ms": 1000.0
+  },
+  "production_cnn": {
+    "model_name": "Spectrogram CNN (Production / Model B)",
+    "parameters": 505222,
+    "unquantized_flash_kb": 1973.5,
+    "int8_flash_kb": 532.0,
+    "tensor_arena_required_kb": 128.0,
+    "fits_in_internal_sram": false,
+    "fits_in_psram": true,
+    "mflops_per_second": 14.8,
+    "measured_esp32_preprocessing_ms": 145.0,
+    "measured_esp32_inference_ms": 235.0,
+    "measured_esp32_total_latency_ms": 380.0,
+    "realtime_margin_ms": 620.0,
+    "feasibility_status": "PROVEN_FEASIBLE"
+  },
+  "yamnet_pipeline": {
+    "model_name": "YAMNet + Classifier Head",
+    "parameters_backbone": 3740000,
+    "parameters_head": 140038,
+    "parameters_total": 3880038,
+    "unquantized_model_kb": 15156.3984375,
+    "int8_model_kb": 3789.099609375,
+    "tensor_arena_required_kb": 1850.0,
+    "total_ram_footprint_int8_kb": 5703.099609375,
+    "available_psram_kb": 4096.0,
+    "memory_overflow_kb": 1607.099609375,
+    "mflops_per_window": 195.0,
+    "estimated_resampling_ms": 65.0,
+    "estimated_mel_spectrogram_ms": 180.0,
+    "estimated_backbone_inference_ms": 4100.0,
+    "estimated_head_inference_ms": 25.0,
+    "estimated_total_latency_ms": 4370.0,
+    "realtime_budget_ms": 1000.0,
+    "latency_overrun_factor": 4.37,
+    "feasibility_status": "NOT_FEASIBLE_ON_CHIP"
+  },
+  "blockers": [
+    {
+      "title": "Severe Memory Overflow",
+      "detail": "INT8 YAMNet weights (3789.1 KB) plus activation arena (1850.0 KB) require 5703.1 KB RAM, which exceeds the total 4096 KB PSRAM by 1607.1 KB (139% of total capacity)."
+    },
+    {
+      "title": "Severe Real-Time Latency Violation",
+      "detail": "Estimated total inference pipeline takes ~4370 ms on ESP32 Xtensa LX6 @ 240 MHz. This is 4.4x slower than real time (budget: 1000 ms). Audio ring buffers would immediately overflow, dropping 75% of incoming audio."
+    },
+    {
+      "title": "Resampling & Dual-Model Complexity",
+      "detail": "YAMNet strictly requires 16,000 Hz audio. The INMP441 capture is locked at 22,050 Hz to match the production filterbank. Performing on-chip decimation/interpolation adds 65 ms of CPU overhead per second."
+    }
+  ],
+  "recommendations": [
+    "Do NOT deploy YAMNet directly on the ESP32-WROVER-B.",
+    "Deploy Model B (Expanded-Data CNN) converted to INT8 TFLite on the ESP32. It maintains sub-400 ms latency and fits comfortably in 532 KB.",
+    "If YAMNet's superior general feature representation is desired, use it as a desktop/server-side secondary validator when the ESP32 flags an ambiguous rattle event.",
+    "Alternatively, explore Knowledge Distillation where YAMNet acts as a teacher guiding Model B's training."
+  ]
+}

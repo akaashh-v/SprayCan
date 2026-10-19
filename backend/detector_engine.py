@@ -55,7 +55,9 @@ from config import (
     MAX_ENV_CONFIDENCE,
     MAX_REVIEW_QUEUE_ITEMS,
     MIN_CONFIDENCE_MARGIN,
+    MODEL_BACKEND,
     MODEL_SAVE_PATH,
+    TF_MODEL_SAVE_PATH,
     NOISE_FLOOR_FACTOR,
     NOISE_SUBTRACTION_FACTOR,
     NUM_CLASSES,
@@ -90,6 +92,7 @@ class SprayCanDetectorEngine:
         cooldown_seconds: float = ALERT_COOLDOWN_SECONDS,
         enable_noise_cancellation: bool = ENABLE_NOISE_CANCELLATION,
         sr: int = SAMPLE_RATE,
+        backend: Optional[str] = None,
     ):
         self.sr = sr
         self.required_consecutive_windows = required_consecutive_windows
@@ -123,9 +126,11 @@ class SprayCanDetectorEngine:
         else:
             self.conservative_threshold = CONSERVATIVE_THRESHOLD
 
-        # 4. Initialize Stage 2 Neural Network (5 Classes)
-        self.model_path = Path(model_path or MODEL_SAVE_PATH)
-        self.model = SprayCanShakingCNN(num_classes=NUM_CLASSES).to(DEVICE)
+        # 4. Initialize Stage 2 Neural Network (Dual Backend: PyTorch or TensorFlow)
+        self.backend = (backend or MODEL_BACKEND).lower()
+        default_model_path = TF_MODEL_SAVE_PATH if self.backend == "tensorflow" else MODEL_SAVE_PATH
+        self.model_path = Path(model_path or default_model_path)
+        self.model = None
         self.model_loaded = False
         self._load_model_weights()
 
@@ -155,20 +160,30 @@ class SprayCanDetectorEngine:
             self.consecutive_quiet_windows = 0
 
     def _load_model_weights(self) -> None:
-        """Load trained neural network checkpoint if available."""
-        if self.model_path.exists():
-            try:
+        """Load trained neural network checkpoint (PyTorch or TensorFlow)."""
+        if not self.model_path.exists():
+            logger.warning("Model checkpoint %s not found yet. Stage 2 will remain in standby.", self.model_path)
+            self.model_loaded = False
+            return
+
+        try:
+            if self.backend == "tensorflow" or self.model_path.suffix in (".keras", ".h5"):
+                from stage2_classifier_tf import SprayCanShakingCNNTF
+                self.model = SprayCanShakingCNNTF(num_classes=NUM_CLASSES, weights_path=self.model_path)
+                self.backend = "tensorflow"
+                self.model_loaded = True
+                logger.info("Loaded Stage 2 TensorFlow neural network from %s", self.model_path)
+            else:
+                self.model = SprayCanShakingCNN(num_classes=NUM_CLASSES).to(DEVICE)
                 checkpoint = torch.load(self.model_path, map_location=DEVICE, weights_only=False)
                 state_dict = checkpoint["model_state_dict"] if "model_state_dict" in checkpoint else checkpoint
                 self.model.load_state_dict(state_dict)
                 self.model.eval()
+                self.backend = "pytorch"
                 self.model_loaded = True
-                logger.info("Loaded Stage 2 neural network from %s", self.model_path)
-            except Exception as e:
-                logger.error("Failed to load model from %s: %s", self.model_path, e)
-                self.model_loaded = False
-        else:
-            logger.warning("Model checkpoint %s not found yet. Stage 2 will remain in standby.", self.model_path)
+                logger.info("Loaded Stage 2 PyTorch neural network from %s", self.model_path)
+        except Exception as e:
+            logger.error("Failed to load model from %s: %s", self.model_path, e)
             self.model_loaded = False
 
     def reload_model_if_available(self) -> bool:
@@ -186,10 +201,20 @@ class SprayCanDetectorEngine:
                     pass
         return self.model_loaded
 
-    def reload_model(self, model_path: Optional[Union[str, Path]] = None) -> bool:
+    def reload_model(
+        self,
+        model_path: Optional[Union[str, Path]] = None,
+        backend: Optional[str] = None,
+    ) -> bool:
         """Explicitly hot-reload model weights from an active or specified checkpoint path."""
+        if backend is not None:
+            self.backend = backend.lower()
         if model_path is not None:
             self.model_path = Path(model_path)
+            if self.model_path.suffix in (".keras", ".h5"):
+                self.backend = "tensorflow"
+            elif self.model_path.suffix == ".pth":
+                self.backend = "pytorch"
         self._load_model_weights()
         if self.calibration_path.exists():
             try:
@@ -288,6 +313,7 @@ class SprayCanDetectorEngine:
             self.history.append(result)
             logger.debug("Engine: Unusable audio clipping: %s", s1['reason'])
             return result
+
 
         # -------------------------------------------------------------
         # Adaptive Spectral Noise Cancellation (Background Room Noise, Fan Hum, Rain Bed)
@@ -440,11 +466,14 @@ class SprayCanDetectorEngine:
 
         # Compute full 2D Log-Mel spectrogram on noise-cancelled audio (64 mels x 44 frames)
         log_mel = compute_log_mel_spectrogram(processed_window, sr=self.sr)
-        tensor_in = torch.from_numpy(log_mel).unsqueeze(0).unsqueeze(0).to(DEVICE)
 
-        with torch.inference_mode():
-            probs = self.model.predict_proba(tensor_in).cpu().numpy()[0]
-        del tensor_in
+        if self.backend == "tensorflow":
+            probs = self.model.predict_proba(log_mel)[0]
+        else:
+            tensor_in = torch.from_numpy(log_mel).unsqueeze(0).unsqueeze(0).to(DEVICE)
+            with torch.inference_mode():
+                probs = self.model.predict_proba(tensor_in).cpu().numpy()[0]
+            del tensor_in
 
         s2_eval = evaluate_candidate_prediction(
             probs,

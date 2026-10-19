@@ -1,0 +1,742 @@
+{
+  "benchmark_summary": {
+    "total_samples_evaluated": 25,
+    "max_probability_difference": 5.364418029785156e-07,
+    "mean_probability_difference": 1.1782394722104073e-07,
+    "prediction_agreement_count": 25,
+    "prediction_agreement_rate_pct": 100.0,
+    "verdict_agreement_count": 25,
+    "verdict_agreement_rate_pct": 100.0,
+    "mean_latency_pytorch_ms": 2.98,
+    "mean_latency_tensorflow_ms": 2.86,
+    "latency_speedup_factor": 1.04,
+    "status": "PASSED"
+  },
+  "sample_evaluations": [
+    {
+      "filename": "ambient_silence.wav",
+      "category": "demo_samples",
+      "max_prob_diff": 4.190951585769653e-09,
+      "pt_prediction": "ambient_and_speech",
+      "tf_prediction": "ambient_and_speech",
+      "pt_p_spray": 0.0008,
+      "tf_p_spray": 0.0008,
+      "pt_verdict": "AMBIENT_AND_SPEECH",
+      "tf_verdict": "AMBIENT_AND_SPEECH",
+      "pt_latency_ms": 2.86,
+      "tf_latency_ms": 2.76,
+      "class_probabilities_pt": {
+        "ambient_and_speech": 0.985,
+        "loud_impact": 0.00409,
+        "continuous_environmental": 0.0088,
+        "hard_negative_rattle": 0.00128,
+        "aerosol_spray_hiss": 1e-05,
+        "spray_can_shaking": 0.00082
+      },
+      "class_probabilities_tf": {
+        "ambient_and_speech": 0.985,
+        "loud_impact": 0.00409,
+        "continuous_environmental": 0.0088,
+        "hard_negative_rattle": 0.00128,
+        "aerosol_spray_hiss": 1e-05,
+        "spray_can_shaking": 0.00082
+      }
+    },
+    {
+      "filename": "ambient_speech.wav",
+      "category": "demo_samples",
+      "max_prob_diff": 1.1920928955078125e-07,
+      "pt_prediction": "continuous_environmental",
+      "tf_prediction": "continuous_environmental",
+      "pt_p_spray": 0.0525,
+      "tf_p_spray": 0.0525,
+      "pt_verdict": "UNCERTAIN_AMBIGUOUS_SOUND",
+      "tf_verdict": "UNCERTAIN_AMBIGUOUS_SOUND",
+      "pt_latency_ms": 2.72,
+      "tf_latency_ms": 3.7,
+      "class_probabilities_pt": {
+        "ambient_and_speech": 0.1978,
+        "loud_impact": 0.0356,
+        "continuous_environmental": 0.48484,
+        "hard_negative_rattle": 0.18804,
+        "aerosol_spray_hiss": 0.04126,
+        "spray_can_shaking": 0.05245
+      },
+      "class_probabilities_tf": {
+        "ambient_and_speech": 0.1978,
+        "loud_impact": 0.0356,
+        "continuous_environmental": 0.48484,
+        "hard_negative_rattle": 0.18804,
+        "aerosol_spray_hiss": 0.04126,
+        "spray_can_shaking": 0.05245
+      }
+    },
+    {
+      "filename": "authentic_spray_can.wav",
+      "category": "demo_samples",
+      "max_prob_diff": 1.1920928955078125e-07,
+      "pt_prediction": "spray_can_shaking",
+      "tf_prediction": "spray_can_shaking",
+      "pt_p_spray": 0.8848,
+      "tf_p_spray": 0.8848,
+      "pt_verdict": "CONFIRMED_SPRAY_CAN",
+      "tf_verdict": "CONFIRMED_SPRAY_CAN",
+      "pt_latency_ms": 2.88,
+      "tf_latency_ms": 3.2,
+      "class_probabilities_pt": {
+        "ambient_and_speech": 0.0049,
+        "loud_impact": 0.00344,
+        "continuous_environmental": 0.00178,
+        "hard_negative_rattle": 0.10371,
+        "aerosol_spray_hiss": 0.0014,
+        "spray_can_shaking": 0.88478
+      },
+      "class_probabilities_tf": {
+        "ambient_and_speech": 0.0049,
+        "loud_impact": 0.00344,
+        "continuous_environmental": 0.00178,
+        "hard_negative_rattle": 0.10371,
+        "aerosol_spray_hiss": 0.0014,
+        "spray_can_shaking": 0.88478
+      }
+    },
+    {
+      "filename": "authentic_spray_can_empty.wav",
+      "category": "demo_samples",
+      "max_prob_diff": 1.1920928955078125e-07,
+      "pt_prediction": "spray_can_shaking",
+      "tf_prediction": "spray_can_shaking",
+      "pt_p_spray": 0.8754,
+      "tf_p_spray": 0.8754,
+      "pt_verdict": "CONFIRMED_SPRAY_CAN",
+      "tf_verdict": "CONFIRMED_SPRAY_CAN",
+      "pt_latency_ms": 3.8,
+      "tf_latency_ms": 2.59,
+      "class_probabilities_pt": {
+        "ambient_and_speech": 0.00613,
+        "loud_impact": 0.00157,
+        "continuous_environmental": 0.00293,
+        "hard_negative_rattle": 0.10469,
+        "aerosol_spray_hiss": 0.00925,
+        "spray_can_shaking": 0.87542
+      },
+      "class_probabilities_tf": {
+        "ambient_and_speech": 0.00613,
+        "loud_impact": 0.00157,
+        "continuous_environmental": 0.00293,
+        "hard_negative_rattle": 0.10469,
+        "aerosol_spray_hiss": 0.00925,
+        "spray_can_shaking": 0.87542
+      }
+    },
+    {
+      "filename": "authentic_spray_can_mini.wav",
+      "category": "demo_samples",
+      "max_prob_diff": 1.1920928955078125e-07,
+      "pt_prediction": "spray_can_shaking",
+      "tf_prediction": "spray_can_shaking",
+      "pt_p_spray": 0.9473,
+      "tf_p_spray": 0.9473,
+      "pt_verdict": "CONFIRMED_SPRAY_CAN",
+      "tf_verdict": "CONFIRMED_SPRAY_CAN",
+      "pt_latency_ms": 2.67,
+      "tf_latency_ms": 2.42,
+      "class_probabilities_pt": {
+        "ambient_and_speech": 0.00176,
+        "loud_impact": 0.00039,
+        "continuous_environmental": 0.00083,
+        "hard_negative_rattle": 0.04399,
+        "aerosol_spray_hiss": 0.00573,
+        "spray_can_shaking": 0.94731
+      },
+      "class_probabilities_tf": {
+        "ambient_and_speech": 0.00176,
+        "loud_impact": 0.00039,
+        "continuous_environmental": 0.00083,
+        "hard_negative_rattle": 0.04399,
+        "aerosol_spray_hiss": 0.00573,
+        "spray_can_shaking": 0.94731
+      }
+    },
+    {
+      "filename": "authentic_spray_paint.wav",
+      "category": "demo_samples",
+      "max_prob_diff": 1.7881393432617188e-07,
+      "pt_prediction": "spray_can_shaking",
+      "tf_prediction": "spray_can_shaking",
+      "pt_p_spray": 0.3942,
+      "tf_p_spray": 0.3942,
+      "pt_verdict": "UNCERTAIN_AMBIGUOUS_SOUND",
+      "tf_verdict": "UNCERTAIN_AMBIGUOUS_SOUND",
+      "pt_latency_ms": 3.33,
+      "tf_latency_ms": 3.07,
+      "class_probabilities_pt": {
+        "ambient_and_speech": 0.09827,
+        "loud_impact": 0.03777,
+        "continuous_environmental": 0.37496,
+        "hard_negative_rattle": 0.08777,
+        "aerosol_spray_hiss": 0.00702,
+        "spray_can_shaking": 0.3942
+      },
+      "class_probabilities_tf": {
+        "ambient_and_speech": 0.09827,
+        "loud_impact": 0.03777,
+        "continuous_environmental": 0.37497,
+        "hard_negative_rattle": 0.08777,
+        "aerosol_spray_hiss": 0.00702,
+        "spray_can_shaking": 0.3942
+      }
+    },
+    {
+      "filename": "bottle_caps.wav",
+      "category": "demo_samples",
+      "max_prob_diff": 5.960464477539063e-08,
+      "pt_prediction": "hard_negative_rattle",
+      "tf_prediction": "hard_negative_rattle",
+      "pt_p_spray": 0.0147,
+      "tf_p_spray": 0.0147,
+      "pt_verdict": "HARD_NEGATIVE_RATTLE_REJECTED",
+      "tf_verdict": "HARD_NEGATIVE_RATTLE_REJECTED",
+      "pt_latency_ms": 3.43,
+      "tf_latency_ms": 2.97,
+      "class_probabilities_pt": {
+        "ambient_and_speech": 0.07247,
+        "loud_impact": 0.00721,
+        "continuous_environmental": 0.00127,
+        "hard_negative_rattle": 0.90416,
+        "aerosol_spray_hiss": 0.00018,
+        "spray_can_shaking": 0.01471
+      },
+      "class_probabilities_tf": {
+        "ambient_and_speech": 0.07247,
+        "loud_impact": 0.00721,
+        "continuous_environmental": 0.00127,
+        "hard_negative_rattle": 0.90416,
+        "aerosol_spray_hiss": 0.00018,
+        "spray_can_shaking": 0.01471
+      }
+    },
+    {
+      "filename": "coins_rattling.wav",
+      "category": "demo_samples",
+      "max_prob_diff": 1.1641532182693481e-09,
+      "pt_prediction": "hard_negative_rattle",
+      "tf_prediction": "hard_negative_rattle",
+      "pt_p_spray": 0.0022,
+      "tf_p_spray": 0.0022,
+      "pt_verdict": "HARD_NEGATIVE_RATTLE_REJECTED",
+      "tf_verdict": "HARD_NEGATIVE_RATTLE_REJECTED",
+      "pt_latency_ms": 2.77,
+      "tf_latency_ms": 2.82,
+      "class_probabilities_pt": {
+        "ambient_and_speech": 0.00242,
+        "loud_impact": 0.00076,
+        "continuous_environmental": 0.00017,
+        "hard_negative_rattle": 0.99437,
+        "aerosol_spray_hiss": 6e-05,
+        "spray_can_shaking": 0.00223
+      },
+      "class_probabilities_tf": {
+        "ambient_and_speech": 0.00242,
+        "loud_impact": 0.00076,
+        "continuous_environmental": 0.00017,
+        "hard_negative_rattle": 0.99437,
+        "aerosol_spray_hiss": 6e-05,
+        "spray_can_shaking": 0.00223
+      }
+    },
+    {
+      "filename": "container_shake.wav",
+      "category": "demo_samples",
+      "max_prob_diff": 5.21540641784668e-08,
+      "pt_prediction": "hard_negative_rattle",
+      "tf_prediction": "hard_negative_rattle",
+      "pt_p_spray": 0.0679,
+      "tf_p_spray": 0.0679,
+      "pt_verdict": "HARD_NEGATIVE_RATTLE_REJECTED",
+      "tf_verdict": "HARD_NEGATIVE_RATTLE_REJECTED",
+      "pt_latency_ms": 2.94,
+      "tf_latency_ms": 2.95,
+      "class_probabilities_pt": {
+        "ambient_and_speech": 0.05428,
+        "loud_impact": 0.00227,
+        "continuous_environmental": 0.00199,
+        "hard_negative_rattle": 0.87274,
+        "aerosol_spray_hiss": 0.00085,
+        "spray_can_shaking": 0.06788
+      },
+      "class_probabilities_tf": {
+        "ambient_and_speech": 0.05428,
+        "loud_impact": 0.00227,
+        "continuous_environmental": 0.00199,
+        "hard_negative_rattle": 0.87274,
+        "aerosol_spray_hiss": 0.00085,
+        "spray_can_shaking": 0.06788
+      }
+    },
+    {
+      "filename": "env_rain.wav",
+      "category": "demo_samples",
+      "max_prob_diff": 1.4901161193847656e-08,
+      "pt_prediction": "continuous_environmental",
+      "tf_prediction": "continuous_environmental",
+      "pt_p_spray": 0.0022,
+      "tf_p_spray": 0.0022,
+      "pt_verdict": "CONTINUOUS_ENVIRONMENTAL_REJECTED",
+      "tf_verdict": "CONTINUOUS_ENVIRONMENTAL_REJECTED",
+      "pt_latency_ms": 3.14,
+      "tf_latency_ms": 2.78,
+      "class_probabilities_pt": {
+        "ambient_and_speech": 0.00472,
+        "loud_impact": 0.00076,
+        "continuous_environmental": 0.98173,
+        "hard_negative_rattle": 0.00048,
+        "aerosol_spray_hiss": 0.01013,
+        "spray_can_shaking": 0.00218
+      },
+      "class_probabilities_tf": {
+        "ambient_and_speech": 0.00472,
+        "loud_impact": 0.00076,
+        "continuous_environmental": 0.98173,
+        "hard_negative_rattle": 0.00048,
+        "aerosol_spray_hiss": 0.01013,
+        "spray_can_shaking": 0.00218
+      }
+    },
+    {
+      "filename": "env_spray_hiss.wav",
+      "category": "demo_samples",
+      "max_prob_diff": 1.1920928955078125e-07,
+      "pt_prediction": "continuous_environmental",
+      "tf_prediction": "continuous_environmental",
+      "pt_p_spray": 0.0006,
+      "tf_p_spray": 0.0006,
+      "pt_verdict": "CONTINUOUS_ENVIRONMENTAL_REJECTED",
+      "tf_verdict": "CONTINUOUS_ENVIRONMENTAL_REJECTED",
+      "pt_latency_ms": 2.42,
+      "tf_latency_ms": 3.01,
+      "class_probabilities_pt": {
+        "ambient_and_speech": 0.00024,
+        "loud_impact": 0.00083,
+        "continuous_environmental": 0.83747,
+        "hard_negative_rattle": 0.0009,
+        "aerosol_spray_hiss": 0.16,
+        "spray_can_shaking": 0.00056
+      },
+      "class_probabilities_tf": {
+        "ambient_and_speech": 0.00024,
+        "loud_impact": 0.00083,
+        "continuous_environmental": 0.83747,
+        "hard_negative_rattle": 0.0009,
+        "aerosol_spray_hiss": 0.16,
+        "spray_can_shaking": 0.00056
+      }
+    },
+    {
+      "filename": "env_train.wav",
+      "category": "demo_samples",
+      "max_prob_diff": 1.3969838619232178e-08,
+      "pt_prediction": "continuous_environmental",
+      "tf_prediction": "continuous_environmental",
+      "pt_p_spray": 0.0028,
+      "tf_p_spray": 0.0028,
+      "pt_verdict": "CONTINUOUS_ENVIRONMENTAL_REJECTED",
+      "tf_verdict": "CONTINUOUS_ENVIRONMENTAL_REJECTED",
+      "pt_latency_ms": 2.94,
+      "tf_latency_ms": 2.9,
+      "class_probabilities_pt": {
+        "ambient_and_speech": 0.01487,
+        "loud_impact": 0.00026,
+        "continuous_environmental": 0.98071,
+        "hard_negative_rattle": 0.00049,
+        "aerosol_spray_hiss": 0.00089,
+        "spray_can_shaking": 0.00278
+      },
+      "class_probabilities_tf": {
+        "ambient_and_speech": 0.01487,
+        "loud_impact": 0.00026,
+        "continuous_environmental": 0.98071,
+        "hard_negative_rattle": 0.00049,
+        "aerosol_spray_hiss": 0.00089,
+        "spray_can_shaking": 0.00278
+      }
+    },
+    {
+      "filename": "env_water_drops.wav",
+      "category": "demo_samples",
+      "max_prob_diff": 5.364418029785156e-07,
+      "pt_prediction": "hard_negative_rattle",
+      "tf_prediction": "hard_negative_rattle",
+      "pt_p_spray": 0.0005,
+      "tf_p_spray": 0.0005,
+      "pt_verdict": "HARD_NEGATIVE_RATTLE_REJECTED",
+      "tf_verdict": "HARD_NEGATIVE_RATTLE_REJECTED",
+      "pt_latency_ms": 3.29,
+      "tf_latency_ms": 3.1,
+      "class_probabilities_pt": {
+        "ambient_and_speech": 0.4045,
+        "loud_impact": 0.00028,
+        "continuous_environmental": 0.00223,
+        "hard_negative_rattle": 0.59246,
+        "aerosol_spray_hiss": 1e-05,
+        "spray_can_shaking": 0.00052
+      },
+      "class_probabilities_tf": {
+        "ambient_and_speech": 0.4045,
+        "loud_impact": 0.00028,
+        "continuous_environmental": 0.00223,
+        "hard_negative_rattle": 0.59246,
+        "aerosol_spray_hiss": 1e-05,
+        "spray_can_shaking": 0.00052
+      }
+    },
+    {
+      "filename": "glassware.wav",
+      "category": "demo_samples",
+      "max_prob_diff": 4.470348358154297e-08,
+      "pt_prediction": "loud_impact",
+      "tf_prediction": "loud_impact",
+      "pt_p_spray": 0.0392,
+      "tf_p_spray": 0.0392,
+      "pt_verdict": "LOUD_IMPACT_REJECTED",
+      "tf_verdict": "LOUD_IMPACT_REJECTED",
+      "pt_latency_ms": 2.75,
+      "tf_latency_ms": 2.54,
+      "class_probabilities_pt": {
+        "ambient_and_speech": 0.08205,
+        "loud_impact": 0.82343,
+        "continuous_environmental": 0.01248,
+        "hard_negative_rattle": 0.02896,
+        "aerosol_spray_hiss": 0.01391,
+        "spray_can_shaking": 0.03918
+      },
+      "class_probabilities_tf": {
+        "ambient_and_speech": 0.08205,
+        "loud_impact": 0.82343,
+        "continuous_environmental": 0.01248,
+        "hard_negative_rattle": 0.02896,
+        "aerosol_spray_hiss": 0.01391,
+        "spray_can_shaking": 0.03918
+      }
+    },
+    {
+      "filename": "impact_clap.wav",
+      "category": "demo_samples",
+      "max_prob_diff": 1.1920928955078125e-07,
+      "pt_prediction": "loud_impact",
+      "tf_prediction": "loud_impact",
+      "pt_p_spray": 0.0001,
+      "tf_p_spray": 0.0001,
+      "pt_verdict": "LOUD_IMPACT_REJECTED",
+      "tf_verdict": "LOUD_IMPACT_REJECTED",
+      "pt_latency_ms": 3.12,
+      "tf_latency_ms": 2.99,
+      "class_probabilities_pt": {
+        "ambient_and_speech": 0.00041,
+        "loud_impact": 0.98938,
+        "continuous_environmental": 0.0078,
+        "hard_negative_rattle": 0.00094,
+        "aerosol_spray_hiss": 0.00141,
+        "spray_can_shaking": 6e-05
+      },
+      "class_probabilities_tf": {
+        "ambient_and_speech": 0.00041,
+        "loud_impact": 0.98938,
+        "continuous_environmental": 0.0078,
+        "hard_negative_rattle": 0.00094,
+        "aerosol_spray_hiss": 0.00141,
+        "spray_can_shaking": 6e-05
+      }
+    },
+    {
+      "filename": "impact_desk_bang.wav",
+      "category": "demo_samples",
+      "max_prob_diff": 9.89530235528946e-10,
+      "pt_prediction": "loud_impact",
+      "tf_prediction": "loud_impact",
+      "pt_p_spray": 0.0,
+      "tf_p_spray": 0.0,
+      "pt_verdict": "LOUD_IMPACT_REJECTED",
+      "tf_verdict": "LOUD_IMPACT_REJECTED",
+      "pt_latency_ms": 2.52,
+      "tf_latency_ms": 2.59,
+      "class_probabilities_pt": {
+        "ambient_and_speech": 0.00011,
+        "loud_impact": 0.9988,
+        "continuous_environmental": 0.00032,
+        "hard_negative_rattle": 0.00011,
+        "aerosol_spray_hiss": 0.00066,
+        "spray_can_shaking": 1e-05
+      },
+      "class_probabilities_tf": {
+        "ambient_and_speech": 0.00011,
+        "loud_impact": 0.9988,
+        "continuous_environmental": 0.00032,
+        "hard_negative_rattle": 0.00011,
+        "aerosol_spray_hiss": 0.00066,
+        "spray_can_shaking": 1e-05
+      }
+    },
+    {
+      "filename": "impact_door_slam.wav",
+      "category": "demo_samples",
+      "max_prob_diff": 1.1920928955078125e-07,
+      "pt_prediction": "loud_impact",
+      "tf_prediction": "loud_impact",
+      "pt_p_spray": 0.0002,
+      "tf_p_spray": 0.0002,
+      "pt_verdict": "LOUD_IMPACT_REJECTED",
+      "tf_verdict": "LOUD_IMPACT_REJECTED",
+      "pt_latency_ms": 3.1,
+      "tf_latency_ms": 2.95,
+      "class_probabilities_pt": {
+        "ambient_and_speech": 0.00036,
+        "loud_impact": 0.99045,
+        "continuous_environmental": 0.00398,
+        "hard_negative_rattle": 0.00111,
+        "aerosol_spray_hiss": 0.00394,
+        "spray_can_shaking": 0.00017
+      },
+      "class_probabilities_tf": {
+        "ambient_and_speech": 0.00036,
+        "loud_impact": 0.99045,
+        "continuous_environmental": 0.00398,
+        "hard_negative_rattle": 0.00111,
+        "aerosol_spray_hiss": 0.00394,
+        "spray_can_shaking": 0.00017
+      }
+    },
+    {
+      "filename": "impact_dropped_object.wav",
+      "category": "demo_samples",
+      "max_prob_diff": 5.960464477539063e-08,
+      "pt_prediction": "loud_impact",
+      "tf_prediction": "loud_impact",
+      "pt_p_spray": 0.0005,
+      "tf_p_spray": 0.0005,
+      "pt_verdict": "LOUD_IMPACT_REJECTED",
+      "tf_verdict": "LOUD_IMPACT_REJECTED",
+      "pt_latency_ms": 2.73,
+      "tf_latency_ms": 2.61,
+      "class_probabilities_pt": {
+        "ambient_and_speech": 0.00156,
+        "loud_impact": 0.98439,
+        "continuous_environmental": 0.00473,
+        "hard_negative_rattle": 0.00293,
+        "aerosol_spray_hiss": 0.0059,
+        "spray_can_shaking": 0.00049
+      },
+      "class_probabilities_tf": {
+        "ambient_and_speech": 0.00156,
+        "loud_impact": 0.98439,
+        "continuous_environmental": 0.00473,
+        "hard_negative_rattle": 0.00293,
+        "aerosol_spray_hiss": 0.0059,
+        "spray_can_shaking": 0.00049
+      }
+    },
+    {
+      "filename": "keys_jangling.wav",
+      "category": "demo_samples",
+      "max_prob_diff": 9.313225746154785e-10,
+      "pt_prediction": "hard_negative_rattle",
+      "tf_prediction": "hard_negative_rattle",
+      "pt_p_spray": 0.0001,
+      "tf_p_spray": 0.0001,
+      "pt_verdict": "HARD_NEGATIVE_RATTLE_REJECTED",
+      "tf_verdict": "HARD_NEGATIVE_RATTLE_REJECTED",
+      "pt_latency_ms": 3.02,
+      "tf_latency_ms": 3.2,
+      "class_probabilities_pt": {
+        "ambient_and_speech": 0.0025,
+        "loud_impact": 0.00014,
+        "continuous_environmental": 0.00072,
+        "hard_negative_rattle": 0.99657,
+        "aerosol_spray_hiss": 2e-05,
+        "spray_can_shaking": 5e-05
+      },
+      "class_probabilities_tf": {
+        "ambient_and_speech": 0.0025,
+        "loud_impact": 0.00014,
+        "continuous_environmental": 0.00072,
+        "hard_negative_rattle": 0.99657,
+        "aerosol_spray_hiss": 2e-05,
+        "spray_can_shaking": 5e-05
+      }
+    },
+    {
+      "filename": "liquid_bottle.wav",
+      "category": "demo_samples",
+      "max_prob_diff": 4.76837158203125e-07,
+      "pt_prediction": "loud_impact",
+      "tf_prediction": "loud_impact",
+      "pt_p_spray": 0.0052,
+      "tf_p_spray": 0.0052,
+      "pt_verdict": "LOUD_IMPACT_REJECTED",
+      "tf_verdict": "LOUD_IMPACT_REJECTED",
+      "pt_latency_ms": 2.88,
+      "tf_latency_ms": 2.43,
+      "class_probabilities_pt": {
+        "ambient_and_speech": 0.06201,
+        "loud_impact": 0.65186,
+        "continuous_environmental": 0.04706,
+        "hard_negative_rattle": 0.17798,
+        "aerosol_spray_hiss": 0.05593,
+        "spray_can_shaking": 0.00516
+      },
+      "class_probabilities_tf": {
+        "ambient_and_speech": 0.06201,
+        "loud_impact": 0.65186,
+        "continuous_environmental": 0.04706,
+        "hard_negative_rattle": 0.17798,
+        "aerosol_spray_hiss": 0.05593,
+        "spray_can_shaking": 0.00516
+      }
+    },
+    {
+      "filename": "pill_bottle.wav",
+      "category": "demo_samples",
+      "max_prob_diff": 1.7881393432617188e-07,
+      "pt_prediction": "hard_negative_rattle",
+      "tf_prediction": "hard_negative_rattle",
+      "pt_p_spray": 0.0044,
+      "tf_p_spray": 0.0044,
+      "pt_verdict": "HARD_NEGATIVE_RATTLE_REJECTED",
+      "tf_verdict": "HARD_NEGATIVE_RATTLE_REJECTED",
+      "pt_latency_ms": 3.95,
+      "tf_latency_ms": 2.85,
+      "class_probabilities_pt": {
+        "ambient_and_speech": 0.17679,
+        "loud_impact": 0.03169,
+        "continuous_environmental": 0.00483,
+        "hard_negative_rattle": 0.78149,
+        "aerosol_spray_hiss": 0.00085,
+        "spray_can_shaking": 0.00435
+      },
+      "class_probabilities_tf": {
+        "ambient_and_speech": 0.17679,
+        "loud_impact": 0.03169,
+        "continuous_environmental": 0.00483,
+        "hard_negative_rattle": 0.78149,
+        "aerosol_spray_hiss": 0.00085,
+        "spray_can_shaking": 0.00435
+      }
+    },
+    {
+      "filename": "spray_hiss_continuous.wav",
+      "category": "demo_samples",
+      "max_prob_diff": 1.7881393432617188e-07,
+      "pt_prediction": "aerosol_spray_hiss",
+      "tf_prediction": "aerosol_spray_hiss",
+      "pt_p_spray": 0.0008,
+      "tf_p_spray": 0.0008,
+      "pt_verdict": "AEROSOL_SPRAY_HISS_REJECTED",
+      "tf_verdict": "AEROSOL_SPRAY_HISS_REJECTED",
+      "pt_latency_ms": 2.45,
+      "tf_latency_ms": 2.54,
+      "class_probabilities_pt": {
+        "ambient_and_speech": 0.00018,
+        "loud_impact": 0.00098,
+        "continuous_environmental": 0.13981,
+        "hard_negative_rattle": 0.00081,
+        "aerosol_spray_hiss": 0.85744,
+        "spray_can_shaking": 0.00077
+      },
+      "class_probabilities_tf": {
+        "ambient_and_speech": 0.00018,
+        "loud_impact": 0.00098,
+        "continuous_environmental": 0.13981,
+        "hard_negative_rattle": 0.00081,
+        "aerosol_spray_hiss": 0.85744,
+        "spray_can_shaking": 0.00077
+      }
+    },
+    {
+      "filename": "spray_hiss_nozzle_sputter.wav",
+      "category": "demo_samples",
+      "max_prob_diff": 1.1920928955078125e-07,
+      "pt_prediction": "aerosol_spray_hiss",
+      "tf_prediction": "aerosol_spray_hiss",
+      "pt_p_spray": 0.0006,
+      "tf_p_spray": 0.0006,
+      "pt_verdict": "AEROSOL_SPRAY_HISS_REJECTED",
+      "tf_verdict": "AEROSOL_SPRAY_HISS_REJECTED",
+      "pt_latency_ms": 3.71,
+      "tf_latency_ms": 2.84,
+      "class_probabilities_pt": {
+        "ambient_and_speech": 0.00026,
+        "loud_impact": 0.00114,
+        "continuous_environmental": 0.29421,
+        "hard_negative_rattle": 0.00087,
+        "aerosol_spray_hiss": 0.70297,
+        "spray_can_shaking": 0.00055
+      },
+      "class_probabilities_tf": {
+        "ambient_and_speech": 0.00026,
+        "loud_impact": 0.00114,
+        "continuous_environmental": 0.29421,
+        "hard_negative_rattle": 0.00087,
+        "aerosol_spray_hiss": 0.70297,
+        "spray_can_shaking": 0.00055
+      }
+    },
+    {
+      "filename": "spray_hiss_pulsed_bursts.wav",
+      "category": "demo_samples",
+      "max_prob_diff": 1.7881393432617188e-07,
+      "pt_prediction": "hard_negative_rattle",
+      "tf_prediction": "hard_negative_rattle",
+      "pt_p_spray": 0.2477,
+      "tf_p_spray": 0.2477,
+      "pt_verdict": "HARD_NEGATIVE_RATTLE_REJECTED",
+      "tf_verdict": "HARD_NEGATIVE_RATTLE_REJECTED",
+      "pt_latency_ms": 2.39,
+      "tf_latency_ms": 2.96,
+      "class_probabilities_pt": {
+        "ambient_and_speech": 0.00875,
+        "loud_impact": 0.00164,
+        "continuous_environmental": 0.00173,
+        "hard_negative_rattle": 0.73796,
+        "aerosol_spray_hiss": 0.00224,
+        "spray_can_shaking": 0.24769
+      },
+      "class_probabilities_tf": {
+        "ambient_and_speech": 0.00875,
+        "loud_impact": 0.00164,
+        "continuous_environmental": 0.00173,
+        "hard_negative_rattle": 0.73796,
+        "aerosol_spray_hiss": 0.00224,
+        "spray_can_shaking": 0.24769
+      }
+    },
+    {
+      "filename": "clip_01_1 (1).wav",
+      "category": "spray_can_shaking",
+      "max_prob_diff": 1.1175870895385742e-08,
+      "pt_prediction": "spray_can_shaking",
+      "tf_prediction": "spray_can_shaking",
+      "pt_p_spray": 0.9605,
+      "tf_p_spray": 0.9605,
+      "pt_verdict": "CONFIRMED_SPRAY_CAN",
+      "tf_verdict": "CONFIRMED_SPRAY_CAN",
+      "pt_latency_ms": 2.68,
+      "tf_latency_ms": 2.67,
+      "class_probabilities_pt": {
+        "ambient_and_speech": 0.00177,
+        "loud_impact": 0.00065,
+        "continuous_environmental": 0.00135,
+        "hard_negative_rattle": 0.03143,
+        "aerosol_spray_hiss": 0.0043,
+        "spray_can_shaking": 0.96051
+      },
+      "class_probabilities_tf": {
+        "ambient_and_speech": 0.00177,
+        "loud_impact": 0.00065,
+        "continuous_environmental": 0.00135,
+        "hard_negative_rattle": 0.03143,
+        "aerosol_spray_hiss": 0.0043,
+        "spray_can_shaking": 0.96051
+      }
+    }
+  ]
+}

@@ -21,12 +21,12 @@ for p in [str(BACKEND_DIR), str(PROJECT_ROOT)]:
     if p not in sys.path:
         sys.path.insert(0, p)
 
-from app import app, ensure_demo_samples, logger
+from app import app, ensure_demo_samples, logger, start_esp32_receiver_service
 
 
 def main():
     parser = argparse.ArgumentParser(description="Start Aerosol Spray Can Detector Application")
-    parser.add_argument("--host", default="127.0.0.1", help="Host interface (default: 127.0.0.1)")
+    parser.add_argument("--host", default="0.0.0.0", help="Host interface (default: 0.0.0.0)")
     parser.add_argument("--port", type=int, default=5000, help="Port to bind server (default: 5000)")
     parser.add_argument("--debug", action="store_true", help="Enable Flask debug mode")
     args = parser.parse_args()
@@ -42,6 +42,19 @@ def main():
 
     # Ensure synthetic and authentic sample fixtures exist in backend/data/demo_samples
     ensure_demo_samples()
+
+    # Pre-flight check: ensure ports are not already occupied by another running instance
+    import socket
+    for check_port in [5001, args.port]:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.settimeout(0.5)
+            if s.connect_ex(("127.0.0.1", check_port)) == 0:
+                print(f"\n[ERROR] Port {check_port} is already in use by another running process!")
+                print("To prevent conflicts, please terminate any existing 'python run.py' instances first.\n")
+                sys.exit(1)
+
+    # Launch dedicated ESP32 hardware receiver on port 5001 (daemon thread)
+    start_esp32_receiver_service()
 
     logger.info("Starting Web Application on http://%s:%d ...", args.host, args.port)
     app.run(host=args.host, port=args.port, debug=args.debug)
